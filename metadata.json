@@ -1,0 +1,7 @@
+{
+  "name": "Seguridad Ciudadana Táchira",
+  "description": "Aplicación oficial de seguridad ciudadana y atención de emergencias del Estado Táchira.",
+  "requestFramePermissions": [
+    "geolocation"
+  ]
+}

@@ -1,0 +1,21 @@
+# Dependencias
+node_modules/
+
+# Expo y archivos temporales
+.expo/
+dist/
+build/
+coverage/
+
+# Archivos locales y de configuración del sistema
+.local/
+.config/
+.DS_Store
+*.log
+
+# Variables de entorno (Seguridad)
+.env*
+!.env.example
+
+# TypeScript
+expo-env.d.ts
