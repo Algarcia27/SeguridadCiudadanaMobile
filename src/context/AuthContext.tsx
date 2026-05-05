@@ -7,6 +7,7 @@ export interface AuthUser {
   correo: string;
   telefono: string;
   cedula: string;
+  municipio: string;
   avatar_url: string | null;
 }
 

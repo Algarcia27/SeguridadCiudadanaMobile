@@ -13,7 +13,8 @@ import {
   ActivityIndicator,
   KeyboardAvoidingView,
   ScrollView,
-} from 'react-native';
+} 
+from 'react-native';
 import { useRouter } from 'expo-router';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { Ionicons } from '@expo/vector-icons';
@@ -265,13 +266,13 @@ const styles = StyleSheet.create({
     flex: 1, alignItems: 'center', justifyContent: 'center', paddingHorizontal: 32,
   },
   logoRing: {
-    width: 140, height: 140, borderRadius: 70, borderWidth: 1,
+    width: 150, height: 150, borderRadius: 75, borderWidth: 1,
     alignItems: 'center', justifyContent: 'center', marginBottom: 36,
   },
   logoInner: {
-    width: 112, height: 112, borderRadius: 56, alignItems: 'center', justifyContent: 'center',
+    width: 124, height: 124, borderRadius: 62, alignItems: 'center', justifyContent: 'center', overflow: 'hidden',
   },
-  logo: { width: 80, height: 80 },
+  logo: { width: 96, height: 96 },
   titleTop: {
     fontSize: 13, fontFamily: 'Inter_600SemiBold', letterSpacing: 2,
     textTransform: 'uppercase', marginBottom: 4,

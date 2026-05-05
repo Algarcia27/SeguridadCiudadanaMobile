@@ -9,6 +9,7 @@ CREATE TABLE IF NOT EXISTS public.users (
   correo            TEXT        NOT NULL UNIQUE,
   telefono          TEXT        NOT NULL DEFAULT '',
   cedula            TEXT        NOT NULL DEFAULT '',
+  municipio         TEXT        NOT NULL DEFAULT '',
   password_hash     TEXT        NOT NULL,
   avatar_url        TEXT,
   reset_code        TEXT,

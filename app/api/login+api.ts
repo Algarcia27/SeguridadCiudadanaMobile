@@ -10,13 +10,36 @@ export async function POST(request: Request) {
     }
 
     const supabase = getSupabase();
-    const { data: user, error } = await supabase
-      .from('users')
-      .select('id, nombre, correo, telefono, cedula, avatar_url, password_hash')
-      .eq('correo', correo.toLowerCase().trim())
-      .maybeSingle();
+    const isMissingMunicipio = (error: any) =>
+      error?.code === '42703' ||
+      error?.code === 'PGRST204' ||
+      error?.message?.includes("Could not find the 'municipio' column") ||
+      error?.message?.includes('municipio');
+    let user: any;
 
-    if (error) throw error;
+    try {
+      const { data, error } = await supabase
+        .from('users')
+        .select('id, nombre, correo, telefono, cedula, municipio, avatar_url, password_hash')
+        .eq('correo', correo.toLowerCase().trim())
+        .maybeSingle();
+
+      if (error) throw error;
+      user = data;
+    } catch (err: any) {
+      if (isMissingMunicipio(err)) {
+        const { data, error } = await supabase
+          .from('users')
+          .select('id, nombre, correo, telefono, cedula, avatar_url, password_hash')
+          .eq('correo', correo.toLowerCase().trim())
+          .maybeSingle();
+
+        if (error) throw error;
+        user = data ? { ...data, municipio: '' } : null;
+      } else {
+        throw err;
+      }
+    }
 
     if (!user) {
       return Response.json({ error: 'Correo o contraseña incorrectos.' }, { status: 401 });

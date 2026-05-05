@@ -24,7 +24,40 @@ interface UserData {
   email: string;
   phone: string;
   cedula: string;
+  municipio: string;
 }
+
+const MUNICIPALITIES = [
+  'Andrés Bello',
+  'Antonio Rómulo Costa',
+  'Ayacucho',
+  'Bolívar',
+  'Cárdenas',
+  'Córdoba',
+  'Fernández Feo',
+  'Francisco de Miranda',
+  'García de Hevia',
+  'Guásimos',
+  'Independencia',
+  'Jáuregui',
+  'José María Vargas',
+  'Junín',
+  'Libertad',
+  'Libertador',
+  'Lobatera',
+  'Michelena',
+  'Panamericano',
+  'Pedro María Ureña',
+  'Rafael Urdaneta',
+  'Samuel Dario Maldonado',
+  'San Cristóbal',
+  'San Judas Tadeo',
+  'Seboruco',
+  'Simón Rodríguez',
+  'Sucre',
+  'Torbes',
+  'Uribante',
+];
 
 export default function ProfileScreen() {
   const insets = useSafeAreaInsets();
@@ -37,6 +70,7 @@ export default function ProfileScreen() {
     email: user?.correo || '',
     phone: user?.telefono || '',
     cedula: user?.cedula || '',
+    municipio: user?.municipio || '',
   });
   const [avatarUri, setAvatarUri] = useState<string | null>(user?.avatar_url || null);
   const [editing, setEditing] = useState<string | null>(null);
@@ -50,6 +84,7 @@ export default function ProfileScreen() {
         email: user.correo,
         phone: user.telefono || '',
         cedula: user.cedula || '',
+        municipio: user.municipio || '',
       });
       setAvatarUri(user.avatar_url || null);
     } else {
@@ -63,11 +98,40 @@ export default function ProfileScreen() {
     }
   }, [user]);
 
-  const saveField = (field: keyof UserData) => {
+  const saveField = async (field: keyof UserData) => {
     const updated = { ...userData, [field]: tempValue };
     setUserData(updated);
     AsyncStorage.setItem('user-profile', JSON.stringify({ ...updated, avatarUri }));
     setEditing(null);
+
+    if (user?.id) {
+      const profileFieldMap: Record<keyof UserData, string> = {
+        displayName: 'nombre',
+        email: 'correo',
+        phone: 'telefono',
+        cedula: 'cedula',
+        municipio: 'municipio',
+      };
+
+      try {
+        const body = { userId: user.id, [profileFieldMap[field]]: tempValue };
+        const res = await fetch('/api/update-profile', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(body),
+        });
+
+        if (res.ok) {
+          const data = await res.json();
+          if (data?.user) {
+            setUser({ ...user, ...data.user });
+          }
+        }
+      } catch (err) {
+        console.warn('Could not sync profile update:', err);
+      }
+    }
+
     notifySuccess();
   };
 
@@ -116,6 +180,7 @@ export default function ProfileScreen() {
     { key: 'email', labelKey: 'email', icon: 'mail-outline', type: 'email-address' },
     { key: 'phone', labelKey: 'phone', icon: 'call-outline', type: 'phone-pad' },
     { key: 'cedula', labelKey: 'id', icon: 'card-outline', type: 'numeric' },
+    { key: 'municipio', labelKey: 'municipio', icon: 'location-outline', type: 'picker' },
   ];
 
   return (
@@ -187,25 +252,52 @@ export default function ProfileScreen() {
             <View key={field.key}>
               {i > 0 && <View style={[styles.sep, { backgroundColor: colors.border }]} />}
               {editing === field.key ? (
-                <View style={styles.editFieldRow}>
-                  <View style={[styles.fieldIcon, { backgroundColor: colors.primaryLight }]}>
+                field.type === 'picker' ? (
+                  <View style={[styles.editFieldPicker, { backgroundColor: colors.surfaceContainer, borderColor: colors.border }]}> 
+                    <View style={[styles.fieldIcon, { backgroundColor: colors.primaryLight }]}>
                     <Ionicons name={field.icon as any} size={18} color={colors.primary} />
                   </View>
-                  <TextInput
-                    style={[styles.editInput, { color: colors.foreground, flex: 1 }]}
-                    value={tempValue}
-                    onChangeText={setTempValue}
-                    autoFocus
-                    keyboardType={field.type as any}
-                    placeholderTextColor={colors.mutedForeground}
-                  />
-                  <TouchableOpacity onPress={() => saveField(field.key)}>
-                    <Ionicons name="checkmark-circle" size={26} color={colors.primary} />
-                  </TouchableOpacity>
-                  <TouchableOpacity onPress={() => setEditing(null)}>
-                    <Ionicons name="close-circle" size={26} color={colors.mutedForeground} />
-                  </TouchableOpacity>
-                </View>
+                    <ScrollView style={styles.municipioScroll} nestedScrollEnabled>
+                      {MUNICIPALITIES.map((municipio) => (
+                        <TouchableOpacity
+                          key={municipio}
+                          style={[styles.municipioOption, { backgroundColor: municipio === tempValue ? colors.primaryLight : colors.surface }]}
+                          onPress={() => setTempValue(municipio)}
+                        >
+                          <Text style={[styles.municipioOptionText, { color: colors.foreground }]}>{municipio}</Text>
+                        </TouchableOpacity>
+                      ))}
+                    </ScrollView>
+                    <View style={styles.pickerActions}>
+                      <TouchableOpacity onPress={() => saveField(field.key)} style={styles.pickerActionButton}>
+                        <Ionicons name="checkmark-circle" size={26} color={colors.primary} />
+                      </TouchableOpacity>
+                      <TouchableOpacity onPress={() => setEditing(null)} style={styles.pickerActionButton}>
+                        <Ionicons name="close-circle" size={26} color={colors.mutedForeground} />
+                      </TouchableOpacity>
+                    </View>
+                  </View>
+                ) : (
+                  <View style={styles.editFieldRow}>
+                    <View style={[styles.fieldIcon, { backgroundColor: colors.primaryLight }]}> 
+                      <Ionicons name={field.icon as any} size={18} color={colors.primary} />
+                    </View>
+                    <TextInput
+                      style={[styles.editInput, { color: colors.foreground, flex: 1 }]}
+                      value={tempValue}
+                      onChangeText={setTempValue}
+                      autoFocus
+                      keyboardType={field.type as any}
+                      placeholderTextColor={colors.mutedForeground}
+                    />
+                    <TouchableOpacity onPress={() => saveField(field.key)}>
+                      <Ionicons name="checkmark-circle" size={26} color={colors.primary} />
+                    </TouchableOpacity>
+                    <TouchableOpacity onPress={() => setEditing(null)}>
+                      <Ionicons name="close-circle" size={26} color={colors.mutedForeground} />
+                    </TouchableOpacity>
+                  </View>
+                )
               ) : (
                 <TouchableOpacity
                   style={styles.fieldRow}
@@ -274,6 +366,12 @@ const styles = StyleSheet.create({
   nameValue: { flex: 1, fontSize: 16, fontFamily: 'Inter_600SemiBold' },
   editRow: { flexDirection: 'row', alignItems: 'center', gap: 10, padding: 12, borderRadius: 18, borderWidth: 1 },
   editFieldRow: { flexDirection: 'row', alignItems: 'center', gap: 10, padding: 14 },
+  editFieldPicker: { padding: 14, gap: 12, borderRadius: 18 },
+  municipioScroll: { maxHeight: 220 },
+  municipioOption: { paddingVertical: 12, paddingHorizontal: 14, borderRadius: 14, marginBottom: 8 },
+  municipioOptionText: { fontSize: 14, fontFamily: 'Inter_500Medium' },
+  pickerActions: { flexDirection: 'row', justifyContent: 'flex-end', gap: 16, marginTop: 8 },
+  pickerActionButton: { padding: 4 },
   editInput: { flex: 1, fontSize: 15, fontFamily: 'Inter_500Medium', padding: 0 },
   infoCard: { borderRadius: 20, borderWidth: 1, overflow: 'hidden' },
   sep: { height: 1, marginHorizontal: 16 },

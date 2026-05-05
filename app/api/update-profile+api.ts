@@ -2,10 +2,21 @@ import { getSupabase } from '@/src/utils/supabase';
 
 export async function POST(request: Request) {
   try {
-    const { userId, avatarUrl } = await request.json();
+    const { userId, nombre, correo, telefono, cedula, municipio } = await request.json();
 
-    if (!userId || !avatarUrl) {
+    if (!userId) {
       return Response.json({ error: 'Datos incompletos.' }, { status: 400 });
+    }
+
+    const updates: Record<string, string> = {};
+    if (nombre !== undefined) updates.nombre = nombre.trim();
+    if (correo !== undefined) updates.correo = correo.toLowerCase().trim();
+    if (telefono !== undefined) updates.telefono = telefono;
+    if (cedula !== undefined) updates.cedula = cedula;
+    if (municipio !== undefined) updates.municipio = municipio;
+
+    if (Object.keys(updates).length === 0) {
+      return Response.json({ error: 'Nada que actualizar.' }, { status: 400 });
     }
 
     const supabase = getSupabase();
@@ -19,7 +30,7 @@ export async function POST(request: Request) {
     try {
       const { data, error } = await supabase
         .from('users')
-        .update({ avatar_url: avatarUrl })
+        .update(updates)
         .eq('id', userId)
         .select('id, nombre, correo, telefono, cedula, municipio, avatar_url')
         .maybeSingle();
@@ -27,10 +38,11 @@ export async function POST(request: Request) {
       if (error) throw error;
       user = data;
     } catch (err: any) {
-      if (isMissingMunicipio(err)) {
+      if (isMissingMunicipio(err) && updates.municipio !== undefined) {
+        delete updates.municipio;
         const { data, error } = await supabase
           .from('users')
-          .update({ avatar_url: avatarUrl })
+          .update(updates)
           .eq('id', userId)
           .select('id, nombre, correo, telefono, cedula, avatar_url')
           .maybeSingle();
@@ -48,7 +60,7 @@ export async function POST(request: Request) {
 
     return Response.json({ success: true, user });
   } catch (err: any) {
-    console.error('Update avatar error:', err);
+    console.error('Update profile error:', err);
     return Response.json({ error: 'Error interno del servidor.' }, { status: 500 });
   }
 }

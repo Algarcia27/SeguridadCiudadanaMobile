@@ -3,9 +3,9 @@ import { getSupabase } from '@/src/utils/supabase';
 
 export async function POST(request: Request) {
   try {
-    const { nombre, correo, telefono, cedula, password } = await request.json();
+    const { nombre, correo, telefono, cedula, municipio, password } = await request.json();
 
-    if (!nombre || !correo || !password) {
+    if (!nombre || !correo || !password || !municipio) {
       return Response.json({ error: 'Faltan campos requeridos.' }, { status: 400 });
     }
 
@@ -24,17 +24,44 @@ export async function POST(request: Request) {
     }
 
     const hash = await bcrypt.hash(password, 10);
-    const { data: inserted, error: insertErr } = await supabase
+    const isMissingMunicipio = (error: any) =>
+      error?.code === '42703' ||
+      error?.code === 'PGRST204' ||
+      error?.message?.includes("Could not find the 'municipio' column") ||
+      error?.message?.includes('municipio');
+
+    const payload: Record<string, any> = {
+      nombre: nombre.trim(),
+      correo: correoNorm,
+      telefono: telefono || '',
+      cedula: cedula || '',
+      municipio: municipio.trim(),
+      password_hash: hash,
+    };
+
+    let inserted: any;
+    let insertErr: any;
+
+    const firstAttempt = await supabase
       .from('users')
-      .insert({
-        nombre: nombre.trim(),
-        correo: correoNorm,
-        telefono: telefono || '',
-        cedula: cedula || '',
-        password_hash: hash,
-      })
-      .select('id, nombre, correo, telefono, cedula, avatar_url')
+      .insert(payload)
+      .select('id, nombre, correo, telefono, cedula, municipio, avatar_url')
       .single();
+
+    inserted = firstAttempt.data;
+    insertErr = firstAttempt.error;
+
+    if (isMissingMunicipio(insertErr)) {
+      delete payload.municipio;
+      const retry = await supabase
+        .from('users')
+        .insert(payload)
+        .select('id, nombre, correo, telefono, cedula, avatar_url')
+        .single();
+
+      inserted = retry.data ? { ...retry.data, municipio: '' } : null;
+      insertErr = retry.error;
+    }
 
     if (insertErr) throw insertErr;
 

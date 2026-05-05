@@ -17,6 +17,38 @@ import { useColors } from '@/src/hooks/useColors';
 
 const PASSWORD_REGEX = /^(?=.*[a-zA-Z])(?=.*[0-9])(?=.*[^a-zA-Z0-9]).{8,}$/;
 
+const MUNICIPALITIES = [
+  'Andrés Bello',
+  'Antonio Rómulo Costa',
+  'Ayacucho',
+  'Bolívar',
+  'Cárdenas',
+  'Córdoba',
+  'Fernández Feo',
+  'Francisco de Miranda',
+  'García de Hevia',
+  'Guásimos',
+  'Independencia',
+  'Jáuregui',
+  'José María Vargas',
+  'Junín',
+  'Libertad',
+  'Libertador',
+  'Lobatera',
+  'Michelena',
+  'Panamericano',
+  'Pedro María Ureña',
+  'Rafael Urdaneta',
+  'Samuel Dario Maldonado',
+  'San Cristóbal',
+  'San Judas Tadeo',
+  'Seboruco',
+  'Simón Rodríguez',
+  'Sucre',
+  'Torbes',
+  'Uribante',
+];
+
 function getPasswordStrength(pwd: string): { label: string; color: string; percent: number } {
   if (pwd.length === 0) return { label: '', color: 'transparent', percent: 0 };
   const hasLetter = /[a-zA-Z]/.test(pwd);
@@ -110,6 +142,7 @@ export default function RegisterScreen() {
     correo: '',
     telefono: '',
     cedula: '',
+    municipio: '',
     password: '',
     confirmPassword: '',
   });
@@ -117,6 +150,7 @@ export default function RegisterScreen() {
   const [serverError, setServerError] = useState('');
   const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState(false);
+  const [showMunicipios, setShowMunicipios] = useState(false);
   const scale = useRef(new Animated.Value(1)).current;
 
   const set = (key: keyof typeof form) => (val: string) => {
@@ -131,6 +165,7 @@ export default function RegisterScreen() {
     if (!form.correo.trim() || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(form.correo)) e.correo = 'Ingresa un correo válido.';
     if (!form.telefono.trim() || !/^\+?[0-9]{7,15}$/.test(form.telefono.replace(/\s/g, ''))) e.telefono = 'Ingresa un teléfono válido.';
     if (!form.cedula.trim() || !/^[0-9]{6,10}$/.test(form.cedula)) e.cedula = 'Número de cédula inválido (6-10 dígitos).';
+    if (!form.municipio.trim()) e.municipio = 'Selecciona un municipio.';
     if (!PASSWORD_REGEX.test(form.password)) e.password = 'Mínimo 8 caracteres con letras, números y caracteres especiales.';
     if (form.confirmPassword !== form.password) e.confirmPassword = 'Las contraseñas no coinciden.';
     setErrors(e);
@@ -150,6 +185,7 @@ export default function RegisterScreen() {
           correo: form.correo.trim(),
           telefono: form.telefono.trim(),
           cedula: form.cedula.trim(),
+          municipio: form.municipio.trim(),
           password: form.password,
         }),
       });
@@ -211,6 +247,33 @@ export default function RegisterScreen() {
                 <Field label="Correo electrónico" value={form.correo} onChangeText={set('correo')} placeholder="ejemplo@correo.com" keyboardType="email-address" error={errors.correo} colors={colors} />
                 <Field label="Teléfono" value={form.telefono} onChangeText={set('telefono')} placeholder="+58 412 0000000" keyboardType="phone-pad" error={errors.telefono} colors={colors} />
                 <Field label="Número de cédula" value={form.cedula} onChangeText={set('cedula')} placeholder="Ej. 12345678" keyboardType="numeric" error={errors.cedula} colors={colors} />
+                <View style={fieldStyles.wrapper}>
+                  <Text style={[fieldStyles.label, { color: colors.mutedForeground }]}>Municipio</Text>
+                  <View style={[fieldStyles.inputRow, { borderColor: errors.municipio ? colors.danger : colors.border, backgroundColor: colors.surfaceContainer }]}> 
+                    <TouchableOpacity style={styles.selectButton} onPress={() => setShowMunicipios((v) => !v)}>
+                      <Text style={[styles.selectValue, { color: form.municipio ? colors.foreground : colors.mutedForeground }]}> 
+                        {form.municipio || 'Selecciona un municipio'}
+                      </Text>
+                      <Ionicons name={showMunicipios ? 'chevron-up-outline' : 'chevron-down-outline'} size={20} color={colors.mutedForeground} />
+                    </TouchableOpacity>
+                  </View>
+                  {showMunicipios && (
+                    <View style={[styles.optionsWrapper, { backgroundColor: colors.surfaceContainer, borderColor: colors.border }]}> 
+                      <ScrollView style={styles.optionsScroll} nestedScrollEnabled>
+                        {MUNICIPALITIES.map((municipio) => (
+                          <TouchableOpacity
+                            key={municipio}
+                            style={[styles.optionItem, { borderBottomColor: colors.border }]}
+                            onPress={() => { set('municipio')(municipio); setShowMunicipios(false); }}
+                          >
+                            <Text style={[styles.optionText, { color: colors.foreground }]}>{municipio}</Text>
+                          </TouchableOpacity>
+                        ))}
+                      </ScrollView>
+                    </View>
+                  )}
+                  {errors.municipio ? <Text style={[fieldStyles.error, { color: colors.danger }]}>{errors.municipio}</Text> : null}
+                </View>
               </View>
             </View>
 
@@ -331,4 +394,15 @@ const styles = StyleSheet.create({
   },
   successTitle: { fontSize: 22, fontFamily: 'Inter_700Bold' },
   successSub: { fontSize: 13, fontFamily: 'Inter_400Regular' },
+  selectButton: {
+    flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between',
+    flex: 1, minHeight: 52, paddingHorizontal: 16,
+  },
+  selectValue: { fontSize: 15, fontFamily: 'Inter_400Regular' },
+  optionsWrapper: {
+    marginTop: 8, borderWidth: 1, borderRadius: 14, overflow: 'hidden', maxHeight: 180,
+  },
+  optionsScroll: { maxHeight: 180 },
+  optionItem: { paddingVertical: 12, paddingHorizontal: 16 },
+  optionText: { fontSize: 15, fontFamily: 'Inter_400Regular' },
 });
