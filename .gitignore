@@ -6,6 +6,7 @@ node_modules/
 dist/
 build/
 coverage/
+instructions.md
 
 # Archivos locales y de configuración del sistema
 .local/
@@ -13,10 +14,11 @@ coverage/
 .DS_Store
 *.log
 
+
 # Variables de entorno (Seguridad)
 .env*
 !.env.example
-.instructions.md
+
 
 # TypeScript
 expo-env.d.ts
