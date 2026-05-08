@@ -1,10 +1,14 @@
-import { getSupabase } from '@/src/utils/supabase';
+import { getAuthenticatedSupabaseUser, getSupabase } from '@/src/utils/supabase';
 
 export async function POST(request: Request) {
   try {
-    const { userId, avatarUrl } = await request.json();
+    const authUser = await getAuthenticatedSupabaseUser(request);
+    if (!authUser?.email) {
+      return Response.json({ error: 'No autorizado.' }, { status: 401 });
+    }
 
-    if (!userId || !avatarUrl) {
+    const { avatarUrl } = await request.json();
+    if (!avatarUrl) {
       return Response.json({ error: 'Datos incompletos.' }, { status: 400 });
     }
 
@@ -15,12 +19,13 @@ export async function POST(request: Request) {
       error?.message?.includes("Could not find the 'municipio' column") ||
       error?.message?.includes('municipio');
     let user: any;
+    const userEmail = authUser.email.toLowerCase();
 
     try {
       const { data, error } = await supabase
         .from('users')
         .update({ avatar_url: avatarUrl })
-        .eq('id', userId)
+        .eq('correo', userEmail)
         .select('id, nombre, correo, telefono, cedula, municipio, avatar_url')
         .maybeSingle();
 
@@ -31,7 +36,7 @@ export async function POST(request: Request) {
         const { data, error } = await supabase
           .from('users')
           .update({ avatar_url: avatarUrl })
-          .eq('id', userId)
+          .eq('correo', userEmail)
           .select('id, nombre, correo, telefono, cedula, avatar_url')
           .maybeSingle();
 
@@ -49,6 +54,6 @@ export async function POST(request: Request) {
     return Response.json({ success: true, user });
   } catch (err: any) {
     console.error('Update avatar error:', err);
-    return Response.json({ error: 'Error interno del servidor.' }, { status: 500 });
+    return Response.json({ error: err.message || 'Error interno del servidor.' }, { status: 500 });
   }
 }

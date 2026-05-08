@@ -114,10 +114,13 @@ export default function ProfileScreen() {
       };
 
       try {
-        const body = { userId: user.id, [profileFieldMap[field]]: tempValue };
+        const body = { [profileFieldMap[field]]: tempValue };
         const res = await fetch('/api/update-profile', {
           method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
+          headers: {
+            'Content-Type': 'application/json',
+            ...(user?.token ? { Authorization: `Bearer ${user.token}` } : {}),
+          },
           body: JSON.stringify(body),
         });
 
@@ -154,12 +157,15 @@ export default function ProfileScreen() {
         setAvatarUri(uri);
         AsyncStorage.setItem('user-profile', JSON.stringify({ ...userData, avatarUri: uri }));
 
-        if (user?.id) {
+        if (user?.token) {
           try {
             const res = await fetch('/api/update-avatar', {
               method: 'POST',
-              headers: { 'Content-Type': 'application/json' },
-              body: JSON.stringify({ userId: user.id, avatarUrl: uri }),
+                headers: {
+                  'Content-Type': 'application/json',
+                  Authorization: `Bearer ${user.token}`,
+                },
+                body: JSON.stringify({ avatarUrl: uri }),
             });
             if (res.ok) {
               const data = await res.json();

@@ -64,8 +64,38 @@ export async function POST(request: Request) {
     }
 
     if (insertErr) throw insertErr;
+    if (!inserted) throw new Error('No se pudo crear el usuario.');
 
-    return Response.json({ success: true, user: inserted }, { status: 201 });
+    const { error: authError } = await supabase.auth.admin.createUser({
+      email: correoNorm,
+      password,
+      email_confirm: true,
+      user_metadata: {
+        nombre: nombre.trim(),
+        telefono: telefono || '',
+        cedula: cedula || '',
+        municipio: municipio.trim(),
+      },
+    });
+
+    if (authError) {
+      await supabase.from('users').delete().eq('id', inserted.id);
+      if (authError.status === 409) {
+        return Response.json({ error: 'El correo ya está registrado.' }, { status: 409 });
+      }
+      throw authError;
+    }
+
+    const { data: authSession, error: authSessionErr } = await supabase.auth.signInWithPassword({
+      email: correoNorm,
+      password,
+    });
+
+    if (authSessionErr || !authSession.session?.access_token) {
+      throw authSessionErr || new Error('No se pudo generar sesión después del registro.');
+    }
+
+    return Response.json({ success: true, user: inserted, token: authSession.session.access_token }, { status: 201 });
   } catch (err: any) {
     console.error('Register error:', err);
     return Response.json({ error: 'Error interno del servidor.' }, { status: 500 });

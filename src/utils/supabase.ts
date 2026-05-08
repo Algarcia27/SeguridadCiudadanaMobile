@@ -30,3 +30,27 @@ export function getSupabase(): SupabaseClient {
   }
   return client;
 }
+
+export function getBearerToken(request: Request): string | null {
+  const authHeader = request.headers.get('Authorization') || request.headers.get('authorization');
+  if (!authHeader || !authHeader.toLowerCase().startsWith('bearer ')) {
+    return null;
+  }
+  return authHeader.slice(7).trim();
+}
+
+export async function getAuthenticatedSupabaseUser(request: Request) {
+  const token = getBearerToken(request);
+  if (!token) {
+    throw new Error('Falta el token de autorización.');
+  }
+
+  const supabase = getSupabase();
+  const { data, error } = await supabase.auth.getUser(token);
+
+  if (error || !data?.user || !data.user.email) {
+    throw new Error('Token inválido o sesión expirada.');
+  }
+
+  return data.user;
+}

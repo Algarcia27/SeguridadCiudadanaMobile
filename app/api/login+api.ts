@@ -10,37 +10,15 @@ export async function POST(request: Request) {
     }
 
     const supabase = getSupabase();
-    const isMissingMunicipio = (error: any) =>
-      error?.code === '42703' ||
-      error?.code === 'PGRST204' ||
-      error?.message?.includes("Could not find the 'municipio' column") ||
-      error?.message?.includes('municipio');
-    let user: any;
+    const correoNorm = correo.toLowerCase().trim();
 
-    try {
-      const { data, error } = await supabase
-        .from('users')
-        .select('id, nombre, correo, telefono, cedula, municipio, avatar_url, password_hash')
-        .eq('correo', correo.toLowerCase().trim())
-        .maybeSingle();
+    const { data: user, error: userErr } = await supabase
+      .from('users')
+      .select('id, nombre, correo, telefono, cedula, municipio, avatar_url, password_hash')
+      .eq('correo', correoNorm)
+      .maybeSingle();
 
-      if (error) throw error;
-      user = data;
-    } catch (err: any) {
-      if (isMissingMunicipio(err)) {
-        const { data, error } = await supabase
-          .from('users')
-          .select('id, nombre, correo, telefono, cedula, avatar_url, password_hash')
-          .eq('correo', correo.toLowerCase().trim())
-          .maybeSingle();
-
-        if (error) throw error;
-        user = data ? { ...data, municipio: '' } : null;
-      } else {
-        throw err;
-      }
-    }
-
+    if (userErr) throw userErr;
     if (!user) {
       return Response.json({ error: 'Correo o contraseña incorrectos.' }, { status: 401 });
     }
@@ -50,8 +28,44 @@ export async function POST(request: Request) {
       return Response.json({ error: 'Correo o contraseña incorrectos.' }, { status: 401 });
     }
 
+    let token: string | null = null;
+    const { data: authData, error: authError } = await supabase.auth.signInWithPassword({
+      email: correoNorm,
+      password,
+    });
+
+    if (authError || !authData.session?.access_token) {
+      const { error: createError } = await supabase.auth.admin.createUser({
+        email: correoNorm,
+        password,
+        email_confirm: true,
+        user_metadata: {
+          nombre: user.nombre,
+          telefono: user.telefono || '',
+          cedula: user.cedula || '',
+          municipio: user.municipio || '',
+        },
+      });
+
+      if (createError) {
+        throw createError;
+      }
+
+      const { data: nextAuthData, error: nextAuthError } = await supabase.auth.signInWithPassword({
+        email: correoNorm,
+        password,
+      });
+
+      if (nextAuthError || !nextAuthData.session?.access_token) {
+        throw nextAuthError || new Error('No se pudo generar una sesión de usuario.');
+      }
+      token = nextAuthData.session.access_token;
+    } else {
+      token = authData.session.access_token;
+    }
+
     const { password_hash, ...safeUser } = user;
-    return Response.json({ success: true, user: safeUser });
+    return Response.json({ success: true, user: safeUser, token });
   } catch (err: any) {
     console.error('Login error:', err);
     return Response.json({ error: 'Error interno del servidor.' }, { status: 500 });

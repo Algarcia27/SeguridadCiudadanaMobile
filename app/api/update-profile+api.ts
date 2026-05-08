@@ -1,16 +1,21 @@
-import { getSupabase } from '@/src/utils/supabase';
+import { getAuthenticatedSupabaseUser, getSupabase } from '@/src/utils/supabase';
 
 export async function POST(request: Request) {
   try {
-    const { userId, nombre, correo, telefono, cedula, municipio } = await request.json();
-
-    if (!userId) {
-      return Response.json({ error: 'Datos incompletos.' }, { status: 400 });
+    const authUser = await getAuthenticatedSupabaseUser(request);
+    if (!authUser?.email) {
+      return Response.json({ error: 'Token inválido o usuario no autenticado.' }, { status: 401 });
     }
 
+    const { nombre, correo, telefono, cedula, municipio } = await request.json();
     const updates: Record<string, string> = {};
+    const userEmail = authUser.email.toLowerCase();
+
+    if (correo !== undefined && correo.toLowerCase().trim() !== userEmail) {
+      return Response.json({ error: 'No está permitido cambiar el correo desde este endpoint.' }, { status: 403 });
+    }
+
     if (nombre !== undefined) updates.nombre = nombre.trim();
-    if (correo !== undefined) updates.correo = correo.toLowerCase().trim();
     if (telefono !== undefined) updates.telefono = telefono;
     if (cedula !== undefined) updates.cedula = cedula;
     if (municipio !== undefined) updates.municipio = municipio;
@@ -25,13 +30,13 @@ export async function POST(request: Request) {
       error?.code === 'PGRST204' ||
       error?.message?.includes("Could not find the 'municipio' column") ||
       error?.message?.includes('municipio');
-    let user: any;
 
+    let user: any;
     try {
       const { data, error } = await supabase
         .from('users')
         .update(updates)
-        .eq('id', userId)
+        .eq('correo', userEmail)
         .select('id, nombre, correo, telefono, cedula, municipio, avatar_url')
         .maybeSingle();
 
@@ -43,7 +48,7 @@ export async function POST(request: Request) {
         const { data, error } = await supabase
           .from('users')
           .update(updates)
-          .eq('id', userId)
+          .eq('correo', userEmail)
           .select('id, nombre, correo, telefono, cedula, avatar_url')
           .maybeSingle();
 
@@ -61,6 +66,7 @@ export async function POST(request: Request) {
     return Response.json({ success: true, user });
   } catch (err: any) {
     console.error('Update profile error:', err);
-    return Response.json({ error: 'Error interno del servidor.' }, { status: 500 });
+    const status = err.message?.includes('Token inválido') || err.message?.includes('no autenticado') ? 401 : 500;
+    return Response.json({ error: err.message || 'Error interno del servidor.' }, { status });
   }
 }

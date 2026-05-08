@@ -12,6 +12,25 @@ export async function POST(request: Request) {
     const supabase = getSupabase();
     const correoNorm = correo.toLowerCase().trim();
 
+    const ipAddress =
+      request.headers.get('x-forwarded-for')?.split(',')[0].trim() ||
+      request.headers.get('x-real-ip') ||
+      'unknown';
+
+    const windowStart = new Date(Date.now() - 15 * 60 * 1000).toISOString();
+    const { count, error: attemptsError } = await supabase
+      .from('password_reset_attempts')
+      .select('id', { count: 'exact', head: true })
+      .eq('correo', correoNorm)
+      .gte('attempt_time', windowStart);
+
+    if (attemptsError) throw attemptsError;
+    if ((count ?? 0) >= 5) {
+      return Response.json({ error: 'Demasiados intentos. Intenta de nuevo en 15 minutos.' }, { status: 429 });
+    }
+
+    await supabase.from('password_reset_attempts').insert({ correo: correoNorm, ip_address: ipAddress });
+
     const { data: user, error } = await supabase
       .from('users')
       .select('id, reset_code, reset_code_expiry')
@@ -53,6 +72,6 @@ export async function POST(request: Request) {
     return Response.json({ success: true });
   } catch (err: any) {
     console.error('Reset password error:', err);
-    return Response.json({ error: 'Error interno del servidor.' }, { status: 500 });
+    return Response.json({ error: err.message || 'Error interno del servidor.' }, { status: 500 });
   }
 }

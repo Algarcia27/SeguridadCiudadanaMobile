@@ -9,6 +9,7 @@ export interface AuthUser {
   cedula: string;
   municipio: string;
   avatar_url: string | null;
+  token?: string;
 }
 
 interface AuthContextType {
