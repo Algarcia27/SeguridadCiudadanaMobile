@@ -102,7 +102,7 @@ export default function SettingsTabScreen() {
       <View style={[styles.header, { paddingTop: topPad + 8, backgroundColor: colors.surface, borderBottomColor: colors.border }]}>
         <Text style={[styles.headerTitle, { color: colors.foreground }]}>{t('settings')}</Text>
         <View style={[styles.versionBadge, { backgroundColor: colors.surfaceContainer }]}>
-          <Text style={[styles.versionText, { color: colors.mutedForeground }]}>v2.1.0</Text>
+          <Text style={[styles.versionText, { color: colors.mutedForeground }]}>v1.0.0</Text>
         </View>
       </View>
 

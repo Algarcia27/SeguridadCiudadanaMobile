@@ -207,7 +207,7 @@ export default function ProfileScreen() {
               </View>
             </View>
             <TouchableOpacity
-              style={styles.avatarPlusBtn}
+              style={[styles.avatarPlusBtn, { backgroundColor: colors.background, borderColor: colors.border }]}
               onPress={handlePickAvatar}
               activeOpacity={0.8}
             >
@@ -325,14 +325,6 @@ export default function ProfileScreen() {
           ))}
         </View>
 
-        <TouchableOpacity style={[styles.securityBtn, { backgroundColor: colors.surfaceContainer, borderColor: colors.border }]}>
-          <View style={[styles.secBtnIcon, { backgroundColor: colors.primaryLight }]}>
-            <Ionicons name="shield-checkmark-outline" size={18} color={colors.primary} />
-          </View>
-          <Text style={[styles.secBtnText, { color: colors.foreground }]}>{t('securityPrivacy')}</Text>
-          <Ionicons name="chevron-forward" size={16} color={colors.mutedForeground} />
-        </TouchableOpacity>
-
         <View style={{ height: 24 }} />
       </ScrollView>
     </View>
@@ -352,9 +344,8 @@ const styles = StyleSheet.create({
   avatarPlusBtn: {
     position: 'absolute', bottom: 2, right: 2,
     width: 28, height: 28, borderRadius: 14,
-    backgroundColor: '#fff',
     alignItems: 'center', justifyContent: 'center',
-    borderWidth: 2, borderColor: 'rgba(0,0,0,0.08)',
+    borderWidth: 2,
     shadowColor: '#000', shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.3, shadowRadius: 4, elevation: 4,
   },
