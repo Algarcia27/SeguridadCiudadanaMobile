@@ -18,6 +18,7 @@ import { useRouter } from 'expo-router';
 import { impactLight, notifyWarning } from '@/src/utils/haptics';
 import { useColors } from '@/src/hooks/useColors';
 import { useLanguage } from '@/src/context/LanguageContext';
+import { useLocationContext } from '@/src/context/LocationContext';
 
 const services = [
   { id: 'counseling', iconName: 'chatbubbles', colorKey: 'traffic', lightKey: 'trafficLight', labelKey: 'counseling', descKey: 'counselingDesc' },
@@ -54,6 +55,7 @@ export default function DashboardScreen() {
   const insets = useSafeAreaInsets();
   const colors = useColors();
   const { t } = useLanguage();
+  const { locationLabel, gpsActive } = useLocationContext();
   const router = useRouter();
   const emergencyScale = useRef(new Animated.Value(1)).current;
 
@@ -152,11 +154,13 @@ export default function DashboardScreen() {
           </View>
           <View style={styles.locationText}>
             <Text style={[styles.locationLabel, { color: colors.mutedForeground }]}>{t('currentLocation')}</Text>
-            <Text style={[styles.locationValue, { color: colors.foreground }]}>San Cristóbal, Táchira</Text>
+            <Text style={[styles.locationValue, { color: colors.foreground }]} numberOfLines={1} ellipsizeMode="tail">
+              {locationLabel}
+            </Text>
           </View>
           <View style={styles.gpsBadge}>
-            <View style={[styles.gpsDot, { backgroundColor: colors.success }]} />
-            <Text style={[styles.gpsText, { color: colors.success }]}>{t('gpsActive')}</Text>
+            <View style={[styles.gpsDot, { backgroundColor: gpsActive ? colors.success : colors.error }]} />
+            <Text style={[styles.gpsText, { color: gpsActive ? colors.success : colors.error }]}> {gpsActive ? t('gpsActive') : 'GPS Inactivo'}</Text>
           </View>
         </View>
 

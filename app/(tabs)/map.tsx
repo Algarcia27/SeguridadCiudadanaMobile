@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useRef, useState } from 'react';
 import {
   View,
   Text,
@@ -6,37 +6,41 @@ import {
   TouchableOpacity,
   Platform,
   Dimensions,
+  FlatList,
+  Linking,
 } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { Ionicons } from '@expo/vector-icons';
-import Animated, {
-  useSharedValue,
-  useAnimatedStyle,
-  withRepeat,
-  withTiming,
-  Easing,
-} from 'react-native-reanimated';
+import MapView, { Marker, PROVIDER_DEFAULT, UrlTile } from 'react-native-maps';
 import { useColors } from '@/src/hooks/useColors';
+import { useLocationContext } from '@/src/context/LocationContext';
+import mapaData from '../../Mapa_Final_Tachira.json';
 
 const { width, height } = Dimensions.get('window');
 
-function PulseMarker({ color }: { color: string }) {
-  const scale = useSharedValue(1);
-  React.useEffect(() => {
-    scale.value = withRepeat(withTiming(1.5, { duration: 1200, easing: Easing.out(Easing.ease) }), -1, false);
-  }, []);
-  const pulseStyle = useAnimatedStyle(() => ({
-    transform: [{ scale: scale.value }],
-    opacity: 2 - scale.value,
-  }));
-  return (
-    <View>
-      <Animated.View style={[styles.pulse, { backgroundColor: color }, pulseStyle]} />
-      <View style={[styles.markerDot, { backgroundColor: color, borderColor: '#fff' }]}>
-        <Ionicons name="alert" size={12} color="#fff" />
-      </View>
-    </View>
-  );
+interface Cuadrante {
+  cuadrante: string;
+  organismo: string;
+  telefono: string;
+  sectores: string;
+}
+
+interface Feature {
+  type: string;
+  geometry: {
+    type: string;
+    coordinates: number[];
+  };
+  properties: {
+    'Ciudad / Localidad'?: string;
+    Municipio?: string;
+    Estado?: string;
+    País?: string;
+    categoria?: string;
+    datos_cuadrantes?: Cuadrante[];
+    telefono_principal?: string;
+  };
+  bbox?: number[];
 }
 
 export default function MapScreen() {
@@ -44,105 +48,156 @@ export default function MapScreen() {
   const colors = useColors();
   const topPad = Platform.OS === 'web' ? 67 : insets.top;
   const bottomPad = Platform.OS === 'web' ? 34 : insets.bottom;
+  const [selectedFeature, setSelectedFeature] = useState<Feature | null>(null);
+  const { currentLocation, locationLabel } = useLocationContext();
+  const [mapType, setMapType] = useState<'standard' | 'satellite'>('standard');
+  const mapRef = useRef<MapView | null>(null);
+
+  const initialRegion = {
+    latitude: 7.7667,
+    longitude: -72.2333,
+    latitudeDelta: 0.5,
+    longitudeDelta: 0.5,
+  };
+
+  const toggleMapType = () => {
+    setMapType((prev) => (prev === 'standard' ? 'satellite' : 'standard'));
+  };
+
+  const centerOnUser = () => {
+    if (!currentLocation || !mapRef.current) {
+      return;
+    }
+
+    mapRef.current.animateToRegion(
+      {
+        latitude: currentLocation.latitude,
+        longitude: currentLocation.longitude,
+        latitudeDelta: 0.02,
+        longitudeDelta: 0.02,
+      },
+      700
+    );
+  };
+
+  const renderMarker = (feature: Feature, index: number) => {
+    const longitude = feature.geometry.coordinates[0];
+    const latitude = feature.geometry.coordinates[1];
+    const isSeguridad = feature.properties.categoria === 'seguridad';
+    return (
+      <Marker
+        key={index}
+        coordinate={{ latitude, longitude }}
+        onPress={() => setSelectedFeature(feature)}
+      >
+        <View style={[styles.markerContainer, { backgroundColor: isSeguridad ? '#3B82F6' : '#EF4444' }]}>
+          <Ionicons name={isSeguridad ? 'shield' : 'alert'} size={16} color="#fff" />
+        </View>
+      </Marker>
+    );
+  };
+
+  const renderCuadrante = ({ item }: { item: Cuadrante }) => (
+    <View style={[styles.cuadranteItem, { backgroundColor: colors.surface, borderColor: colors.border }]}>
+      <View style={styles.cuadranteInfo}>
+        <Text style={[styles.cuadranteTitle, { color: colors.foreground }]}>Cuadrante: {item.cuadrante}</Text>
+        <Text style={[styles.cuadranteOrg, { color: colors.mutedForeground }]}>Organismo: {item.organismo}</Text>
+      </View>
+      <TouchableOpacity
+        style={[styles.callBtn, { backgroundColor: colors.primary }]}
+        onPress={() => Linking.openURL(`tel:${item.telefono}`)}
+      >
+        <Text style={[styles.callBtnText, { color: colors.background }]}>LLAMAR</Text>
+      </TouchableOpacity>
+    </View>
+  );
 
   return (
     <View style={[styles.container, { backgroundColor: colors.background }]}>
-      <View style={[styles.mapBg, { backgroundColor: colors.surfaceContainer }]}>
-        <View style={[styles.gridLine, styles.gridH1, { borderColor: colors.border }]} />
-        <View style={[styles.gridLine, styles.gridH2, { borderColor: colors.border }]} />
-        <View style={[styles.gridLine, styles.gridH3, { borderColor: colors.border }]} />
-        <View style={[styles.gridLine, styles.gridV1, { borderColor: colors.border }]} />
-        <View style={[styles.gridLine, styles.gridV2, { borderColor: colors.border }]} />
-        <View style={[styles.gridLine, styles.gridV3, { borderColor: colors.border }]} />
-
-        <View style={[styles.quadrant, { borderColor: colors.primary + '30' }]}>
-          <View style={[styles.quadrantLabel, { backgroundColor: colors.surface }]}>
-            <Text style={[styles.quadrantText, { color: colors.primary }]}>Quadrant P-01 Active</Text>
-          </View>
-        </View>
-
-        <View style={styles.userLocation}>
-          <Animated.View style={[styles.userPulse, { backgroundColor: colors.primary + '20' }]} />
-          <View style={[styles.userDot, { backgroundColor: colors.surface, borderColor: colors.primary }]}>
-            <View style={[styles.userCenter, { backgroundColor: colors.primary }]} />
-          </View>
-        </View>
-
-        <View style={[styles.incident1]}>
-          <PulseMarker color="#EF4444" />
-        </View>
-        <View style={[styles.incident2]}>
-          <PulseMarker color="#F97316" />
-        </View>
-      </View>
+      <MapView
+        ref={mapRef}
+        style={styles.map}
+        initialRegion={initialRegion}
+        provider={PROVIDER_DEFAULT}
+        mapType={mapType}
+        showsUserLocation
+        followsUserLocation={false}
+        loadingEnabled
+        loadingBackgroundColor={colors.surface}
+      >
+        <UrlTile
+          urlTemplate="https://{s}.tile.openstreetmap.fr/osmfr/{z}/{x}/{y}.png"
+          maximumZ={19}
+          tileSize={256}
+          zIndex={0}
+        />
+        {mapaData.features.map(renderMarker)}
+      </MapView>
 
       <View style={[styles.topBar, { top: topPad + 12 }]}>
         <View style={[styles.topCard, { backgroundColor: colors.surface + 'E8', borderColor: colors.border }]}>
           <View style={[styles.topCardIcon, { backgroundColor: colors.primaryLight }]}>
             <Ionicons name="location" size={20} color={colors.primary} />
           </View>
-          <View>
-            <Text style={[styles.topCardLabel, { color: colors.mutedForeground }]}>Visibility: Clear</Text>
-            <Text style={[styles.topCardValue, { color: colors.foreground }]}>Av. Francisco de Miranda</Text>
+              <View>
+            <Text style={[styles.topCardLabel, { color: colors.mutedForeground }]}>UBICACIÓN ACTUAL:</Text>
+            <Text style={[styles.topCardValue, { color: colors.foreground }]} numberOfLines={1} ellipsizeMode="tail">
+              {locationLabel}
+            </Text>
           </View>
         </View>
       </View>
 
       <View style={styles.floatingControls}>
-        <TouchableOpacity style={[styles.floatBtn, { backgroundColor: colors.surface + 'E8', borderColor: colors.border }]}>
-          <Ionicons name="layers-outline" size={20} color={colors.foreground} />
+        <TouchableOpacity
+          style={[styles.floatBtn, { backgroundColor: colors.surface + 'E8', borderColor: colors.primary }]}
+          onPress={toggleMapType}
+        >
+          <Ionicons name="layers" size={22} color={colors.primary} />
         </TouchableOpacity>
-        <TouchableOpacity style={[styles.floatBtn, { backgroundColor: colors.surface + 'E8', borderColor: colors.border }]}>
-          <Ionicons name="navigate-outline" size={20} color={colors.foreground} />
+        <TouchableOpacity
+          style={[styles.floatBtn, { backgroundColor: colors.surface + 'E8', borderColor: colors.primary }]}
+          onPress={centerOnUser}
+        >
+          <Ionicons name="navigate" size={22} color={colors.primary} />
         </TouchableOpacity>
       </View>
 
-      <View style={[styles.bottomCard, { bottom: bottomPad + 20, backgroundColor: colors.surface + 'E8', borderColor: colors.border }]}>
-        <View style={[styles.patrolIcon, { backgroundColor: 'rgba(239,68,68,0.15)' }]}>
-          <Ionicons name="shield-half-outline" size={24} color="#EF4444" />
+      {selectedFeature && (
+        <View style={[styles.bottomPanel, { bottom: bottomPad, backgroundColor: colors.surface + 'F0', borderColor: colors.border }]}>
+          <TouchableOpacity
+            style={styles.closeBtn}
+            onPress={() => setSelectedFeature(null)}
+          >
+            <Ionicons name="close" size={24} color={colors.foreground} />
+          </TouchableOpacity>
+          <Text style={[styles.municipioTitle, { color: colors.foreground }]}>
+            Municipio: {selectedFeature.properties.Municipio || 'Desconocido'}
+          </Text>
+          <FlatList
+            data={selectedFeature.properties.datos_cuadrantes || []}
+            renderItem={renderCuadrante}
+            keyExtractor={(item, index) => index.toString()}
+            style={styles.cuadrantesList}
+          />
         </View>
-        <View style={styles.patrolInfo}>
-          <Text style={[styles.patrolTitle, { color: colors.foreground }]}>Patrol P-01</Text>
-          <Text style={[styles.patrolSub, { color: colors.mutedForeground }]}>Response time: &lt; 5 mins</Text>
-        </View>
-        <TouchableOpacity style={[styles.sosBtn, { backgroundColor: colors.foreground }]}>
-          <Text style={[styles.sosBtnText, { color: colors.background }]}>SOS</Text>
-        </TouchableOpacity>
-      </View>
+      )}
     </View>
   );
 }
 
 const styles = StyleSheet.create({
   container: { flex: 1 },
-  mapBg: { position: 'absolute', inset: 0 },
-  gridLine: { position: 'absolute', borderWidth: 0.5 },
-  gridH1: { top: '25%', left: 0, right: 0, borderBottomWidth: 0.5 },
-  gridH2: { top: '50%', left: 0, right: 0, borderBottomWidth: 0.5 },
-  gridH3: { top: '75%', left: 0, right: 0, borderBottomWidth: 0.5 },
-  gridV1: { left: '25%', top: 0, bottom: 0, borderRightWidth: 0.5 },
-  gridV2: { left: '50%', top: 0, bottom: 0, borderRightWidth: 0.5 },
-  gridV3: { left: '75%', top: 0, bottom: 0, borderRightWidth: 0.5 },
-  quadrant: {
-    position: 'absolute',
-    top: '15%',
-    left: '10%',
-    right: '10%',
-    bottom: '20%',
-    borderRadius: 32,
-    borderWidth: 2,
+  map: { flex: 1 },
+  markerContainer: {
+    width: 32,
+    height: 32,
+    borderRadius: 16,
     alignItems: 'center',
+    justifyContent: 'center',
+    borderWidth: 2,
+    borderColor: '#fff',
   },
-  quadrantLabel: { marginTop: 16, paddingHorizontal: 14, paddingVertical: 6, borderRadius: 20 },
-  quadrantText: { fontSize: 10, fontFamily: 'Inter_700Bold', letterSpacing: 1.5, textTransform: 'uppercase' },
-  userLocation: { position: 'absolute', top: '50%', left: '50%', marginLeft: -16, marginTop: -16 },
-  userPulse: { position: 'absolute', inset: -20, borderRadius: 36 },
-  userDot: { width: 32, height: 32, borderRadius: 16, borderWidth: 3, alignItems: 'center', justifyContent: 'center' },
-  userCenter: { width: 10, height: 10, borderRadius: 5 },
-  incident1: { position: 'absolute', top: '30%', right: '22%' },
-  incident2: { position: 'absolute', bottom: '38%', left: '18%' },
-  pulse: { position: 'absolute', width: 40, height: 40, borderRadius: 20, top: -8, left: -8 },
-  markerDot: { width: 24, height: 24, borderRadius: 12, borderWidth: 2, alignItems: 'center', justifyContent: 'center' },
   topBar: { position: 'absolute', left: 16, right: 16 },
   topCard: {
     flexDirection: 'row',
@@ -157,21 +212,30 @@ const styles = StyleSheet.create({
   topCardValue: { fontSize: 14, fontFamily: 'Inter_600SemiBold' },
   floatingControls: { position: 'absolute', right: 16, bottom: 200, gap: 10 },
   floatBtn: { width: 44, height: 44, borderRadius: 14, borderWidth: 1, alignItems: 'center', justifyContent: 'center' },
-  bottomCard: {
+  bottomPanel: {
     position: 'absolute',
-    left: 16,
-    right: 16,
+    left: 0,
+    right: 0,
+    height: height * 0.4,
+    borderTopLeftRadius: 28,
+    borderTopRightRadius: 28,
+    borderWidth: 1,
+    padding: 20,
+  },
+  closeBtn: { alignSelf: 'flex-end', marginBottom: 10 },
+  municipioTitle: { fontSize: 18, fontFamily: 'Inter_700Bold', marginBottom: 10 },
+  cuadrantesList: { flex: 1 },
+  cuadranteItem: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: 14,
-    padding: 18,
-    borderRadius: 28,
+    padding: 12,
+    marginVertical: 4,
+    borderRadius: 12,
     borderWidth: 1,
   },
-  patrolIcon: { width: 48, height: 48, borderRadius: 16, alignItems: 'center', justifyContent: 'center' },
-  patrolInfo: { flex: 1 },
-  patrolTitle: { fontSize: 14, fontFamily: 'Inter_700Bold' },
-  patrolSub: { fontSize: 12, fontFamily: 'Inter_400Regular', marginTop: 2 },
-  sosBtn: { paddingVertical: 10, paddingHorizontal: 18, borderRadius: 20 },
-  sosBtnText: { fontSize: 12, fontFamily: 'Inter_700Bold', letterSpacing: 1 },
+  cuadranteInfo: { flex: 1 },
+  cuadranteTitle: { fontSize: 14, fontFamily: 'Inter_600SemiBold' },
+  cuadranteOrg: { fontSize: 12, fontFamily: 'Inter_400Regular', marginTop: 2 },
+  callBtn: { paddingVertical: 8, paddingHorizontal: 12, borderRadius: 8 },
+  callBtnText: { fontSize: 12, fontFamily: 'Inter_700Bold' },
 });

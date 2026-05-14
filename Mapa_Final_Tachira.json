@@ -1,0 +1,1749 @@
+{
+    "type": "FeatureCollection",
+    "features": [
+        {
+            "type": "Feature",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    -72.22142,
+                    7.775578
+                ]
+            },
+            "properties": {
+                "Ciudad / Localidad": "San Cristóbal",
+                "Municipio": "San Cristóbal",
+                "Estado": "Táchira",
+                "País": "Venezuela",
+                "categoria": "seguridad",
+                "datos_cuadrantes": [
+                    {
+                        "cuadrante": "P-01",
+                        "organismo": "POLICÍA DEL ESTADO TÁCHIRA",
+                        "telefono": "0426-5140935",
+                        "sectores": "MANUEL FELIPE RUGELES, SABANA LARGA, LA INVASION, LA ORTIZA, LA CHUCURI, BARRIO LA ORTIZA, BARRIO PARAISO, BARRIO ROMULO GALLEGOS, CUESTA DE TRAPICHE,, SAN FRANCISCO, URS COLINAS DEL TORBES, BARRIO ANDRES BELLO."
+                    },
+                    {
+                        "cuadrante": "P-02",
+                        "organismo": "CPNB",
+                        "telefono": "0416-6103932",
+                        "sectores": "LA VICTORIA, MARCO TULIO RANGEL, GENARO MÉNDEZ, BARRIO ALIANZA"
+                    },
+                    {
+                        "cuadrante": "P-03",
+                        "organismo": "POLICÍA DEL ESTADO TÁCHIRA",
+                        "telefono": "0416-6273165",
+                        "sectores": "URB SANTA ROSA, BARRIO PARQUE EXPOSICIONES, URB TACHIRA, URS LOS ATICOS, RAFAEL URDANETA LA CONCORDIA, BARRIO EL CARMEN, 21 BRIGADA BARRIO URDANETA, JUAN DE MALDONADO, SIMON BOLIVAR VERA CRUZ"
+                    },
+                    {
+                        "cuadrante": "P-04",
+                        "organismo": "CPNB",
+                        "telefono": "0426-5141074",
+                        "sectores": "COLINAS DEL TORBES, LA CONCORDIA."
+                    },
+                    {
+                        "cuadrante": "P-05",
+                        "organismo": "POLICÍA DEL ESTADO TÁCHIRA",
+                        "telefono": "0416-0104722",
+                        "sectores": "LA CASTRA,CONJ RESIDENCIAL SAN CRISTOBAL UNIDAD VECINAL,LA CASTRA RUIZ PINEDA URB ALTO DE LOS CRIOLLITOS, LUCIO OQUENDO, VILLA SAN CRISTOBAL LA BERMEJA, CON RESIDENCIAL VILLA SAN CRISTOBAL BARRIO CENTRAL ALTOS DE LOS CRIOLLITOS,"
+                    },
+                    {
+                        "cuadrante": "P-06",
+                        "organismo": "POLICÍA MUNICIPAL SAN CRISTÓBAL",
+                        "telefono": "911",
+                        "sectores": "PARQUE METROPOLITANO, BARRIO LAS DELICIAS, URB COROMOTO, BARRIO LAS FLORES LA HACIENDA, LAS DELICIAS, MONSEÑOR JAUREGUI, 19 DE ABRIL URB MERIDA"
+                    },
+                    {
+                        "cuadrante": "P-07",
+                        "organismo": "CPNB",
+                        "telefono": "911",
+                        "sectores": "POZO AZUL, URB. LA CASTELLANA, MADRE JUANA, 23 DE ENERO, 8 DE DICIEMBRE"
+                    },
+                    {
+                        "cuadrante": "P-09",
+                        "organismo": "POLICÍA DEL ESTADO TÁCHIRA",
+                        "telefono": "0412-0208714",
+                        "sectores": "CHORRO DEL INDIO, CONJ RESIDENCIAL, VILLA DEL ECUADOR"
+                    },
+                    {
+                        "cuadrante": "PT-01",
+                        "organismo": "CPNB",
+                        "telefono": "SIN ASIGNAR",
+                        "sectores": "CHORRO EL INDIO, SONA TURISTICA"
+                    },
+                    {
+                        "cuadrante": "P-08A",
+                        "organismo": "POLICÍA DEL ESTADO TÁCHIRA",
+                        "telefono": "0426-5140908",
+                        "sectores": "BARRIO GUZMAN LA GUACARA BARRIO OBRERO PARTE BAJA, SAN CARLOS BARRIO SAN CARLOS, BARRIO LOURDES  LA GUACARA"
+                    },
+                    {
+                        "cuadrante": "PT-02",
+                        "organismo": "CPNB",
+                        "telefono": "0426-5140988",
+                        "sectores": "BARRIO OBRERO, BARRIO JOSE GREGORIO HERNÁNDEZ, URBANIZACIÓN LAS ACACIAS, URB. PIRINEOS PARTE BAJA, BARRIO CRISTO REY, EL PORTAL DE LAS ACACIAS"
+                    },
+                    {
+                        "cuadrante": "P-10A",
+                        "organismo": "POLICÍA MUNICIPAL SAN CRISTÓBAL",
+                        "telefono": "0412-0112820",
+                        "sectores": "BARRIO SUCRE PARTE ALTA BARRIO SUCRE BARRIO SUCRE PARTE BAJA URB COLINAS DE ANTARAJU, URB SUCRE, URB BAJUMBAL URB COLINAS DE PIRINEOS"
+                    },
+                    {
+                        "cuadrante": "P-10B",
+                        "organismo": "CPNB",
+                        "telefono": "0412-0105897",
+                        "sectores": "BARRIO LIBERTADOR, SINARAL, PIRINEOS 1, PIRINEOS 2, PIRINEOS PARTE ALTA QUNIMARI, BELLO MONTE"
+                    },
+                    {
+                        "cuadrante": "P-11",
+                        "organismo": "POLICÍA DEL ESTADO TÁCHIRA",
+                        "telefono": "0412-2210909",
+                        "sectores": "CAMPO ALEGRE, BARRIO AMBROSIO PLAZA LOS NARANJOS, URB MILITAR LA MONUMENTAL, LAS PILAS BUENOS AIRES II, URB LOS NARANJOS PUEBLO NUEVO, BARRIO TAMPACON, BUENOS AIRES,URS LOS CAOBOS, REDOMA LOS ARBOLITOS, BARRIO PEDRO ROA GONZALEZ, COMPLEJO FERIAL"
+                    },
+                    {
+                        "cuadrante": "P-12",
+                        "organismo": "CPNB",
+                        "telefono": "911",
+                        "sectores": "LA POPITA, SANTA INÉS, LAS MERCEDES, PARAISO, NUEVA GUYANA MONTERREY, LOS FRAILEJONES, JOSE GREGORIO HERNÁNDEZ"
+                    },
+                    {
+                        "cuadrante": "P-13",
+                        "organismo": "CPNB",
+                        "telefono": "0416-6098083",
+                        "sectores": "ZONA INDUSTRIAL DE PUENTE REAL, PASAJE BARCELONA, 1°RO MAYO, BARRIO ALTAMIRA, LA ERMITA, PUERTA DEL SOL, URB. TORSES, AVENIDA LIBERTADOR, CALLE ORINOCO, AVENIDA"
+                    },
+                    {
+                        "cuadrante": "P-14",
+                        "organismo": "CPNB",
+                        "telefono": "0416-6096816",
+                        "sectores": "LAS LOMAS, LOS KIOSCOS, LOS TEQUES, SANTA TERESA"
+                    },
+                    {
+                        "cuadrante": "P-15",
+                        "organismo": "POLICÍA DEL ESTADO TÁCHIRA",
+                        "telefono": "0416-6096771",
+                        "sectores": "ZONA INDUSTRIAL DE PARAMILLO  EL LOBO SANTA CECILIA, SABANA IDEL MEDIO, BARRIO BOLIVAR URB EL LOBO LAS TORRES BARRIO ALTOS DE MACHIRI\n"
+                    },
+                    {
+                        "cuadrante": "P-16",
+                        "organismo": "CPNB",
+                        "telefono": "0416-6097162",
+                        "sectores": "RES. VISTA DORADA, MACHIRI, SABANA DEL MEDIO,               VILLA OLIMPICA,"
+                    },
+                    {
+                        "cuadrante": "PV-01",
+                        "organismo": "CPNB",
+                        "telefono": "911",
+                        "sectores": "TRONCAL 1, DESDE EL PUENTE, LOS CAYENES, TUCAPE, CERRO VERDE, AVENIDA ARGINAS TORRES, PRADOS DEL TORBE, DISTRIBUIDOR DE CORDERO, AVENIDA JOSE A. SUCRE, BARRANCAS,AVENIDA MARGINAL DEL TORBES, SAMBIL, BARRIO EL CAMBIO, PARADERO, URB. COLINAS DEL TORBES, AV. PRINCIPAL COLINA DEL TORBES, DISTRIBUIDOR REDOMA DE LA ULA, EL CUCHARO, AUTOPISTA SANCRISTOBAL ABEJALES, LAS PAMPAS, HASTA DISTRIBUIDOR SAN JOSECITO\n"
+                    },
+                    {
+                        "cuadrante": "P-17",
+                        "organismo": "GNB",
+                        "telefono": "0412-3390911",
+                        "sectores": "EL MIRADOR PARTE ALTA COLINAS DEL MIRADOR,             SANTA ELLENA"
+                    },
+                    {
+                        "cuadrante": "P-18",
+                        "organismo": "GNB",
+                        "telefono": "0416-6097046",
+                        "sectores": "SAN ISIDRO, ZORCA, TRES ESQUINAS PROVIDENCIAS EL BOLON VALLE VERDE CON RES SAN BENITO , MATA DE GUAUDA"
+                    },
+                    {
+                        "cuadrante": "P-19",
+                        "organismo": "POLICÍA DEL ESTADO TÁCHIRA",
+                        "telefono": "0416-6098169",
+                        "sectores": "\nEL MIRADOR, GRANJAS INFANTILES, ALDEA PERICOS,             URB EL MIRADOR "
+                    },
+                    {
+                        "cuadrante": "P-20",
+                        "organismo": "POLICÍA DEL ESTADO TÁCHIRA",
+                        "telefono": "0416-6096548",
+                        "sectores": "LA PLAYA, ALDEA LA TINTA, ABREBRECHA, RAFAEL MORENO, BARRIO ALTOS DE BELLA VISTA BARRIO EL RIO, BARRIO RAFAEL MORENO LABRADOR"
+                    },
+                    {
+                        "cuadrante": "P-21",
+                        "organismo": "POLICÍA DEL ESTADO TÁCHIRA",
+                        "telefono": "0416-6096774",
+                        "sectores": "\nSABANA LARGA, BARRIO VEGA DE LA VIRGEN, EL CUCHARO, LA ORTIZA SABANETA LOS ANGELES, VEGA DE LA TINTA, ELEAZAR LOPEZ CONTRERAS"
+                    }
+                ],
+                "telefono_principal": "0426-5140935"
+            },
+            "bbox": [
+                -72.22142,
+                7.775578,
+                -72.22142,
+                7.775578
+            ]
+        },
+        {
+            "type": "Feature",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    -72.373599,
+                    7.602733
+                ]
+            },
+            "properties": {
+                "Ciudad / Localidad": "Rubio",
+                "Municipio": "Junín",
+                "Estado": "Táchira",
+                "País": "Venezuela",
+                "categoria": "seguridad",
+                "datos_cuadrantes": [
+                    {
+                        "cuadrante": "PF-01",
+                        "organismo": "POLICÍA DEL ESTADO TÁCHIRA",
+                        "telefono": "0416-6096360",
+                        "sectores": "LOS BOSQUES, SAN DIEGO LA COLONIA FIQUEROS, BARRIO SAN DIEGO, RUBIO CENTRO,, URE LA SUR URB LA AZUCENA, CEMENTERIO BARRIO LA"
+                    },
+                    {
+                        "cuadrante": "PF-02",
+                        "organismo": "POLICÍA DEL ESTADO TÁCHIRA",
+                        "telefono": "0416-6097060",
+                        "sectores": "CAÑAVERAL, BARRIO LA GUAIRA, PICO PISO DE PLATA REMOLINO 1, REMOILING 2, BARRIO MATA DE GUAUDA, SANTA BARBARA, EL HOYITO ZONA INDUSTRIAL LA AZUCENA, RUIZ PINEDA EL JAGUAL"
+                    },
+                    {
+                        "cuadrante": "PF-03",
+                        "organismo": "POLICÍA DEL ESTADO TÁCHIRA",
+                        "telefono": "0416-6096886",
+                        "sectores": "BOLIVIA, LA Y, EL POBLADO, CUMBRES ANDINAS, UPEL, ALI PRIMERA LA GONZALERA, MISA JULIA, EL RODEO, BUENOS AIRES, BARRIO EL AMPARO."
+                    },
+                    {
+                        "cuadrante": "PF-04",
+                        "organismo": "CPNB",
+                        "telefono": "0416-6096638",
+                        "sectores": "LA VICTORIA, BOLIVIA, BRAMON PARTE ALTA,          BRAMON PARTE BAJA."
+                    }
+                ],
+                "telefono_principal": "0416-6096360"
+            },
+            "bbox": [
+                -72.373599,
+                7.602733,
+                -72.373599,
+                7.602733
+            ]
+        },
+        {
+            "type": "Feature",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    -72.22221,
+                    7.821526
+                ]
+            },
+            "properties": {
+                "Ciudad / Localidad": "Táriba",
+                "Municipio": "Cárdenas",
+                "Estado": "Táchira",
+                "País": "Venezuela",
+                "categoria": "seguridad",
+                "datos_cuadrantes": [
+                    {
+                        "cuadrante": "P-01",
+                        "organismo": "POLICÍA MUNICIPAL CÁRDENAS",
+                        "telefono": "0416-6096484",
+                        "sectores": "TARIBA BARRIO BELLAVISTA BARRIO MONSENOR BRICEÑO PRADOS DEL FORBES CASCO CENTRAL BARRIO ZULIA"
+                    },
+                    {
+                        "cuadrante": "P-02",
+                        "organismo": "CPNB",
+                        "telefono": "0416-6103760",
+                        "sectores": "HIRANZO-SANTA EDUVIGUES-DIAMANTE"
+                    },
+                    {
+                        "cuadrante": "P-03",
+                        "organismo": "CPNB",
+                        "telefono": "0426-5369617",
+                        "sectores": "TUCAPE-BELLAVISTA LAS MARGARITAS"
+                    },
+                    {
+                        "cuadrante": "P-04",
+                        "organismo": "CPNB",
+                        "telefono": "0416-6097995",
+                        "sectores": "LA PUENTE-TOITUNA-BOCA CANEYES-L0S CEIBOS CANEYES"
+                    },
+                    {
+                        "cuadrante": "P-05",
+                        "organismo": "POLICÍA DEL ESTADO TÁCHIRA",
+                        "telefono": "0416-6096514",
+                        "sectores": "ARJONA URB COLINAS DE LA AURORA LAS VEGAS SABANETA"
+                    },
+                    {
+                        "cuadrante": "P-06",
+                        "organismo": "POLICÍA DEL ESTADO TÁCHIRA",
+                        "telefono": "0416-6096334",
+                        "sectores": "PALO GORDO JUNCO CAPACHITO EL JUNCO, JUNCO PARAMO ZAPATOCAU RB ROSAL"
+                    },
+                    {
+                        "cuadrante": "P-07",
+                        "organismo": "POLICÍA MUNICIPAL CÁRDENAS",
+                        "telefono": "0416-6096882",
+                        "sectores": "URB ANDRES BELLO HORIZONTE SAN MATEO, URB ALTOS DE PARAMILLO, EL NAZARENO LA TRINIDAD, ALTOS DE GALLARDIN EL MILAGRO URB LAS LOMAS DEL TOICO HELECHALES CAPACHITO"
+                    },
+                    {
+                        "cuadrante": "PV-04",
+                        "organismo": "POLICÍA DEL ESTADO TÁCHIRA",
+                        "telefono": "911",
+                        "sectores": "TRONCAL 7 DESDE EL DISTRIBUIDOR DE CORDERO, SANTA EDUVIGES, SABANETA, LOS LLANITOS, 12 DE OCTUBRE, LLANO LA CRUZ, EL BORDO HASTA EL CRUCE CON EL CASERIO LA AHUYALA Y LA VIA AL PARQUE CHORRO DEL INDIO"
+                    },
+                    {
+                        "cuadrante": "P-08",
+                        "organismo": "CPNB",
+                        "telefono": "0416-6096880",
+                        "sectores": "PUERTA DEL SOL, SILGARA TORBES"
+                    },
+                    {
+                        "cuadrante": "P-09",
+                        "organismo": "POLICÍA DEL ESTADO TÁCHIRA",
+                        "telefono": "0414-3218082",
+                        "sectores": "URB LA BORREREÑAL LOS PIÑUELOS SAN RAFAEL BELLAVISTA URB EL BOSQUE"
+                    },
+                    {
+                        "cuadrante": "P-10",
+                        "organismo": "POLICÍA DEL ESTADO TÁCHIRA",
+                        "telefono": "0416-6096238",
+                        "sectores": "MANUEL FELIPE RUGELES URB NUEVO AMANECER URB ALTOS DE FLAMINGO LA GARCIA LOMAS BLANCAS LOMA BLANCA LLANITO, LOS LLANITOS URB MANUEL PELIPE RUGELES"
+                    },
+                    {
+                        "cuadrante": "P-11",
+                        "organismo": "POLICÍA DEL ESTADO TÁCHIRA",
+                        "telefono": "0416-6096469",
+                        "sectores": "BARRIO RIBERAS DEL TORBES BARRANCAS PARTE BAJALOS PROCERES BARRANCAS PARTE ALTA RIVERAS DEL TORBES BARRIO BARNANCAS BARRIO RIVERAS DEL TORBES"
+                    }
+                ],
+                "telefono_principal": "0416-6096484"
+            },
+            "bbox": [
+                -72.22221,
+                7.821526,
+                -72.22221,
+                7.821526
+            ]
+        },
+        {
+            "type": "Feature",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    -72.44651,
+                    7.822456
+                ]
+            },
+            "properties": {
+                "Ciudad / Localidad": "San Antonio del Táchira",
+                "Municipio": "Bolívar",
+                "Estado": "Táchira",
+                "País": "Venezuela",
+                "categoria": "seguridad",
+                "datos_cuadrantes": [
+                    {
+                        "cuadrante": "PF-01",
+                        "organismo": "POLICÍA DEL ESTADO TÁCHIRA",
+                        "telefono": "0416-6097031",
+                        "sectores": "BARRIO RICAUTE BARRIO MIRANDA, BARRIO PUEBLO NUEVO BARRIO FRANCISCO DE MIRANDA SIMON BOLIVARLLA POPA CAYETANG REDONDO, BARRIO LAS LAGUNITAS, MIRANDA \"A MIRANDAS MAPICHE VILLA BOLIVAR, SANCHEZ OSORIO, BARRIO CIRAZAO PICO VEREDE BARRIO LA POPA, SIM"
+                    },
+                    {
+                        "cuadrante": "PF-02",
+                        "organismo": "GNB",
+                        "telefono": "0416-6096802",
+                        "sectores": "ANTONIO RICAUTE JU MORA RULE PINEDA URS CAPRENCO EL TERMINAL BARRIO ANTONIO PINTO SALINAS OCUMARE BARRIO RUIZ PINEDA BARRIO EL PLANURS CAYETANO ANDRES BELLO, BARRIO RAFAEL URDANETA, BARRIDOCUMARERAFAEL URDANETA, GARROCHAL"
+                    },
+                    {
+                        "cuadrante": "PF-03",
+                        "organismo": "POLICÍA DEL ESTADO TÁCHIRA",
+                        "telefono": "0416-6097887",
+                        "sectores": "COLINAS LAS POPITAS BARRIO QUEBRADA SECA, PEDRO PAEZ PINTO SALINAS, BARRIO CRISTO REY BARRIO LA POPITALOS DE JULIO"
+                    },
+                    {
+                        "cuadrante": "PF-04",
+                        "organismo": "POLICÍA DEL ESTADO TÁCHIRA",
+                        "telefono": "0416-8086330",
+                        "sectores": "SAN ANTONIO, LOS LIBERTADORESDE AMERICA LA INVASION"
+                    },
+                    {
+                        "cuadrante": "PF-05",
+                        "organismo": "GNB",
+                        "telefono": "0416-6096430",
+                        "sectores": "LOS GARCIA, SANTA ROSA DE LIMA, JUAN DE DIOS MUNOS NICOTINA, CONSTATING GUTIERREZ BARRIO JOSE ANTONIO PAEZ ALI PRIMERAALTO MOROS, JOSE FELIX RIBAS, JOSE ANTONG PAEZ, SOLER, JORGE NARZISO MOROS LOS TIGRILLOS BARRIO JUAN DE DIOS MUNOS, ROSA INES"
+                    },
+                    {
+                        "cuadrante": "PF-06",
+                        "organismo": "GNB",
+                        "telefono": "0416-6096288",
+                        "sectores": "EL SALAITO LLAND DE JORGE LLAND DE JORGE SABAN POTRERAEL SALADITO LA INVASION, DE LLAND DE JORGELLLAND JORGE COLINAS DE LA FRONTERA TERRAZAS DE SANTA MARGARITA"
+                    },
+                    {
+                        "cuadrante": "PV-02",
+                        "organismo": "CPNB",
+                        "telefono": "911",
+                        "sectores": "TRONCAL 1 DESDE: CRUCE MARGINAL DEL TORBES CON VIA SAN ANTONIO DEL TACHIRA, EL MIRADOR, ZORCA, MATA DE GUADA, BALANDRIA, RANCHERIAS, CAPACHO, LIBERTAD, COLINAS DE BELLO MONTE, AGUA BLANCA, SALADO NEGRO, HASTA LA ALCABALA DE PERACAL"
+                    }
+                ],
+                "telefono_principal": "0416-6097031"
+            },
+            "bbox": [
+                -72.44651,
+                7.822456,
+                -72.44651,
+                7.822456
+            ]
+        },
+        {
+            "type": "Feature",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    -72.42572,
+                    7.945454
+                ]
+            },
+            "properties": {
+                "Ciudad / Localidad": "Ureña",
+                "Municipio": "Pedro María Ureña",
+                "Estado": "Táchira",
+                "País": "Venezuela",
+                "categoria": "seguridad",
+                "datos_cuadrantes": [
+                    {
+                        "cuadrante": "PF-01",
+                        "organismo": "GNB",
+                        "telefono": "0412-3390930",
+                        "sectores": "CENTRAL AZUCARERA, EL GANEY, BARRIO RUIZ PINEDA URB SIMON BOLIVAR RESIDENCIAS MILITARES, SIMON BOLIVAR LA ESPERANZA URB DANIELCARIAS, BARRIO LOS PARCELEROS, BLOQUERA, RUIZ PINEDA, PLAZA VIEJA, BARRIO EL CENTRO, LAS FLORES, BARRIO LAS FLORES"
+                    },
+                    {
+                        "cuadrante": "PF-02",
+                        "organismo": "GNB",
+                        "telefono": "911",
+                        "sectores": "BARRIO LA PEZA, EMANUEL CUJILA PESA, BONILLA, 13 DE ABRIL EL CEMENTERIO, BARRIO ELOY BLANCON, SAN ISIDRO DE ALTAMIRA BARRIO BONILLA INTEGRACION   1,3 Y 4 PARTE ALTA"
+                    },
+                    {
+                        "cuadrante": "PF-03",
+                        "organismo": "CPNB",
+                        "telefono": "911",
+                        "sectores": "ZONA INDUSTRIAL, SAN MARTIN, JOSE GREGORIO HERNÁNDEZ, BARRIO QUEBRADA SECA, LA INTEGRACIÓN 06"
+                    },
+                    {
+                        "cuadrante": "PF-04",
+                        "organismo": "POLICÍA DEL ESTADO TÁCHIRA",
+                        "telefono": "911",
+                        "sectores": "LUIS USECHE DIAZ, CARRIO GONZALO CASTELLANOS URB ROMULO GALLEGOS BARRIO CARLOS ANDRES, ROMULO GALLEGOS, 24 DE JULIO,S DE JULIO AGUAS CALIENTES, EL CASTILLO, CRISTAL DEL BOSQUE BARRIO EL CENTRO, BARRIO DOCTOR LUIS USECHE"
+                    },
+                    {
+                        "cuadrante": "PF-05",
+                        "organismo": "POLICÍA DEL ESTADO TÁCHIRA",
+                        "telefono": "911",
+                        "sectores": "LAS TIENDITAS PARTE ALTA PORTALES, TIENDITAS PARTE BAJA PORTAL DE TIENDITAS, BARRIO CAMILO TORRES NUEVAS TIENDITAS"
+                    },
+                    {
+                        "cuadrante": "PR-06",
+                        "organismo": "GNB",
+                        "telefono": "911",
+                        "sectores": "SECTORES: LA MULATA, LA VEGA, ALTOS DE LA MULATA, SAN ISIDRO, MAYORQUIN, LOS ANDES, ANDRES ARELLANO, LA CARRERA, EL RAYO, LA CANTERA, LAS GUINEAS, LA LAGUNA\n"
+                    }
+                ],
+                "telefono_principal": "0412-3390930"
+            },
+            "bbox": [
+                -72.42572,
+                7.945454,
+                -72.42572,
+                7.945454
+            ]
+        },
+        {
+            "type": "Feature",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    -72.257352,
+                    8.237373
+                ]
+            },
+            "properties": {
+                "Ciudad / Localidad": "La Fría",
+                "Municipio": "García de Hevia",
+                "Estado": "Táchira",
+                "País": "Venezuela",
+                "categoria": "seguridad",
+                "datos_cuadrantes": [
+                    {
+                        "cuadrante": "PF-01",
+                        "organismo": "POLICÍA DEL ESTADO TÁCHIRA",
+                        "telefono": "0412-3246763",
+                        "sectores": "BARRIO EL CARMEN URB FRANCISCO DE MIRANDA, TERMINAL DE PASAJEROS CENTRO LA FRIA, CALLE 1, EL OBELISCO HIERRO LA FRIA URB JAUREGULPREFUNDACION, BARRIO BOLIVAR, BARRIO LAS DELICIAS, BARRIO GARCIA DE HEVIA EL ESCONDITE, RAUL LEONI, 19 DE ABRIL, LOS PITUFOS POLIDEPORTIVO"
+                    },
+                    {
+                        "cuadrante": "PF-02",
+                        "organismo": "POLICÍA DEL ESTADO TÁCHIRA",
+                        "telefono": "0412-4010063",
+                        "sectores": "PANAMERICANA, LAS PIPAS, LA ESMERALDA BARRIO SUCRE BARRIO LAS AMERICAS, ASOCIACION DE GANADEROS"
+                    },
+                    {
+                        "cuadrante": "PF-03",
+                        "organismo": "CPNB",
+                        "telefono": "0412-3244902",
+                        "sectores": "SECTOR EL ARAGUANEY, LOS APARTAMENTOS BARRIO EL PARAISO, EL CAFENOL, LOS CEDROS, LAS CASAS DIE MADERA, PARQUE DE LOS MONOS, LA TERTULIA, URB SOCIALISTA"
+                    },
+                    {
+                        "cuadrante": "PF-04",
+                        "organismo": "POLICÍA DEL ESTADO TÁCHIRA",
+                        "telefono": "0412-2246037",
+                        "sectores": "CAUCHOS PIRELLI BELLAVISTA EL PARAISO GOODYEAR LA CARRETA"
+                    },
+                    {
+                        "cuadrante": "PF-05",
+                        "organismo": "POLICÍA DEL ESTADO TÁCHIRA",
+                        "telefono": "0416-6006077",
+                        "sectores": "CASCO CENTRAL, FRANCISCO RONDON PLAZA BOLIVAR,CANCHA, LICEO BOLIVARIANO BOCA DEL GRITA PLAYA GALLINERO PARQUE EL MANGO"
+                    },
+                    {
+                        "cuadrante": "PF-06",
+                        "organismo": "POLICÍA DEL ESTADO TÁCHIRA",
+                        "telefono": "0416-6006328",
+                        "sectores": "LAS FLORES,LA LIBERTAD PLAZA JOSE ANTONIO PAEZ EL CEMENTERIO IGLESIA 21 DE ENERO, TECNICA INDUSTRIAL DE OROPE CASCO CENTRAL"
+                    }
+                ],
+                "telefono_principal": "0412-3246763"
+            },
+            "bbox": [
+                -72.257352,
+                8.237373,
+                -72.257352,
+                8.237373
+            ]
+        },
+        {
+            "type": "Feature",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    -72.092066,
+                    8.330425
+                ]
+            },
+            "properties": {
+                "Ciudad / Localidad": "Coloncito",
+                "Municipio": "Panamericano",
+                "Estado": "Táchira",
+                "País": "Venezuela",
+                "categoria": "seguridad",
+                "datos_cuadrantes": [
+                    {
+                        "cuadrante": "P-01",
+                        "organismo": "POLICÍA DEL ESTADO TÁCHIRA",
+                        "telefono": "0412-3249277",
+                        "sectores": "COLONCITO CASCO CENTRAL, ES TREBOL, NORESTE, E/S TREBOL OESTE"
+                    },
+                    {
+                        "cuadrante": "P-02",
+                        "organismo": "GNB",
+                        "telefono": "0416-6096927",
+                        "sectores": "E/S TREBOL BUR ESTE, PLAZA BOLIVAR DE COLONCITO CLINICA Y LABORATORIO CORAZON DE JESUS ALCALDIA DEL MUNICIPIO PANAMERICANO, EL CANEY."
+                    },
+                    {
+                        "cuadrante": "P-03",
+                        "organismo": "POLICÍA DEL ESTADO TÁCHIRA",
+                        "telefono": "0416-6096584",
+                        "sectores": "LA PALMITA TRONCAL 1"
+                    }
+                ],
+                "telefono_principal": "0412-3249277"
+            },
+            "bbox": [
+                -72.092066,
+                8.330425,
+                -72.092066,
+                8.330425
+            ]
+        },
+        {
+            "type": "Feature",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    -72.258416,
+                    8.102515
+                ]
+            },
+            "properties": {
+                "Ciudad / Localidad": "San Juan de Colón",
+                "Municipio": "Ayacucho",
+                "Estado": "Táchira",
+                "País": "Venezuela",
+                "categoria": "seguridad",
+                "datos_cuadrantes": [
+                    {
+                        "cuadrante": "PF-01",
+                        "organismo": "POLICÍA DEL ESTADO TÁCHIRA",
+                        "telefono": "0412-3330962",
+                        "sectores": "LA AVENIDA, HARRIO SAN VICENTE SAN VICENTE CEMENTERIO EL PARAISO CAMPO ALEGRE SAN JJUMS TADEO SAN JUAN DE COLON BARRIO AYACUCHO SANTA EDGESEL TOPON CASCO CENTRAL BARRIO CAMPO ALEGRE SANTA BARBARA"
+                    },
+                    {
+                        "cuadrante": "PF-02",
+                        "organismo": "POLICÍA DEL ESTADO TÁCHIRA",
+                        "telefono": "0412-403629",
+                        "sectores": "SANTA ROSAEL LABERINTO BARRIO LAS FLORES PEREZ DE TOLOZA ANDRES BELLO, SANTA MARTA BARRIO URDANETA LUCATEVAL CASAS DE LOS GUARDIAS URB LOS CHANATOS URB LOS CEIBOS EL PINAR LOS BLOQUES URB RIOS REINA URA 18 DE ABRIL  URB PINAR"
+                    },
+                    {
+                        "cuadrante": "PF-03",
+                        "organismo": "GNB",
+                        "telefono": "911",
+                        "sectores": "MARMOLES Y GRANITOS, CRISTOBAL COLON LA PISCINA EL CHE GUEVARA LA PARRILLA LOS TOMISTAS CAÑO DE GUERRA EL CANAVERAL"
+                    },
+                    {
+                        "cuadrante": "PT-04",
+                        "organismo": "CPNB",
+                        "telefono": "911",
+                        "sectores": "PARQUE OSCAR DANIEL BARRERO, JUNTA PARROQUIAL SAN PEDRO DEL RIO, CEMENTERIO MUNICIPAL, CAMPO DE FUTBOL, ARTESANIAS DE ANTAÑO PREFECTURA DE SAN PEDRO DEL RIO, ARTESANIA LA FACHADA DE PLAZA PLAZA BOLIVAR, POSADA LA VIEJA ESCUELA, DULCERIA LAS RAMIREZ, POSADA LA RAMIRENA, AMBULATORIO RURAL, CERAMICA MAGIN, UED GUSTAVO NETO, POLICÍA DEL ESTADO TACHIRA"
+                    },
+                    {
+                        "cuadrante": "PF-05",
+                        "organismo": "POLICÍA DEL ESTADO TÁCHIRA",
+                        "telefono": "911",
+                        "sectores": "COMUNIDAD SAN FELIX VEREDAS CALLES Y AREA PERMETRAL"
+                    },
+                    {
+                        "cuadrante": "PF-04 ",
+                        "organismo": "POLICÍA DEL ESTADO TÁCHIRA",
+                        "telefono": "911",
+                        "sectores": "SECTORES: LAS CRUCES, CAÑO DE GUERNA, CAMPO ALEGRE, EL CALICHE, LLANO CARMELO, CALICHE VIEJO, GRANJA CHAPARRAL, GRANJA LOS PINOS, "
+                    }
+                ],
+                "telefono_principal": "0412-3330962"
+            },
+            "bbox": [
+                -72.258416,
+                8.102515,
+                -72.258416,
+                8.102515
+            ]
+        },
+        {
+            "type": "Feature",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    -72.311967,
+                    7.940587
+                ]
+            },
+            "properties": {
+                "Ciudad / Localidad": "Lobatera",
+                "Municipio": "Lobatera",
+                "Estado": "Táchira",
+                "País": "Venezuela",
+                "categoria": "seguridad",
+                "datos_cuadrantes": [
+                    {
+                        "cuadrante": "PT-01",
+                        "organismo": "CPNB",
+                        "telefono": "911",
+                        "sectores": "BARRIO NINO DE JESUS, NIÑO JESUS, LA Y, CASCO CENTRAL, EL HUMILLADERO, KUWAIT, NUEVA LOBATERA, URDANETA, URB. LOBATERITA H LA AVENIDA"
+                    },
+                    {
+                        "cuadrante": "P-02",
+                        "organismo": "POLICÍA DEL ESTADO TÁCHIRA",
+                        "telefono": "911",
+                        "sectores": "BOROTA"
+                    }
+                ],
+                "telefono_principal": "911"
+            },
+            "bbox": [
+                -72.311967,
+                7.940587,
+                -72.311967,
+                7.940587
+            ]
+        },
+        {
+            "type": "Feature",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    -72.259965,
+                    7.947199
+                ]
+            },
+            "properties": {
+                "Ciudad / Localidad": "Michelena",
+                "Municipio": "Michelena",
+                "Estado": "Táchira",
+                "País": "Venezuela",
+                "categoria": "seguridad",
+                "datos_cuadrantes": [
+                    {
+                        "cuadrante": "P-01",
+                        "organismo": "GNB",
+                        "telefono": "911",
+                        "sectores": "LAS QUEBRADITAS, HOTEL VILLA MICHELENA,CDI MICHELENA, BAN TOS MICHELENA, LA SABANA, LA PRADERA PANIFICADORA MARSELL, EL LLANITO, ANDRES BELLO, EL CERRO, IGLESIA, CONSEJO MICHELENA, 23 DE ENERO PARQUE TENIENTE CORONEL AVENIDA LUIS"
+                    }
+                ],
+                "telefono_principal": "911"
+            },
+            "bbox": [
+                -72.259965,
+                7.947199,
+                -72.259965,
+                7.947199
+            ]
+        },
+        {
+            "type": "Feature",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    -72.145148,
+                    7.891207
+                ]
+            },
+            "properties": {
+                "Ciudad / Localidad": "Cordero",
+                "Municipio": "Andrés Bello",
+                "Estado": "Táchira",
+                "País": "Venezuela",
+                "categoria": "seguridad",
+                "datos_cuadrantes": [
+                    {
+                        "cuadrante": "P-01",
+                        "organismo": "POLICÍA DEL ESTADO TÁCHIRA",
+                        "telefono": "911",
+                        "sectores": "CONJUNTO RESIDENCIAL LA ESMERALDA DOCTOR VILLALOBOS 21 DICIEMBRE CAMPO DEPORTIVO, LLANO LA CRUZ, BARRIO BELLAVISTA, LA GARCIA LOS PINOS EL BORDO, 12 DE OCTUBRE, LA PRADERA, ANDRES BELLO EL GORDO UR ANDRES BELLO CORDERO"
+                    }
+                ],
+                "telefono_principal": "911"
+            },
+            "bbox": [
+                -72.145148,
+                7.891207,
+                -72.145148,
+                7.891207
+            ]
+        },
+        {
+            "type": "Feature",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    -72.222562,
+                    7.839808
+                ]
+            },
+            "properties": {
+                "Ciudad / Localidad": "Palmira",
+                "Municipio": "Guásimos",
+                "Estado": "Táchira",
+                "País": "Venezuela",
+                "categoria": "seguridad",
+                "datos_cuadrantes": [
+                    {
+                        "cuadrante": "P-01",
+                        "organismo": "CPNB",
+                        "telefono": "0412-3300018",
+                        "sectores": "PATIECITOS"
+                    },
+                    {
+                        "cuadrante": "P-02",
+                        "organismo": "CPNB",
+                        "telefono": "0412-2540145",
+                        "sectores": "MESETAS-COPA DE ORO"
+                    },
+                    {
+                        "cuadrante": "P-03",
+                        "organismo": "POLICÍA DEL ESTADO TÁCHIRA",
+                        "telefono": "0412-2244730",
+                        "sectores": "URB TOIQUITO, LA TOICA SANTO TOMAS DE AQUINO"
+                    },
+                    {
+                        "cuadrante": "P-04",
+                        "organismo": "POLICÍA DEL ESTADO TÁCHIRA",
+                        "telefono": "0412-0411574",
+                        "sectores": "COPA DE ORO,URB SANTA SOFIA"
+                    },
+                    {
+                        "cuadrante": "P-05",
+                        "organismo": "POLICÍA DEL ESTADO TÁCHIRA",
+                        "telefono": "0412-0412102",
+                        "sectores": "LA LAGUNA PARTE BAJA LA VICTORIA"
+                    }
+                ],
+                "telefono_principal": "0412-3300018"
+            },
+            "bbox": [
+                -72.222562,
+                7.839808,
+                -72.222562,
+                7.839808
+            ]
+        },
+        {
+            "type": "Feature",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    -72.317189,
+                    7.82788
+                ]
+            },
+            "properties": {
+                "Ciudad / Localidad": "Capacho Nuevo",
+                "Municipio": "Independencia",
+                "Estado": "Táchira",
+                "País": "Venezuela",
+                "categoria": "seguridad",
+                "datos_cuadrantes": [
+                    {
+                        "cuadrante": "P-01",
+                        "organismo": "POLICÍA DEL ESTADO TÁCHIRA",
+                        "telefono": "911",
+                        "sectores": "BELLA VISTA, EL TOPON, BARRIO LOS RANCHOS, BARRIO SAN PEDRO,EL CAMPO EL MOLINO CENTRO, PUEBLO NUEVO, MIRANDA CAPACHO INDEPENDENCIA, EL CEMENTERIO, PREGONERO, EL CENTENARIO"
+                    },
+                    {
+                        "cuadrante": "P-02",
+                        "organismo": "CPNB",
+                        "telefono": "911",
+                        "sectores": "EL OJITO, RANCHERA, LLANITO PARTE ALTA, RANCHERIAS, BELANDRIA, EL LLANITO, PERIBECA"
+                    },
+                    {
+                        "cuadrante": "P-03",
+                        "organismo": "GNB",
+                        "telefono": "0416-0097170",
+                        "sectores": "PIE DE CUESTA LA LAJA, EL PARAISO, COLINAS DEL CAMPO C, PIE DE CUESTA EL BOSQUE SAN ISIDRO, EL CAMPO C PARAMO DE LAJA SAN JUAQUIN URB EL PARAISO DE LAS CANDIALES, CASERIO RAFAEL URDANETAURD RAFAEL DE CANDIALES."
+                    },
+                    {
+                        "cuadrante": "P-04",
+                        "organismo": "GNB",
+                        "telefono": "0416-6006100",
+                        "sectores": "PARAMO DEL DUENDE SANTA RITA EL VALLE LOS GUADALES LOMA LINDA TRES ESQUINAS, MATA DE GUAUDA"
+                    },
+                    {
+                        "cuadrante": "PV-02",
+                        "organismo": "CPNB",
+                        "telefono": "911",
+                        "sectores": "TRONCAL 1 DESDE: CRUCE MARGINAL DEL TORBES CON VIA SAN ANTONIO DEL TACHIRA, EL MIRADOR, ZORCA, MATA DE GUADA, BALANDRIA, RANCHERIAS, CAPACHO, LIBERTAD, COLINAS DE BELLO MONTE, AGUA BLANCA, SALADO NEGRO, HASTA LA ALCABALA DE PERACAL"
+                    }
+                ],
+                "telefono_principal": "911"
+            },
+            "bbox": [
+                -72.317189,
+                7.82788,
+                -72.317189,
+                7.82788
+            ]
+        },
+        {
+            "type": "Feature",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    -72.330194,
+                    7.788418
+                ]
+            },
+            "properties": {
+                "Ciudad / Localidad": "Capacho Viejo",
+                "Municipio": "Libertad",
+                "Estado": "Táchira",
+                "País": "Venezuela",
+                "categoria": "seguridad",
+                "datos_cuadrantes": [
+                    {
+                        "cuadrante": "PT-01",
+                        "organismo": "CPNB",
+                        "telefono": "911",
+                        "sectores": "PUENTE UNION, LA PALMITA, EL POBLAR, PUENTE UNION, CRISTO REY, COLINAS DE BELLO MONTE, AGUA BLANCA, BARRIO LOS PINOS, QUEBRADITAS, BARRIO EL CENTRO, LOMAS BAJAS, LIBERTAD, CASCO CENTRAL LIBERTAD, CASERÍO EL POBLAR, EL PLAN"
+                    },
+                    {
+                        "cuadrante": "PT-02 ",
+                        "organismo": "CPNB",
+                        "telefono": "911",
+                        "sectores": "CONSEJOS COMUNALES: COLINAS DEL CRISTO REY, ALDEAS 5 DE JULIO, SECTORES: SCASERIO PALO GORDO, CHORRO EL CRISTO, GIRARDOT"
+                    },
+                    {
+                        "cuadrante": "P-02",
+                        "organismo": "POLICÍA DEL ESTADO TÁCHIRA",
+                        "telefono": "911",
+                        "sectores": "BERLIN, POBLAR, PRADOS DE LOMA LINDA"
+                    }
+                ],
+                "telefono_principal": "911"
+            },
+            "bbox": [
+                -72.330194,
+                7.788418,
+                -72.330194,
+                7.788418
+            ]
+        },
+        {
+            "type": "Feature",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    72,
+                    7
+                ]
+            },
+            "properties": {
+                "Ciudad / Localidad": "San Josecito",
+                "Municipio": "Torbes",
+                "Estado": "Táchira",
+                "País": "Venezuela",
+                "categoria": "seguridad",
+                "datos_cuadrantes": [
+                    {
+                        "cuadrante": "P-01",
+                        "organismo": "CPNB",
+                        "telefono": "0412-3390892",
+                        "sectores": "LAS PAMPAS, LAS CRUCES, SANTA LUCIA, EL COROZO."
+                    },
+                    {
+                        "cuadrante": "P-02",
+                        "organismo": "CPNB",
+                        "telefono": "0412-4311547",
+                        "sectores": "LA FLORESTA 1, LA FLORESTA 2, ENTRADA A SAN JOSECITO, LOS ANDES EL CHAPARRAL"
+                    },
+                    {
+                        "cuadrante": "P-03",
+                        "organismo": "CPNB",
+                        "telefono": "0412-3390859",
+                        "sectores": "SECTOR B, SECTOR C, SECTOR D, SECTOR E."
+                    },
+                    {
+                        "cuadrante": "P-04",
+                        "organismo": "POLICÍA MUNICIPAL TORBES",
+                        "telefono": "0412-2937301",
+                        "sectores": "SECTOR F, SECTOR G, LA MONTAÑITA,\nCANCHA DEPORTIVA,"
+                    },
+                    {
+                        "cuadrante": "P-05",
+                        "organismo": "POLICÍA MUNICIPAL TORBES",
+                        "telefono": "0412-2937428",
+                        "sectores": "LAS COLINAS, POLICIA ESTADAL, EL MERCADO, FARMACIA LA POPULAR, SAN JOSECITO, UN SOLO PUEBLO,CDI SAN JOSECITO, FARMACIA SAN JOSECITO, UNIDAD EDUCATIVA SAN JOSECITO, SAN JOSECITO 1. IGLESIA FARMACIA CRISTO MORENO, PLAZA BOLIVAR, PANIFICADORA LAS COLINAS DEL TORBES."
+                    },
+                    {
+                        "cuadrante": "P-06",
+                        "organismo": "POLICÍA MUNICIPAL TORBES",
+                        "telefono": "0412-2939755",
+                        "sectores": "LUISA PACHECO, LA PALMITA, JUAN PABLO, LOS PROCERES, BARRIO LUIS MONCADA, CONJUNTO RES LUISA PACHECO, HUGO CHAVEZ, WALTER MARQUEZ"
+                    },
+                    {
+                        "cuadrante": "P-07",
+                        "organismo": "POLICÍA DEL ESTADO TÁCHIRA",
+                        "telefono": "0412-3244563",
+                        "sectores": "LA PALMITA, FINCA EL SANTO, FINCA AGUA DULCE, GAVILANES,LA ESCUELA"
+                    },
+                    {
+                        "cuadrante": "P-08",
+                        "organismo": "POLICÍA DEL ESTADO TÁCHIRA",
+                        "telefono": "0412-0279639",
+                        "sectores": "EL ESTADIO, EL RINCON DE LA VEGA, FUERTE MURACHI, CEMENTERIO JARDIN EL ANGEL, CAMPO DEPORTIVO, FUERTE MURACHI, VEGA DE AZA"
+                    },
+                    {
+                        "cuadrante": "P-09",
+                        "organismo": "POLICÍA DEL ESTADO TÁCHIRA",
+                        "telefono": "0412-0205474",
+                        "sectores": "CAÑO AMARILLO LA RINCONADA, BARRIO LOS PINOS, EL PALMAR, PALMAR VIEJO, PALNAR NUEVO DE LA COPE BARRIO NUEVO."
+                    }
+                ],
+                "telefono_principal": "0412-3390892"
+            },
+            "bbox": [
+                72,
+                7,
+                72,
+                7
+            ]
+        },
+        {
+            "type": "Feature",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    -71.998577,
+                    8.159911
+                ]
+            },
+            "properties": {
+                "Ciudad / Localidad": "La Grita",
+                "Municipio": "Jáuregui",
+                "Estado": "Táchira",
+                "País": "Venezuela",
+                "categoria": "seguridad",
+                "datos_cuadrantes": [
+                    {
+                        "cuadrante": "P-01",
+                        "organismo": "CPNB",
+                        "telefono": "0416-6096962",
+                        "sectores": "LA ESPINOZA, AGUADIA, 2 DE FEBRERO, 11 DE JUNIO, GUATAVITA, LA GRANJA, EL CALVARIO, TERRENO, URB. LAS DALIAS, URB. SANTO CRISTO, LAS DELICIAS, CARRERA 2, CARRERA 3, CENTRO, CARRERA 7 A LA 10. BARRIO FATIMA, SAN MARTIN DE PORRAS, BARRIO LAS PIEDRITA"
+                    },
+                    {
+                        "cuadrante": "P-02",
+                        "organismo": "CPNB",
+                        "telefono": "911",
+                        "sectores": "BARRIO BOLIVARIANO, BARRIO SANTA ROSA, LA MESETA, LICEO MILITAR JAUREGUI, URB. EL PARAMO, EL MOLINO, CASINO MILITAR, TERRENO MILITAR, URB. LAS DELICIAS, SAN VICENTE, LLANO LOS ZAMBRANOS, EL SURURAL"
+                    },
+                    {
+                        "cuadrante": "P-03",
+                        "organismo": "POLICÍA DEL ESTADO TÁCHIRA",
+                        "telefono": "0416-6006978",
+                        "sectores": "PUEBLO ENCIMA, BAILADORES DE LA GRITA"
+                    },
+                    {
+                        "cuadrante": "PT-01 ",
+                        "organismo": "CPNB",
+                        "telefono": "911",
+                        "sectores": "LAS  PALMAS ,PARQUE  NACIONAL  LAS  PORQUERAS,LA  LAGUNA , RANCHO  GRANDE,RANCHO  VIEJO, JUDIO,  CAMPO  ALEGRE, MONASTERIO  DE  LUMEN,POSADA LA  ROMEREÑA."
+                    },
+                    {
+                        "cuadrante": "P-04",
+                        "organismo": "POLICÍA DEL ESTADO TÁCHIRA",
+                        "telefono": "0416-6094749",
+                        "sectores": "EL PALMAR PUEBLO HONDO LLANETES"
+                    },
+                    {
+                        "cuadrante": "PR-04",
+                        "organismo": "CPNB",
+                        "telefono": "911",
+                        "sectores": "SECTORES: OSORIO, LAS MESADAS, LA GANADERA, RANCHO GRANDE, LA LAGUNA, EL RINCON, BABUQUENA, LLANO ZAMBRANO"
+                    }
+                ],
+                "telefono_principal": "0416-6096962"
+            },
+            "bbox": [
+                -71.998577,
+                8.159911,
+                -71.998577,
+                8.159911
+            ]
+        },
+        {
+            "type": "Feature",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    -72.090251,
+                    8.145974
+                ]
+            },
+            "properties": {
+                "Ciudad / Localidad": "Seboruco",
+                "Municipio": "Seboruco",
+                "Estado": "Táchira",
+                "País": "Venezuela",
+                "categoria": "seguridad",
+                "datos_cuadrantes": [
+                    {
+                        "cuadrante": "PR-03",
+                        "organismo": "GNB",
+                        "telefono": "911",
+                        "sectores": "CONSEJOS COMUNALES: PARAMILLO DE PALMARITO, MEAS DE COSTA, MENORICA III, CALICHE, SECTORES: EL SUSPIRO, LAS TABLAS, CASERIO BOTUAS, ALBARICO, LA CUCHILLA, EL JABUAL, MENORICA, SISCATERIA, BOCA DEL MONTE, LAS TALAS"
+                    },
+                    {
+                        "cuadrante": "P-01",
+                        "organismo": "POLICÍA DEL ESTADO TÁCHIRA",
+                        "telefono": "0412-1499457",
+                        "sectores": "POTRERITOS, IGLESIA SAN PEDRO DE SEBORUCO, PLAZA BOLIVAR, CASCO CENTRAL, ESTADIO SANTA FILOMENA EL LLANITO,EL TORO, ACUEDUCTO, EL CEMENTERIO"
+                    }
+                ],
+                "telefono_principal": "911"
+            },
+            "bbox": [
+                -72.090251,
+                8.145974,
+                -72.090251,
+                8.145974
+            ]
+        },
+        {
+            "type": "Feature",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    -72.043668,
+                    7.887487
+                ]
+            },
+            "properties": {
+                "Ciudad / Localidad": "Queniquea",
+                "Municipio": "Sucre",
+                "Estado": "Táchira",
+                "País": "Venezuela",
+                "categoria": "seguridad",
+                "datos_cuadrantes": [
+                    {
+                        "cuadrante": "P-01",
+                        "organismo": "GNB",
+                        "telefono": "911",
+                        "sectores": "MACHADO, EL ATICOS, QUENIQUEA"
+                    }
+                ],
+                "telefono_principal": "911"
+            },
+            "bbox": [
+                -72.043668,
+                7.887487,
+                -72.043668,
+                7.887487
+            ]
+        },
+        {
+            "type": "Feature",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    -71.970278,
+                    7.927516
+                ]
+            },
+            "properties": {
+                "Ciudad / Localidad": "San José de Bolívar",
+                "Municipio": "Francisco de Miranda",
+                "Estado": "Táchira",
+                "País": "Venezuela",
+                "categoria": "seguridad",
+                "datos_cuadrantes": [
+                    {
+                        "cuadrante": "P-01",
+                        "organismo": "POLICÍA DEL ESTADO TÁCHIRA",
+                        "telefono": "911",
+                        "sectores": "E/ B REGINA VELASQUEZ EL TOPON, CEMENTERIO, POLIDEPORTIVO JOSE MANUELFRANCISCONY, SAN JOSE DE BOLIVAR CASCO CENTRAL, TERMINAL DE PASAJEROS, UPROLEVATA, ESCUELA TECNICA AGR. SAN JOSE DE BOLIVAR, TEMPLO SAN JOSE, PLAZA BOLIVAR "
+                    }
+                ],
+                "telefono_principal": "911"
+            },
+            "bbox": [
+                -71.970278,
+                7.927516,
+                -71.970278,
+                7.927516
+            ]
+        },
+        {
+            "type": "Feature",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    -72.06965,
+                    8.036987
+                ]
+            },
+            "properties": {
+                "Ciudad / Localidad": "El Cobre",
+                "Municipio": "José María Vargas",
+                "Estado": "Táchira",
+                "País": "Venezuela",
+                "categoria": "seguridad",
+                "datos_cuadrantes": [
+                    {
+                        "cuadrante": "P-01",
+                        "organismo": "POLICÍA DEL ESTADO TÁCHIRA",
+                        "telefono": "911",
+                        "sectores": "LA FARMACIA SOCIAL CEMENTERIO, EL RINCON CASCO CENTRAL EL SAN JON, SANTA INES, PLAZA BOLIVAR, DE EL COBRE FARMACIA SALUD Y BIENESTAR EL PALYON EL ESTADIO"
+                    }
+                ],
+                "telefono_principal": "911"
+            },
+            "bbox": [
+                -72.06965,
+                8.036987,
+                -72.06965,
+                8.036987
+            ]
+        },
+        {
+            "type": "Feature",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    -72.302133,
+                    7.639197
+                ]
+            },
+            "properties": {
+                "Ciudad / Localidad": "Santa Ana",
+                "Municipio": "Córdoba",
+                "Estado": "Táchira",
+                "País": "Venezuela",
+                "categoria": "seguridad",
+                "datos_cuadrantes": [
+                    {
+                        "cuadrante": "P-01",
+                        "organismo": "POLICÍA DEL ESTADO TÁCHIRA",
+                        "telefono": "911",
+                        "sectores": "DIAMANTE SANTA ANA SANTA TERESA URB ANTONIO JOSÉ, PENAL URB СEМЕNЕTЕRIO CACERIO SAN JUAQUIN URB CARRIZAL"
+                    }
+                ],
+                "telefono_principal": "911"
+            },
+            "bbox": [
+                -72.302133,
+                7.639197,
+                -72.302133,
+                7.639197
+            ]
+        },
+        {
+            "type": "Feature",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    -71.513159,
+                    7.623354
+                ]
+            },
+            "properties": {
+                "Ciudad / Localidad": "Abejales",
+                "Municipio": "Libertador",
+                "Estado": "Táchira",
+                "País": "Venezuela",
+                "categoria": "seguridad",
+                "datos_cuadrantes": [
+                    {
+                        "cuadrante": "P-01",
+                        "organismo": "POLICÍA DEL ESTADO TÁCHIRA",
+                        "telefono": "911",
+                        "sectores": "SAN JUAQUIN DE NAVAY, LOS MONOS"
+                    },
+                    {
+                        "cuadrante": "P-02",
+                        "organismo": "POLICÍA DEL ESTADO TÁCHIRA",
+                        "telefono": "911",
+                        "sectores": "SAN CRISTOBAL DE ABEJALES, EL MILAGRO"
+                    },
+                    {
+                        "cuadrante": "P-03",
+                        "organismo": "GNB",
+                        "telefono": "911",
+                        "sectores": "CAMPO HERMOSO SAN CRISTOBAL DE ABEJALES PUERTO NUEVO GUACAS, KM26"
+                    },
+                    {
+                        "cuadrante": "P-04",
+                        "organismo": "POLICÍA DEL ESTADO TÁCHIRA",
+                        "telefono": "0412-0200185",
+                        "sectores": "SAN ANTONIO DE CAPARO, LA SABANA"
+                    },
+                    {
+                        "cuadrante": "P-05",
+                        "organismo": "POLICÍA DEL ESTADO TÁCHIRA",
+                        "telefono": "911",
+                        "sectores": "SIMON BOLIVAR BUENOS AIRES, SAN MIGUEL ARCANGEL, RIVERAS DE CAPARO CASCO CENTRAL, ABEJALES, EMETERIO OCHOA, BRIMANIA EZEQUIEL ZAMORA PUNTA DE PIEDRA BRIMANIA"
+                    },
+                    {
+                        "cuadrante": "P-06",
+                        "organismo": "POLICÍA DEL ESTADO TÁCHIRA",
+                        "telefono": "0412-3244573",
+                        "sectores": "LOS BANCOS."
+                    }
+                ],
+                "telefono_principal": "911"
+            },
+            "bbox": [
+                -71.513159,
+                7.623354,
+                -71.513159,
+                7.623354
+            ]
+        },
+        {
+            "type": "Feature",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    -71.653329,
+                    7.651533
+                ]
+            },
+            "properties": {
+                "Ciudad / Localidad": "San Joaquín de Navay",
+                "Municipio": "Libertador",
+                "Estado": "Táchira",
+                "País": "Venezuela",
+                "categoria": "seguridad",
+                "datos_cuadrantes": [
+                    {
+                        "cuadrante": "P-01",
+                        "organismo": "POLICÍA DEL ESTADO TÁCHIRA",
+                        "telefono": "911",
+                        "sectores": "SAN JUAQUIN DE NAVAY, LOS MONOS"
+                    },
+                    {
+                        "cuadrante": "P-02",
+                        "organismo": "POLICÍA DEL ESTADO TÁCHIRA",
+                        "telefono": "911",
+                        "sectores": "SAN CRISTOBAL DE ABEJALES, EL MILAGRO"
+                    },
+                    {
+                        "cuadrante": "P-03",
+                        "organismo": "GNB",
+                        "telefono": "911",
+                        "sectores": "CAMPO HERMOSO SAN CRISTOBAL DE ABEJALES PUERTO NUEVO GUACAS, KM26"
+                    },
+                    {
+                        "cuadrante": "P-04",
+                        "organismo": "POLICÍA DEL ESTADO TÁCHIRA",
+                        "telefono": "0412-0200185",
+                        "sectores": "SAN ANTONIO DE CAPARO, LA SABANA"
+                    },
+                    {
+                        "cuadrante": "P-05",
+                        "organismo": "POLICÍA DEL ESTADO TÁCHIRA",
+                        "telefono": "911",
+                        "sectores": "SIMON BOLIVAR BUENOS AIRES, SAN MIGUEL ARCANGEL, RIVERAS DE CAPARO CASCO CENTRAL, ABEJALES, EMETERIO OCHOA, BRIMANIA EZEQUIEL ZAMORA PUNTA DE PIEDRA BRIMANIA"
+                    },
+                    {
+                        "cuadrante": "P-06",
+                        "organismo": "POLICÍA DEL ESTADO TÁCHIRA",
+                        "telefono": "0412-3244573",
+                        "sectores": "LOS BANCOS."
+                    }
+                ],
+                "telefono_principal": "911"
+            },
+            "bbox": [
+                -71.653329,
+                7.651533,
+                -71.653329,
+                7.651533
+            ]
+        },
+        {
+            "type": "Feature",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    -72.44532,
+                    7.565588
+                ]
+            },
+            "properties": {
+                "Ciudad / Localidad": "Delicias",
+                "Municipio": "Rafael Urdaneta",
+                "Estado": "Táchira",
+                "País": "Venezuela",
+                "categoria": "seguridad",
+                "datos_cuadrantes": [
+                    {
+                        "cuadrante": "PR-05",
+                        "organismo": "GNB",
+                        "telefono": "911",
+                        "sectores": "CONSEJOS COMUNALES: MONTE VERDE, TORONJAL PARTE ALTA, EL CENTRO, SAN JOSE DEL AVILA, PALMA Y OSO, EL PLAN R´POSO, AGUADITAS, LAS LAJAS, SECTORES: LA HONDA, TORONJAL, ALDEA DEL CENTRO, LA RIO CHELA, EL PAN, EL CENTRO, LA LAJA, EL REPOSO, LA HONDA"
+                    },
+                    {
+                        "cuadrante": "PF-01",
+                        "organismo": "POLICÍA DEL ESTADO TÁCHIRA",
+                        "telefono": "911",
+                        "sectores": "DELICIAS"
+                    }
+                ],
+                "telefono_principal": "911"
+            },
+            "bbox": [
+                -72.44532,
+                7.565588,
+                -72.44532,
+                7.565588
+            ]
+        },
+        {
+            "type": "Feature",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    -72.26216,
+                    8.260922
+                ]
+            },
+            "properties": {
+                "Ciudad / Localidad": "Boca de Grita",
+                "Municipio": "García de Hevia",
+                "Estado": "Táchira",
+                "País": "Venezuela",
+                "categoria": "seguridad",
+                "datos_cuadrantes": [
+                    {
+                        "cuadrante": "PF-01",
+                        "organismo": "POLICÍA DEL ESTADO TÁCHIRA",
+                        "telefono": "0412-3246763",
+                        "sectores": "BARRIO EL CARMEN URB FRANCISCO DE MIRANDA, TERMINAL DE PASAJEROS CENTRO LA FRIA, CALLE 1, EL OBELISCO HIERRO LA FRIA URB JAUREGULPREFUNDACION, BARRIO BOLIVAR, BARRIO LAS DELICIAS, BARRIO GARCIA DE HEVIA EL ESCONDITE, RAUL LEONI, 19 DE ABRIL, LOS PITUFOS POLIDEPORTIVO"
+                    },
+                    {
+                        "cuadrante": "PF-02",
+                        "organismo": "POLICÍA DEL ESTADO TÁCHIRA",
+                        "telefono": "0412-4010063",
+                        "sectores": "PANAMERICANA, LAS PIPAS, LA ESMERALDA BARRIO SUCRE BARRIO LAS AMERICAS, ASOCIACION DE GANADEROS"
+                    },
+                    {
+                        "cuadrante": "PF-03",
+                        "organismo": "CPNB",
+                        "telefono": "0412-3244902",
+                        "sectores": "SECTOR EL ARAGUANEY, LOS APARTAMENTOS BARRIO EL PARAISO, EL CAFENOL, LOS CEDROS, LAS CASAS DIE MADERA, PARQUE DE LOS MONOS, LA TERTULIA, URB SOCIALISTA"
+                    },
+                    {
+                        "cuadrante": "PF-04",
+                        "organismo": "POLICÍA DEL ESTADO TÁCHIRA",
+                        "telefono": "0412-2246037",
+                        "sectores": "CAUCHOS PIRELLI BELLAVISTA EL PARAISO GOODYEAR LA CARRETA"
+                    },
+                    {
+                        "cuadrante": "PF-05",
+                        "organismo": "POLICÍA DEL ESTADO TÁCHIRA",
+                        "telefono": "0416-6006077",
+                        "sectores": "CASCO CENTRAL, FRANCISCO RONDON PLAZA BOLIVAR,CANCHA, LICEO BOLIVARIANO BOCA DEL GRITA PLAYA GALLINERO PARQUE EL MANGO"
+                    },
+                    {
+                        "cuadrante": "PF-06",
+                        "organismo": "POLICÍA DEL ESTADO TÁCHIRA",
+                        "telefono": "0416-6006328",
+                        "sectores": "LAS FLORES,LA LIBERTAD PLAZA JOSE ANTONIO PAEZ EL CEMENTERIO IGLESIA 21 DE ENERO, TECNICA INDUSTRIAL DE OROPE CASCO CENTRAL"
+                    }
+                ],
+                "telefono_principal": "0412-3246763"
+            },
+            "bbox": [
+                -72.26216,
+                8.260922,
+                -72.26216,
+                8.260922
+            ]
+        },
+        {
+            "type": "Feature",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    -71.614598,
+                    7.988522
+                ]
+            },
+            "properties": {
+                "Ciudad / Localidad": "Pregonero",
+                "Municipio": "Uribante",
+                "Estado": "Táchira",
+                "País": "Venezuela",
+                "categoria": "seguridad",
+                "datos_cuadrantes": [
+                    {
+                        "cuadrante": "P-01",
+                        "organismo": "POLICÍA DEL ESTADO TÁCHIRA",
+                        "telefono": "0416-6096483",
+                        "sectores": "CEMENTERIO VIEJO DE PREGONERO, ESTADIO DE PREGONERO, HOSPITAL DE PREGONERO PLAZA BOLIVAR, CASCO CENTRAL DE PREGONERO."
+                    },
+                    {
+                        "cuadrante": "PR-01",
+                        "organismo": "CPNB",
+                        "telefono": "911",
+                        "sectores": "VALLE PLATEADO, SECTORES LA MURAL, PARTE BAJA, LA MURAL, BUENA JOSTA HATO BUENA VISTA, VALLE PLATEADO, HATOS."
+                    },
+                    {
+                        "cuadrante": "PR-02",
+                        "organismo": "CPNB",
+                        "telefono": "911",
+                        "sectores": "LLANO SAN ANTONIO PARTE BAJA, QUEBRADA NEGRA, TEMPLABAL, PARTE BAJA TEMBLADAL, LAS AMARILLAS. HATOS."
+                    },
+                    {
+                        "cuadrante": "PL-01",
+                        "organismo": "CPNB",
+                        "telefono": "911",
+                        "sectores": "COMPLEJO  HIDROELECTRIC O FABRCIO  OJEDA "
+                    }
+                ],
+                "telefono_principal": "0416-6096483"
+            },
+            "bbox": [
+                -71.614598,
+                7.988522,
+                -71.614598,
+                7.988522
+            ]
+        },
+        {
+            "type": "Feature",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    -72.178559,
+                    8.161814
+                ]
+            },
+            "properties": {
+                "Ciudad / Localidad": "Las Mesas",
+                "Municipio": "Antonio Rómulo Acosta",
+                "Estado": "Táchira",
+                "País": "Venezuela",
+                "categoria": "seguridad",
+                "datos_cuadrantes": [
+                    {
+                        "cuadrante": "P-02",
+                        "organismo": "POLICÍA DEL ESTADO TÁCHIRA",
+                        "telefono": "0412-1497603",
+                        "sectores": "EL MODULO, EL PUEBLO NUEVO, CANO GRANDE, MESA ALTA, LAS MESAS, CASCO CENTRAL LOS ANGELES, EL CONTENTO, CANO AMARILLO, EL CARMEN"
+                    }
+                ],
+                "telefono_principal": "0412-1497603"
+            },
+            "bbox": [
+                -72.178559,
+                8.161814,
+                -72.178559,
+                8.161814
+            ]
+        },
+        {
+            "type": "Feature",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    -71.959958,
+                    7.537079
+                ]
+            },
+            "properties": {
+                "Ciudad / Localidad": "El Piñal",
+                "Municipio": "Fernandez Feo",
+                "Estado": "Táchira",
+                "País": "Venezuela",
+                "categoria": "seguridad",
+                "datos_cuadrantes": [
+                    {
+                        "cuadrante": "P-01",
+                        "organismo": "POLICÍA DEL ESTADO TÁCHIRA",
+                        "telefono": "0412-3390924",
+                        "sectores": "EL NULA LA VICTORIA 27 DE FEBRERO NARANJALES PUERTO TETEO"
+                    },
+                    {
+                        "cuadrante": "P-02",
+                        "organismo": "POLICÍA DEL ESTADO TÁCHIRA",
+                        "telefono": "0412-2151687",
+                        "sectores": "CEMENTERIO SAN RAFAEL DEL PIÑAL S/E ELECTRICA   18 DE ABRIL SAN RAFAEL DEL PIÑAL EL PIÑAL"
+                    },
+                    {
+                        "cuadrante": "P-03",
+                        "organismo": "GNB",
+                        "telefono": "0412-3390906",
+                        "sectores": "SAN CRISTOBAL ABEJALES COSTA RICA EL CANTA RANA CHURURU CHURURU VIEJO"
+                    },
+                    {
+                        "cuadrante": "P-04",
+                        "organismo": "GNB",
+                        "telefono": "0412-3390947",
+                        "sectores": "MANUELITA SAENZ, SAN LORENZO"
+                    },
+                    {
+                        "cuadrante": "P-05",
+                        "organismo": "POLICÍA DEL ESTADO TÁCHIRA",
+                        "telefono": "0142-2940059",
+                        "sectores": "SANTO DOMINGO"
+                    }
+                ],
+                "telefono_principal": "0412-3390924"
+            },
+            "bbox": [
+                -71.959958,
+                7.537079,
+                -71.959958,
+                7.537079
+            ]
+        },
+        {
+            "type": "Feature",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    -72.222174,
+                    7.662803
+                ]
+            },
+            "properties": {
+                "Ciudad / Localidad": "San Josecito",
+                "Municipio": "Torbes",
+                "Estado": "Táchira",
+                "País": "Venezuela",
+                "categoria": "seguridad",
+                "datos_cuadrantes": [
+                    {
+                        "cuadrante": "P-01",
+                        "organismo": "CPNB",
+                        "telefono": "0412-3390892",
+                        "sectores": "LAS PAMPAS, LAS CRUCES, SANTA LUCIA, EL COROZO."
+                    },
+                    {
+                        "cuadrante": "P-02",
+                        "organismo": "CPNB",
+                        "telefono": "0412-4311547",
+                        "sectores": "LA FLORESTA 1, LA FLORESTA 2, ENTRADA A SAN JOSECITO, LOS ANDES EL CHAPARRAL"
+                    },
+                    {
+                        "cuadrante": "P-03",
+                        "organismo": "CPNB",
+                        "telefono": "0412-3390859",
+                        "sectores": "SECTOR B, SECTOR C, SECTOR D, SECTOR E."
+                    },
+                    {
+                        "cuadrante": "P-04",
+                        "organismo": "POLICÍA MUNICIPAL TORBES",
+                        "telefono": "0412-2937301",
+                        "sectores": "SECTOR F, SECTOR G, LA MONTAÑITA,\nCANCHA DEPORTIVA,"
+                    },
+                    {
+                        "cuadrante": "P-05",
+                        "organismo": "POLICÍA MUNICIPAL TORBES",
+                        "telefono": "0412-2937428",
+                        "sectores": "LAS COLINAS, POLICIA ESTADAL, EL MERCADO, FARMACIA LA POPULAR, SAN JOSECITO, UN SOLO PUEBLO,CDI SAN JOSECITO, FARMACIA SAN JOSECITO, UNIDAD EDUCATIVA SAN JOSECITO, SAN JOSECITO 1. IGLESIA FARMACIA CRISTO MORENO, PLAZA BOLIVAR, PANIFICADORA LAS COLINAS DEL TORBES."
+                    },
+                    {
+                        "cuadrante": "P-06",
+                        "organismo": "POLICÍA MUNICIPAL TORBES",
+                        "telefono": "0412-2939755",
+                        "sectores": "LUISA PACHECO, LA PALMITA, JUAN PABLO, LOS PROCERES, BARRIO LUIS MONCADA, CONJUNTO RES LUISA PACHECO, HUGO CHAVEZ, WALTER MARQUEZ"
+                    },
+                    {
+                        "cuadrante": "P-07",
+                        "organismo": "POLICÍA DEL ESTADO TÁCHIRA",
+                        "telefono": "0412-3244563",
+                        "sectores": "LA PALMITA, FINCA EL SANTO, FINCA AGUA DULCE, GAVILANES,LA ESCUELA"
+                    },
+                    {
+                        "cuadrante": "P-08",
+                        "organismo": "POLICÍA DEL ESTADO TÁCHIRA",
+                        "telefono": "0412-0279639",
+                        "sectores": "EL ESTADIO, EL RINCON DE LA VEGA, FUERTE MURACHI, CEMENTERIO JARDIN EL ANGEL, CAMPO DEPORTIVO, FUERTE MURACHI, VEGA DE AZA"
+                    },
+                    {
+                        "cuadrante": "P-09",
+                        "organismo": "POLICÍA DEL ESTADO TÁCHIRA",
+                        "telefono": "0412-0205474",
+                        "sectores": "CAÑO AMARILLO LA RINCONADA, BARRIO LOS PINOS, EL PALMAR, PALMAR VIEJO, PALNAR NUEVO DE LA COPE BARRIO NUEVO."
+                    }
+                ],
+                "telefono_principal": "0412-3390892"
+            },
+            "bbox": [
+                -72.222174,
+                7.662803,
+                -72.222174,
+                7.662803
+            ]
+        },
+        {
+            "type": "Feature",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    -71.822963,
+                    8.52037
+                ]
+            },
+            "properties": {
+                "Ciudad / Localidad": "La tendida",
+                "Municipio": "Samuel Dario Maldonado",
+                "Estado": "Táchira",
+                "País": "Venezuela",
+                "categoria": "seguridad",
+                "datos_cuadrantes": [
+                    {
+                        "cuadrante": "P-01",
+                        "organismo": "POLICÍA DEL ESTADO TÁCHIRA",
+                        "telefono": "0412-3350072",
+                        "sectores": "ESCUELA MONSEÑOR ALEJANDRO FMPPAT SRI SAMUEL DARIO MALDONADO, CENTRO, DE EDUCACION INICIAL ANA DE INES DE LABRADOR, FARMACIA ALBES, UNIDAD EDUCATIVA MONSEÑOR ALEJANDRO FERNANDEZ FEO, LA MORITA, HOTEL RESTAURAT BUENA VISTA, CENTRO COMERCIAL LA TENDIDA, LA IGLESIA"
+                    },
+                    {
+                        "cuadrante": "P-02",
+                        "organismo": "POLICÍA DEL ESTADO TÁCHIRA",
+                        "telefono": "0412-3390842",
+                        "sectores": "SAN RAFEL"
+                    },
+                    {
+                        "cuadrante": "P-03",
+                        "organismo": "POLICÍA DEL ESTADO TÁCHIRA",
+                        "telefono": "911",
+                        "sectores": "HERNANDEZ PLAZA BOLIVAR,CEMENTERIO"
+                    },
+                    {
+                        "cuadrante": "P-04",
+                        "organismo": "POLICÍA DEL ESTADO TÁCHIRA",
+                        "telefono": "911",
+                        "sectores": "UNIDAD EDUCATIVA NACIONAL CAÑO AMARILLO,CAPILLA, ESTADIO, PLAZA BOLICAR DE CAÑO AMARILLO, UNIDAD EDUCATIVA JOSE TRINIDAD COLMENARES, INFOCENTRO, POLICIA DEL ESTADO TACHIRA, BOCONO CIBER WILSON PLAZA CAÑO AMARILLO"
+                    }
+                ],
+                "telefono_principal": "0412-3350072"
+            },
+            "bbox": [
+                -71.822963,
+                8.52037,
+                -71.822963,
+                8.52037
+            ]
+        },
+        {
+            "type": "Feature",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    -72.063655,
+                    8.268871
+                ]
+            },
+            "properties": {
+                "Ciudad / Localidad": "Umuquena",
+                "Municipio": "San Judas Tadeo",
+                "Estado": "Táchira",
+                "País": "Venezuela",
+                "categoria": "seguridad",
+                "datos_cuadrantes": [
+                    {
+                        "cuadrante": "P-01",
+                        "organismo": "POLICÍA DEL ESTADO TÁCHIRA",
+                        "telefono": "0412-3243880",
+                        "sectores": "PLAZA BOLIVAR DE UMUQUENA"
+                    }
+                ],
+                "telefono_principal": "0412-3243880"
+            },
+            "bbox": [
+                -72.063655,
+                8.268871,
+                -72.063655,
+                8.268871
+            ]
+        },
+        {
+            "type": "Feature",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    -71.850953,
+                    8.350025
+                ]
+            },
+            "properties": {
+                "Ciudad / Localidad": "San simon",
+                "Municipio": "Simon Rodriguez",
+                "Estado": "Táchira",
+                "País": "Venezuela",
+                "categoria": "seguridad",
+                "datos_cuadrantes": [
+                    {
+                        "cuadrante": "P-01",
+                        "organismo": "POLICÍA DEL ESTADO TÁCHIRA",
+                        "telefono": "911",
+                        "sectores": "SIMON RODRIGUEZ, PLAZA BOLIVAR"
+                    }
+                ],
+                "telefono_principal": "911"
+            },
+            "bbox": [
+                -71.850953,
+                8.350025,
+                -71.850953,
+                8.350025
+            ]
+        }
+    ]
+}
