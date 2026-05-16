@@ -1,4 +1,4 @@
-import React, { useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import {
   View,
   Text,
@@ -8,6 +8,7 @@ import {
   Dimensions,
   FlatList,
   Linking,
+  ActivityIndicator,
 } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { Ionicons } from '@expo/vector-icons';
@@ -23,6 +24,14 @@ interface Cuadrante {
   organismo: string;
   telefono: string;
   sectores: string;
+}
+
+interface SupabaseCuadrante {
+  MUNICIPIO: string;
+  CUADRANTE: string;
+  ORGANISMORESPONSABLE: string;
+  TELEFONOCUADRANTE: string;
+  SECTORES: string;
 }
 
 interface Feature {
@@ -49,9 +58,53 @@ export default function MapScreen() {
   const topPad = Platform.OS === 'web' ? 67 : insets.top;
   const bottomPad = Platform.OS === 'web' ? 34 : insets.bottom;
   const [selectedFeature, setSelectedFeature] = useState<Feature | null>(null);
+  const [cuadrantesByMunicipio, setCuadrantesByMunicipio] = useState<Record<string, SupabaseCuadrante[]>>({});
+  const [loadingCuadrantes, setLoadingCuadrantes] = useState(true);
+  const [cuadrantesError, setCuadrantesError] = useState<string | null>(null);
   const { currentLocation, locationLabel } = useLocationContext();
   const [mapType, setMapType] = useState<'standard' | 'satellite'>('standard');
   const mapRef = useRef<MapView | null>(null);
+
+  const normalizarTexto = (texto: string) =>
+    String(texto || '')
+      .normalize('NFD')
+      .replace(/[\u0300-\u036f]/g, '') // Quita acentos
+      .replace(/[^a-zA-Z0-9]/g, ' ') // Cambia caracteres no alfanuméricos por espacio
+      .trim()
+      .toUpperCase();
+
+  useEffect(() => {
+    const loadCuadrantes = async () => {
+      try {
+        setLoadingCuadrantes(true);
+        setCuadrantesError(null);
+        const response = await fetch('/api/cuadrantes');
+        const json = await response.json();
+
+        if (!response.ok) {
+          throw new Error(json?.error || 'No se pudo cargar la información de cuadrantes.');
+        }
+
+        const rows: SupabaseCuadrante[] = json.data || [];
+        const grouped = rows.reduce<Record<string, SupabaseCuadrante[]>>((acc, item) => {
+          const key = normalizarTexto(item.MUNICIPIO || '');
+          if (!acc[key]) {
+            acc[key] = [];
+          }
+          acc[key].push(item);
+          return acc;
+        }, {});
+
+        setCuadrantesByMunicipio(grouped);
+      } catch (error: any) {
+        setCuadrantesError(error?.message || 'Error al cargar los cuadrantes.');
+      } finally {
+        setLoadingCuadrantes(false);
+      }
+    };
+
+    loadCuadrantes();
+  }, []);
 
   const initialRegion = {
     latitude: 7.7667,
@@ -97,20 +150,44 @@ export default function MapScreen() {
     );
   };
 
-  const renderCuadrante = ({ item }: { item: Cuadrante }) => (
-    <View style={[styles.cuadranteItem, { backgroundColor: colors.surface, borderColor: colors.border }]}>
+const renderCuadrante = ({ item }: { item: SupabaseCuadrante }) => (
+    <View style={[styles.cuadranteItem, { backgroundColor: colors.surface, borderColor: colors.border }]}> 
       <View style={styles.cuadranteInfo}>
-        <Text style={[styles.cuadranteTitle, { color: colors.foreground }]}>Cuadrante: {item.cuadrante}</Text>
-        <Text style={[styles.cuadranteOrg, { color: colors.mutedForeground }]}>Organismo: {item.organismo}</Text>
+        <Text style={[styles.cuadranteTitle, { color: colors.foreground }]}>
+          {item.ORGANISMORESPONSABLE} · Cuadrante {item.CUADRANTE}
+        </Text>
+        <Text style={[styles.sectoresText, { color: colors.mutedForeground }]} numberOfLines={3} ellipsizeMode="tail">
+          Sectores: {item.SECTORES}
+        </Text>
       </View>
       <TouchableOpacity
         style={[styles.callBtn, { backgroundColor: colors.primary }]}
-        onPress={() => Linking.openURL(`tel:${item.telefono}`)}
+        onPress={() => Linking.openURL(`tel:${item.TELEFONOCUADRANTE}`)}
       >
         <Text style={[styles.callBtnText, { color: colors.background }]}>LLAMAR</Text>
       </TouchableOpacity>
     </View>
   );
+
+  const rawMunicipio = selectedFeature?.properties?.Municipio ?? '';
+  const correctedMunicipio = rawMunicipio.trim() === 'Antonio Rómulo Acosta' ? 'Antonio Rómulo Costa' : rawMunicipio;
+  const selectedMunicipioKey = selectedFeature ? normalizarTexto(correctedMunicipio) : '';
+  const selectedCuadrantes = selectedMunicipioKey ? cuadrantesByMunicipio[selectedMunicipioKey] || [] : [];
+
+  const displayMunicipio = String(
+    selectedFeature?.properties?.Municipio ?? selectedCuadrantes[0]?.MUNICIPIO ?? 'Desconocido'
+  )
+    .replace(/\r?\n/g, '')
+    .trim();
+
+  if (loadingCuadrantes) {
+    return (
+      <View style={[styles.loaderContainer, { backgroundColor: colors.background }]}> 
+        <ActivityIndicator size="large" color={colors.primary} />
+        <Text style={[styles.loadingText, { color: colors.mutedForeground }]}>Cargando información de cuadrantes...</Text>
+      </View>
+    );
+  }
 
   return (
     <View style={[styles.container, { backgroundColor: colors.background }]}>
@@ -171,15 +248,21 @@ export default function MapScreen() {
           >
             <Ionicons name="close" size={24} color={colors.foreground} />
           </TouchableOpacity>
-          <Text style={[styles.municipioTitle, { color: colors.foreground }]}>
-            Municipio: {selectedFeature.properties.Municipio || 'Desconocido'}
+          <Text style={[styles.municipioTitle, { color: colors.foreground }]}> 
+            Municipio: {displayMunicipio}
           </Text>
-          <FlatList
-            data={selectedFeature.properties.datos_cuadrantes || []}
-            renderItem={renderCuadrante}
-            keyExtractor={(item, index) => index.toString()}
-            style={styles.cuadrantesList}
-          />
+          {cuadrantesError ? (
+            <Text style={[styles.errorText, { color: colors.danger }]}>No se pudo cargar la lista de cuadrantes.</Text>
+          ) : selectedCuadrantes.length === 0 ? (
+            <Text style={[styles.emptyText, { color: colors.mutedForeground }]}>No se encontraron cuadrantes para este municipio.</Text>
+          ) : (
+            <FlatList
+              data={selectedCuadrantes}
+              renderItem={renderCuadrante}
+              keyExtractor={(item, index) => `${item.CUADRANTE}-${index}`}
+              style={styles.cuadrantesList}
+            />
+          )}
         </View>
       )}
     </View>
@@ -225,6 +308,11 @@ const styles = StyleSheet.create({
   closeBtn: { alignSelf: 'flex-end', marginBottom: 10 },
   municipioTitle: { fontSize: 18, fontFamily: 'Inter_700Bold', marginBottom: 10 },
   cuadrantesList: { flex: 1 },
+  sectoresText: { fontSize: 12, fontFamily: 'Inter_400Regular', marginTop: 6, lineHeight: 18 },
+  errorText: { fontSize: 13, fontFamily: 'Inter_600SemiBold', textAlign: 'center', marginTop: 12 },
+  emptyText: { fontSize: 13, fontFamily: 'Inter_400Regular', textAlign: 'center', marginTop: 12 },
+  loaderContainer: { flex: 1, alignItems: 'center', justifyContent: 'center', gap: 10, padding: 20 },
+  loadingText: { fontSize: 14, fontFamily: 'Inter_500Medium' },
   cuadranteItem: {
     flexDirection: 'row',
     alignItems: 'center',
