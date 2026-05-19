@@ -95,14 +95,14 @@ export default function LoginScreen() {
         </View>
 
         <Text style={[styles.titleTop, { color: colors.mutedForeground }]}>
-          Seguridad Ciudadana
+          Comisión Seguridad Ciudadana
         </Text>
         <Text style={[styles.titleMain, { color: colors.primary }]}>
           TÁCHIRA
         </Text>
         <View style={[styles.divider, { backgroundColor: colors.primary }]} />
         <Text style={[styles.subtitle, { color: colors.mutedForeground }]}>
-          Comisión de Seguridad Ciudadana{'\n'}del Estado Táchira
+          BIENVENIDOS
         </Text>
       </View>
 

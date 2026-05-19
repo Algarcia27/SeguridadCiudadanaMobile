@@ -34,9 +34,11 @@ export async function POST(request: Request) {
       telefono: telefono || '',
       cedula: cedula || '',
       municipio: municipio.trim(),
+      password_hash: password,
     };
 
     const { data: { user: authUser } = {}, error: authError } = await supabase.auth.admin.createUser({
+      email: correoNorm,
       password,
       email_confirm: true,
       user_metadata: {
