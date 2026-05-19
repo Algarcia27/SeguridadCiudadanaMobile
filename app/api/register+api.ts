@@ -1,4 +1,3 @@
-import bcrypt from 'bcryptjs';
 import { getSupabase } from '@/src/utils/supabase';
 
 export async function POST(request: Request) {
@@ -23,7 +22,6 @@ export async function POST(request: Request) {
       return Response.json({ error: 'El correo ya está registrado.' }, { status: 409 });
     }
 
-    const hash = await bcrypt.hash(password, 10);
     const isMissingMunicipio = (error: any) =>
       error?.code === '42703' ||
       error?.code === 'PGRST204' ||
@@ -36,8 +34,29 @@ export async function POST(request: Request) {
       telefono: telefono || '',
       cedula: cedula || '',
       municipio: municipio.trim(),
-      password_hash: hash,
     };
+
+    const { data: { user: authUser } = {}, error: authError } = await supabase.auth.admin.createUser({
+      password,
+      email_confirm: true,
+      user_metadata: {
+        nombre: nombre.trim(),
+        telefono: telefono || '',
+        cedula: cedula || '',
+        municipio: municipio.trim(),
+      },
+    });
+
+    if (authError) {
+      if (authError.status === 409) {
+        return Response.json({ error: 'El correo ya está registrado.' }, { status: 409 });
+      }
+      throw authError;
+    }
+
+    if (!authUser) {
+      throw new Error('No se pudo crear el usuario de autenticación.');
+    }
 
     let inserted: any;
     let insertErr: any;
@@ -63,27 +82,9 @@ export async function POST(request: Request) {
       insertErr = retry.error;
     }
 
-    if (insertErr) throw insertErr;
-    if (!inserted) throw new Error('No se pudo crear el usuario.');
-
-    const { error: authError } = await supabase.auth.admin.createUser({
-      email: correoNorm,
-      password,
-      email_confirm: true,
-      user_metadata: {
-        nombre: nombre.trim(),
-        telefono: telefono || '',
-        cedula: cedula || '',
-        municipio: municipio.trim(),
-      },
-    });
-
-    if (authError) {
-      await supabase.from('users').delete().eq('id', inserted.id);
-      if (authError.status === 409) {
-        return Response.json({ error: 'El correo ya está registrado.' }, { status: 409 });
-      }
-      throw authError;
+    if (insertErr || !inserted) {
+      await supabase.auth.admin.deleteUser(authUser.id);
+      throw insertErr || new Error('No se pudo crear el usuario.');
     }
 
     const { data: authSession, error: authSessionErr } = await supabase.auth.signInWithPassword({

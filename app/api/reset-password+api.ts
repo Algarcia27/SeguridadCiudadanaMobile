@@ -1,4 +1,3 @@
-import bcrypt from 'bcryptjs';
 import { getSupabase } from '@/src/utils/supabase';
 
 export async function POST(request: Request) {
@@ -57,11 +56,26 @@ export async function POST(request: Request) {
       }, { status: 400 });
     }
 
-    const hash = await bcrypt.hash(newPassword, 10);
+    const { data: authUser, error: authUserErr } = await supabase
+      .from('auth.users')
+      .select('id')
+      .eq('email', correoNorm)
+      .maybeSingle();
+
+    if (authUserErr) throw authUserErr;
+    if (!authUser?.id) {
+      return Response.json({ error: 'No se pudo encontrar el usuario de autenticación.' }, { status: 404 });
+    }
+
+    const { error: updatePasswordErr } = await supabase.auth.admin.updateUserById(authUser.id, {
+      password: newPassword,
+    });
+
+    if (updatePasswordErr) throw updatePasswordErr;
+
     const { error: updateErr } = await supabase
       .from('users')
       .update({
-        password_hash: hash,
         reset_code: null,
         reset_code_expiry: null,
       })
