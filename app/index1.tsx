@@ -62,7 +62,7 @@ export default function LoginScreen() {
       });
       const data = await res.json();
       if (res.ok && data.user) {
-        setUser({ ...data.user, token: data.token });
+        await setUser({ ...data.user, token: data.token, refreshToken: data.refreshToken });
         setShowLogin(false);
         router.replace('/(tabs)');
       } else {

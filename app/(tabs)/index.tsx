@@ -75,7 +75,13 @@ export default function DashboardScreen() {
   const handleMenuSelect = (option: string) => {
     setMenuOpen(false);
     impactLight();
-    console.log('Selected menu option:', option);
+    if (option === 'emergencyReport') {
+      router.push('../report-emergency' as any);
+    } else if (option === 'incidentReport') {
+      router.push('../report-incident' as any);
+    } else if (option === 'suggestions') {
+      router.push('../suggestions' as any);
+    }
   };
 
   return (
@@ -159,8 +165,8 @@ export default function DashboardScreen() {
             </Text>
           </View>
           <View style={styles.gpsBadge}>
-            <View style={[styles.gpsDot, { backgroundColor: gpsActive ? colors.success : colors.error }]} />
-            <Text style={[styles.gpsText, { color: gpsActive ? colors.success : colors.error }]}> {gpsActive ? t('gpsActive') : 'GPS Inactivo'}</Text>
+            <View style={[styles.gpsDot, { backgroundColor: gpsActive ? colors.success : colors.danger }]} />
+            <Text style={[styles.gpsText, { color: gpsActive ? colors.success : colors.danger }]}> {gpsActive ? t('gpsActive') : 'GPS Inactivo'}</Text>
           </View>
         </View>
 

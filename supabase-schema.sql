@@ -49,3 +49,26 @@ CREATE POLICY "Insert own profile" ON public.users
 CREATE POLICY "Insert reset attempt" ON public.password_reset_attempts
   FOR INSERT
   WITH CHECK (correo = auth.email());
+
+-- Storage policies para bucket de evidencias
+ALTER TABLE IF EXISTS storage.objects ENABLE ROW LEVEL SECURITY;
+
+DROP POLICY IF EXISTS "Allow authenticated insert on evidencias_reportes" ON storage.objects;
+DROP POLICY IF EXISTS "Allow authenticated select on evidencias_reportes" ON storage.objects;
+
+CREATE POLICY "Allow authenticated insert on evidencias_reportes"
+  ON storage.objects
+  FOR INSERT
+  WITH CHECK (
+    bucket_id = 'evidencias_reportes'
+    AND auth.role() = 'authenticated'
+  );
+
+CREATE POLICY "Allow authenticated select on evidencias_reportes"
+  ON storage.objects
+  FOR SELECT
+  USING (
+    bucket_id = 'evidencias_reportes'
+    AND auth.role() = 'authenticated'
+    AND owner = auth.uid()
+  );

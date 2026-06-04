@@ -34,6 +34,9 @@ function RootLayoutNav() {
         <Stack.Screen name="chat" options={{ presentation: 'card' }} />
         <Stack.Screen name="notifications" options={{ presentation: 'card' }} />
         <Stack.Screen name="settings" options={{ presentation: 'card' }} />
+        <Stack.Screen name="report-emergency" options={{ presentation: 'card' }} />
+        <Stack.Screen name="report-incident" options={{ presentation: 'card' }} />
+        <Stack.Screen name="suggestions" options={{ presentation: 'card' }} />
         <Stack.Screen name="register" options={{ presentation: 'card' }} />
         <Stack.Screen name="forgot-password" options={{ presentation: 'card' }} />
         <Stack.Screen name="reset-password" options={{ presentation: 'card' }} />

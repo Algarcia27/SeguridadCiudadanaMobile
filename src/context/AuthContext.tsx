@@ -1,5 +1,6 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { setSupabaseAuthSession } from '@/src/supabaseClient';
 
 export interface AuthUser {
   id: number;
@@ -10,39 +11,55 @@ export interface AuthUser {
   municipio: string;
   avatar_url: string | null;
   token?: string;
+  refreshToken?: string;
 }
 
 interface AuthContextType {
   user: AuthUser | null;
-  setUser: (user: AuthUser | null) => void;
-  logout: () => void;
+  setUser: (user: AuthUser | null) => Promise<void>;
+  logout: () => Promise<void>;
 }
 
 const AuthContext = createContext<AuthContextType>({
   user: null,
-  setUser: () => {},
-  logout: () => {},
+  setUser: async () => {},
+  logout: async () => {},
 });
 
 export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [user, setUserState] = useState<AuthUser | null>(null);
 
   useEffect(() => {
-    AsyncStorage.getItem('auth-user').then((raw) => {
-      if (raw) setUserState(JSON.parse(raw));
-    });
+    (async () => {
+      const raw = await AsyncStorage.getItem('auth-user');
+      if (raw) {
+        const parsed = JSON.parse(raw) as AuthUser;
+        await setSupabaseAuthSession(
+          parsed.token && parsed.refreshToken
+            ? { access_token: parsed.token, refresh_token: parsed.refreshToken }
+            : null
+        );
+        setUserState(parsed);
+      }
+    })();
   }, []);
 
-  const setUser = (u: AuthUser | null) => {
+  const setUser = async (u: AuthUser | null) => {
     setUserState(u);
     if (u) {
-      AsyncStorage.setItem('auth-user', JSON.stringify(u));
+      await AsyncStorage.setItem('auth-user', JSON.stringify(u));
+      await setSupabaseAuthSession(
+        u.token && u.refreshToken ? { access_token: u.token, refresh_token: u.refreshToken } : null
+      );
     } else {
-      AsyncStorage.removeItem('auth-user');
+      await AsyncStorage.removeItem('auth-user');
+      await setSupabaseAuthSession(null);
     }
   };
 
-  const logout = () => setUser(null);
+  const logout = async () => {
+    await setUser(null);
+  };
 
   return (
     <AuthContext.Provider value={{ user, setUser, logout }}>

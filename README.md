@@ -1,143 +1,65 @@
 # Seguridad Ciudadana Táchira — App Móvil
 
-Aplicación móvil oficial de la Comisión de Seguridad Ciudadana del Estado Táchira (Venezuela). Construida con **React Native** y **Expo Router**.
+Aplicación móvil oficial diseñada para la **Comisión de Seguridad Ciudadana del Estado Táchira**. Desarrollada con **React Native** y **Expo Router**, esta plataforma combina la visualización de mapas tácticos con una arquitectura en la nube robusta basada en **Supabase** para la gestión de autenticación, almacenamiento multimedia y persistencia de reportes en tiempo real[cite: 1].
 
 ---
 
-## Estructura del proyecto
+## 🚀 Resumen Tecnológico
 
-```
-/
-├── app/                        # Pantallas (Expo Router – file-based routing)
-│   ├── _layout.tsx             # Layout raíz: providers, fuentes, StatusBar
-│   ├── index.tsx               # Pantalla de bienvenida / login
-│   ├── chat.tsx                # Chat con operador de emergencias
-│   ├── notifications.tsx       # Centro de notificaciones
-│   ├── settings.tsx            # Ajustes (ruta de stack con botón atrás)
-│   └── (tabs)/                 # Navegación por pestañas
-│       ├── _layout.tsx         # TabNavigator con FloatingTabBar personalizada
-│       ├── index.tsx           # Dashboard (botón 911, servicios, ubicación)
-│       ├── map.tsx             # Mapa táctico de incidentes
-│       ├── news.tsx            # Feed de noticias / Instagram
-│       ├── profile.tsx         # Perfil del ciudadano
-│       ├── info.tsx            # Información institucional y directorio
-│       └── settings.tsx        # Ajustes completos (pestaña)
-│
-├── assets/images/              # Recursos estáticos (icono, logo, splash)
-│
-├── src/                        # Lógica y componentes reutilizables
-│   ├── components/
-│   │   ├── FloatingTabBar.tsx  # Barra de navegación flotante animada
-│   │   └── ErrorBoundary.tsx   # Captura de errores en tiempo de ejecución
-│   ├── constants/
-│   │   └── colors.ts           # Paleta de colores: modo claro y oscuro
-│   ├── context/
-│   │   ├── ThemeContext.tsx     # Proveedor de tema (claro / oscuro)
-│   │   └── LanguageContext.tsx  # Proveedor de idioma (es / en) + traducciones
-│   ├── hooks/
-│   │   └── useColors.ts        # Hook que retorna la paleta activa según tema
-│   └── utils/
-│       ├── haptics.ts          # Wrappers de Expo Haptics para vibración táctil
-│       └── supabase.ts         # Cliente Supabase (server-side, service role)
-│
-├── app.json                    # Configuración de Expo (bundle ID, splash, etc.)
-├── babel.config.js             # Babel con preset Expo y plugin Reanimated
-├── metro.config.js             # Metro bundler (configuración por defecto Expo)
-├── tsconfig.json               # TypeScript (alias @/* → ./*)
-├── package.json                # Dependencias
-└── README.md                   # Este archivo
-```
+* **Frontend & UI:** React Native con Expo Router (Enrutamiento basado en archivos)[cite: 1].
+* **Mapas Tácticos:** Renderizado de polígonos de cuadrantes de paz mediante archivos GeoJSON sobre mapas de OpenStreetMap[cite: 1].
+* **Backend & Persistencia:** Supabase (PostgreSQL, Auth y Storage) con políticas de seguridad a nivel de fila (**RLS**) totalmente activas[cite: 1].
+* **Canales Ciudadanos:** Módulos optimizados para el envío de reportes de emergencia (atención inmediata), incidencias comunitarias con adjuntos multimedia y sugerencias de participación directa[cite: 1].
 
 ---
 
-## Alias de importación
+## 📂 Estructura Clave del Proyecto
 
-El alias `@/` mapea a la raíz del proyecto:
-
-```ts
-// tsconfig.json
-"paths": { "@/*": ["./*"] }
-```
-
-Ejemplos con la nueva estructura `src/`:
-```ts
-import { useColors } from '@/src/hooks/useColors';
-import { ThemeProvider } from '@/src/context/ThemeContext';
-import FloatingTabBar from '@/src/components/FloatingTabBar';
-import { Colors } from '@/src/constants/colors';
-import { impactLight } from '@/src/utils/haptics';
-```
+* `app/` — Rutas y pantallas de la aplicación[cite: 1].
+    * `app/report-emergency.tsx` — Formulario táctico y envío de emergencias de atención inmediata[cite: 1].
+    * `app/(tabs)/map.tsx` — Módulo del mapa interactivo con la carga de cuadrantes[cite: 1].
+* `src/` — Lógica de negocio, contextos y servicios[cite: 1]:
+    * `src/supabaseClient.ts` — Inicialización oficial del cliente de Supabase para el Frontend[cite: 1].
+    * `src/supabaseServices.ts` — Servicios CRUD estrictamente tipados (`enviarEmergencia`, `enviarIncidencia`, `enviarSugerencia`, `subirFotoSupabase`)[cite: 1].
+    * `src/context/` — Gestión de estados globales (`AuthContext.tsx` y `ThemeContext.tsx`)[cite: 1].
+* `Mapa_Final_Tachira.json` — Archivo GeoJSON maestro con las coordenadas geográficas de los cuadrantes del estado Táchira[cite: 1].
 
 ---
 
-## Stack tecnológico
+## 🛠️ Arquitectura de Base de Datos e Integración
 
-| Tecnología | Uso |
-|---|---|
-| React Native 0.81 | Framework UI nativo |
-| Expo 54 | Toolchain, plugins, módulos nativos |
-| Expo Router 6 | Navegación file-based |
-| React Native Reanimated 4 | Animaciones fluidas |
-| React Native Gesture Handler | Gestos táctiles |
-| React Native Safe Area Context | Insets de dispositivo |
-| @tanstack/react-query | Gestión de estado asíncrono |
-| @expo-google-fonts/inter | Tipografía Inter |
-| AsyncStorage | Persistencia local (tema, idioma, perfil) |
-| Expo Haptics | Retroalimentación táctil |
-| Supabase (`@supabase/supabase-js`) | Base de datos en la nube (Postgres + REST) usada por las rutas `/api` |
+### 1. Autenticación e Integridad Referencial
+El sistema utiliza **Supabase Auth** para el control de sesiones de los ciudadanos[cite: 1]. Cada reporte insertado en las tablas relacionales (`reportes_emergencia`, `reportes_incidencia`, `sugerencias`) incluye una **Clave Foránea (Foreign Key)** directa hacia la tabla interna de usuarios de la plataforma (`auth.users`), garantizando la trazabilidad y la integridad de cada alerta recibida[cite: 1].
 
----
+### 2. Flujo de Almacenamiento Multimedia (Storage)
+La subida de evidencias fotográficas se realiza de forma directa y eficiente desde el cliente móvil[cite: 1]:
+1. El dispositivo captura o selecciona la imagen del reporte.
+2. `expo-file-system/legacy` codifica el archivo local en formato Base64 de forma asíncrona.
+3. Los bytes se decodifican mediante un ArrayBuffer y se cargan directamente al bucket público `evidencias_reportes` usando el SDK de Supabase.
+4. La base de datos almacena la URL pública generada de forma sincronizada con el texto del formulario en su respectiva columna (`url_evidencia`).
 
-## Tema y colores
-
-El sistema de temas está definido en `src/constants/colors.ts` con dos paletas (`light` / `dark`).  
-`useColors()` retorna la paleta activa. Los colores se aplican inline en todos los componentes.
+### 3. Seguridad Perimetral (RLS)
+La base de datos y el almacenamiento de objetos se encuentran blindados mediante políticas de **Row-Level Security (RLS)** en Postgres[cite: 1]. Esto permite operaciones de inserción (`INSERT`) y lectura (`SELECT`) de datos únicamente a los dispositivos que cuenten con una sesión JWT de usuario autenticado (`authenticated`) válida en la aplicación, protegiendo el sistema contra accesos no autorizados[cite: 1].
 
 ---
 
-## Flujos de navegación
+## 🗺️ Integración Cartográfica (GeoJSON + OSM)
 
-```
-index (Login)
-    └── (tabs)/ ─┬─ index     (Dashboard)
-                  ├─ map       (Mapa)
-                  ├─ news      (Noticias)
-                  ├─ info      (Institución)
-                  ├─ profile   (Perfil)
-                  └─ settings  (Ajustes tab)
+El módulo del mapa táctico (`app/(tabs)/map.tsx`) procesa y superpone los datos de seguridad regional siguiendo estas pautas[cite: 1]:
 
-Stack screens (modal/card):
-  - /chat           → ChatScreen
-  - /notifications  → NotificationsScreen
-  - /settings       → SettingsScreen (con back)
-```
+* **Capa Base:** Consumo de mosaicos de imágenes mediante OpenStreetMap como proveedor global de mapas[cite: 1].
+* **Superposición de Datos:** Transformación en caliente del archivo `Mapa_Final_Tachira.json` para renderizar polígonos, marcadores de interés y etiquetas de identificación en el mapa de la app[cite: 1].
+* **Optimización Geográfica:** Los nombres de los municipios y la data cartográfica se encuentran normalizados (ej. *Municipio Antonio Rómulo Costa*) para garantizar la coincidencia exacta con el motor de geolocalización y los filtros de la aplicación móvil.
 
 ---
 
-## Scripts
+## ⚙️ Configuración y Despliegue Local
 
-```bash
-npx expo start --web --port 5000   # Previsualización web (Replit)
-npx expo start --tunnel            # QR para Expo Go en dispositivo físico
-npx expo start --android           # Emulador Android
-npx expo start --ios               # Simulador iOS
-```
+### Variables de Entorno Requeridas
+Para conectar la aplicación localmente con el backend, configure un archivo `.env` en la raíz del proyecto con las siguientes claves[cite: 1]:
 
----
+```env
+SUPABASE_URL=[https://tu-proyecto.supabase.co](https://tu-proyecto.supabase.co)
+SUPABASE_ANON_KEY=tu-clave-anonima-publica
 
-## Base de datos (Supabase)
-
-La app usa **Supabase** (Postgres en la nube) para los datos de usuario. Las rutas
-`/api` (`login`, `register`, `forgot-password`, `reset-password`, `update-avatar`)
-acceden a Supabase desde el servidor con la **Service Role Key** a través del
-helper `src/utils/supabase.ts`.
-
-Variables de entorno requeridas (configuradas como Secrets en Replit):
-
-| Variable | Uso |
-|---|---|
-| `SUPABASE_URL` | URL del proyecto Supabase (`https://xxxx.supabase.co`) |
-| `SUPABASE_SERVICE_ROLE_KEY` | Clave de servicio (solo server-side) |
-
-El esquema de la tabla `users` está en `supabase-schema.sql`. Ejecútalo una vez
-en el **SQL Editor** de Supabase para crear la tabla.
+ 

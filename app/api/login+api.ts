@@ -16,7 +16,7 @@ export async function POST(request: Request) {
       password,
     });
 
-    if (authError || !authData.session?.access_token) {
+    if (authError || !authData.session?.access_token || !authData.session?.refresh_token) {
       return Response.json({ error: 'Correo o contraseña incorrectos.' }, { status: 401 });
     }
 
@@ -32,6 +32,7 @@ export async function POST(request: Request) {
       success: true,
       user: user ?? null,
       token: authData.session.access_token,
+      refreshToken: authData.session.refresh_token,
     });
   } catch (err: any) {
     console.error('Login error:', err);
