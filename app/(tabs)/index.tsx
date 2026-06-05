@@ -75,11 +75,7 @@ export default function DashboardScreen() {
   const handleMenuSelect = (option: string) => {
     setMenuOpen(false);
     impactLight();
-    if (option === 'emergencyReport') {
-      router.push('../report-emergency' as any);
-    } else if (option === 'incidentReport') {
-      router.push('../report-incident' as any);
-    } else if (option === 'suggestions') {
+    if (option === 'suggestions') {
       router.push('../suggestions' as any);
     }
   };
@@ -114,18 +110,6 @@ export default function DashboardScreen() {
           </View>
           {menuOpen && (
             <View style={[styles.dropdownMenu, { backgroundColor: colors.surface, borderColor: colors.border }]}> 
-              <TouchableOpacity
-                style={styles.dropdownItem}
-                onPress={() => handleMenuSelect('emergencyReport')}
-              >
-                <Text style={[styles.dropdownText, { color: colors.foreground }]}>Reporte de emergencia</Text>
-              </TouchableOpacity>
-              <TouchableOpacity
-                style={styles.dropdownItem}
-                onPress={() => handleMenuSelect('incidentReport')}
-              >
-                <Text style={[styles.dropdownText, { color: colors.foreground }]}>Reporte de incidente</Text>
-              </TouchableOpacity>
               <TouchableOpacity
                 style={styles.dropdownItem}
                 onPress={() => handleMenuSelect('suggestions')}

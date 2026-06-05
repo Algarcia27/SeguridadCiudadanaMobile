@@ -45,11 +45,14 @@ La base de datos y el almacenamiento de objetos se encuentran blindados mediante
 
 ## 🗺️ Integración Cartográfica (GeoJSON + OSM)
 
-El módulo del mapa táctico (`app/(tabs)/map.tsx`) procesa y superpone los datos de seguridad regional siguiendo estas pautas[cite: 1]:
+El módulo del mapa táctico (`app/(tabs)/map.tsx`) implementa un diseño de alta interacción con el ciudadano centrado en la usabilidad:
 
-* **Capa Base:** Consumo de mosaicos de imágenes mediante OpenStreetMap como proveedor global de mapas[cite: 1].
-* **Superposición de Datos:** Transformación en caliente del archivo `Mapa_Final_Tachira.json` para renderizar polígonos, marcadores de interés y etiquetas de identificación en el mapa de la app[cite: 1].
-* **Optimización Geográfica:** Los nombres de los municipios y la data cartográfica se encuentran normalizados (ej. *Municipio Antonio Rómulo Costa*) para garantizar la coincidencia exacta con el motor de geolocalización y los filtros de la aplicación móvil.
+* **Marcador de Ubicación Dinámico:** En lugar del punto azul genérico de GPS, la app renderiza un marcador circular perfecto con la foto de perfil real del usuario conectado (obtenida desde `user_metadata.avatar_url` de Supabase). Cuenta con un borde blanco grueso y anclaje centrado (`anchor={{ x: 0.5, y: 0.5 }}`) para eliminar errores de renderizado nativo en Android.
+* **Menú Desplegable Flotante:** Un botón principal de acción rápida **"REPORTAR"** se ubica con posicionamiento absoluto en la base del mapa. Al ser presionado, despliega verticalmente un submenú con transiciones limpias para elegir entre:
+  * **🚨 Reportar Emergencia:** Redirige al formulario de atención inmediata.
+  * **⚠️ Reportar Incidente:** Redirige al formulario de incidencias comunitarias.
+* **Capa de Cierre Inmediato (Overlay):** Un componente invisible se activa detrás del menú abierto para que, si el usuario toca cualquier parte externa del mapa, las opciones se oculten automáticamente de forma segura.
+* **Simplificación del Menú de Tres Puntos (Header):** Las opciones operativas de emergencia e incidencia se removieron por completo de la barra superior. El menú de tres puntos queda reservado exclusivamente para la gestión institucional de **Sugerencias**.
 
 ---
 

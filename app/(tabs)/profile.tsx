@@ -20,6 +20,7 @@ import { notifySuccess } from '@/src/utils/haptics';
 import { useColors } from '@/src/hooks/useColors';
 import { useLanguage } from '@/src/context/LanguageContext';
 import { useAuth } from '@/src/context/AuthContext';
+import { actualizarFotoPerfilUsuario } from '@/src/supabaseServices';
 
 interface UserData {
   displayName: string;
@@ -80,6 +81,17 @@ export default function ProfileScreen() {
   const topPad = Platform.OS === 'web' ? 67 : insets.top;
 
   useEffect(() => {
+    const loadSavedProfile = async () => {
+      const raw = await AsyncStorage.getItem('user-profile');
+      if (!raw) return;
+
+      const parsed = JSON.parse(raw);
+      setUserData(parsed);
+      if (parsed.avatarUri && !parsed.avatarUri.startsWith('file://')) {
+        setAvatarUri(parsed.avatarUri);
+      }
+    };
+
     if (user) {
       setUserData({
         displayName: user.nombre,
@@ -88,15 +100,14 @@ export default function ProfileScreen() {
         cedula: user.cedula || '',
         municipio: user.municipio || '',
       });
-      setAvatarUri(user.avatar_url || null);
+
+      if (user.avatar_url && !user.avatar_url.startsWith('file://')) {
+        setAvatarUri(user.avatar_url);
+      } else {
+        loadSavedProfile();
+      }
     } else {
-      AsyncStorage.getItem('user-profile').then((raw) => {
-        if (raw) {
-          const parsed = JSON.parse(raw);
-          setUserData(parsed);
-          if (parsed.avatarUri) setAvatarUri(parsed.avatarUri);
-        }
-      });
+      loadSavedProfile();
     }
   }, [user]);
 
@@ -147,40 +158,80 @@ export default function ProfileScreen() {
         Alert.alert('Permiso requerido', 'Se necesita acceso a tu galería para cambiar la foto.');
         return;
       }
+
       const result = await ImagePicker.launchImageLibraryAsync({
         mediaTypes: ['images'],
         allowsEditing: true,
         aspect: [1, 1],
-        quality: 0.8,
+        quality: 0.4,
       });
 
       if (!result.canceled && result.assets[0].uri) {
         const uri = result.assets[0].uri;
-        setAvatarUri(uri);
-        AsyncStorage.setItem('user-profile', JSON.stringify({ ...userData, avatarUri: uri }));
+        const urlPublica = await actualizarFotoPerfilUsuario(uri);
+
+        if (!urlPublica || !urlPublica.startsWith('http')) {
+          throw new Error('No se obtuvo una URL pública válida para la foto de perfil.');
+        }
+
+        setAvatarUri(urlPublica);
+        await AsyncStorage.setItem('user-profile', JSON.stringify({ ...userData, avatarUri: urlPublica }));
 
         if (user?.token) {
-          try {
-            const res = await fetch('/api/update-avatar', {
-              method: 'POST',
-                headers: {
-                  'Content-Type': 'application/json',
-                  Authorization: `Bearer ${user.token}`,
-                },
-                body: JSON.stringify({ avatarUrl: uri }),
-            });
-            if (res.ok) {
-              const data = await res.json();
-              setUser({ ...user, avatar_url: uri });
-            }
-          } catch (e) {
-            console.warn('Could not sync avatar to server');
+          const response = await fetch('/api/update-avatar', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+              Authorization: `Bearer ${user.token}`,
+            },
+            body: JSON.stringify({ avatarUrl: urlPublica }),
+          });
+
+          if (!response.ok) {
+            const errorBody = await response.json();
+            throw new Error(errorBody?.error || 'No se pudo actualizar el avatar en el servidor.');
           }
+
+          const data = await response.json();
+          if (data?.success && data?.user) {
+            const updatedUser = {
+              ...user,
+              ...data.user,
+              avatar_url: urlPublica,
+              user_metadata: {
+                ...((user as any)?.user_metadata),
+                avatar_url: urlPublica,
+              },
+            };
+            await setUser(updatedUser);
+          } else {
+            const updatedUser = {
+              ...user,
+              avatar_url: urlPublica,
+              user_metadata: {
+                ...((user as any)?.user_metadata),
+                avatar_url: urlPublica,
+              },
+            };
+            await setUser(updatedUser);
+          }
+        } else if (user) {
+          const updatedUser = {
+            ...user,
+            avatar_url: urlPublica,
+            user_metadata: {
+              ...((user as any)?.user_metadata),
+              avatar_url: urlPublica,
+            },
+          };
+          await setUser(updatedUser);
         }
+
         notifySuccess();
       }
-    } catch (e) {
-      Alert.alert('Error', 'No se pudo abrir la galería.');
+    } catch (error: any) {
+      console.error('handlePickAvatar error:', error);
+      Alert.alert('Error', error?.message || 'No se pudo actualizar la foto de perfil.');
     }
   };
 
@@ -202,7 +253,7 @@ export default function ProfileScreen() {
             <View style={[styles.avatarRing, { borderColor: colors.border }]}> 
               <View style={[styles.avatar, { backgroundColor: colors.surface }]}> 
                 {avatarUri ? (
-                  <Image source={{ uri: avatarUri }} style={styles.avatarImage} />
+                  <Image source={{ uri: `${avatarUri}?v=${new Date().getTime()}` }} style={styles.avatarImage} />
                 ) : (
                   <Ionicons name="person" size={44} color={colors.mutedForeground} />
                 )}

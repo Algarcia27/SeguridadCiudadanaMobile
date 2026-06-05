@@ -64,7 +64,7 @@ export async function subirFotoSupabase(fileUri: string): Promise<string> {
     // Subir los bytes decodificados al bucket de Supabase
     const { data, error: uploadError } = await supabase.storage
       .from('evidencias_reportes')
-      .upload(rutaArchivo, decode(base64), {
+      .upload(rutaArchivo, Buffer.from(base64, 'base64'), {
         contentType: 'image/jpeg',
       });
 
@@ -160,5 +160,45 @@ export async function enviarSugerencia(data: DataSugerencia) {
   } catch (error) {
     console.error('enviarSugerencia error:', error);
     throw new Error('No se pudo guardar la sugerencia.');
+  }
+}
+
+
+export async function actualizarFotoPerfilUsuario(fileUri: string): Promise<string> {
+  try {
+    const usuarioId = await obtenerUsuarioId();
+    const nombreArchivo = `${usuarioId}_avatar.jpg`;
+    const rutaArchivo = `avatars/${nombreArchivo}`;
+
+    const base64 = await FileSystem.readAsStringAsync(fileUri, {
+      encoding: 'base64',
+    });
+
+    const bytes = decode(base64);
+
+    const { error: uploadError } = await supabase.storage
+      .from('evidencias_reportes')
+      .upload(rutaArchivo, bytes, {
+        contentType: 'image/jpeg',
+        upsert: true,
+        cacheControl: '0',
+      });
+
+    if (uploadError) throw uploadError;
+
+    const { data: publicUrlData } = supabase.storage
+      .from('evidencias_reportes')
+      .getPublicUrl(rutaArchivo);
+
+    const urlPermanente = publicUrlData.publicUrl;
+    if (!urlPermanente) {
+      throw new Error('No se pudo obtener la URL pública del avatar.');
+    }
+
+    return urlPermanente;
+
+  } catch (error: any) {
+    console.error('actualizarFotoPerfilUsuario error:', error);
+    throw new Error(`No se pudo guardar la foto de perfil: ${error.message}`);
   }
 }

@@ -23,6 +23,9 @@ const INCIDENT_TYPES = [
   'Inseguridad',
   'Bloqueo',
   'Vehículo abandonado',
+  'Mascota perdida',
+  'Agresion Fisica',
+  'Violencia de genero',
   'Otros',
 ];
 
