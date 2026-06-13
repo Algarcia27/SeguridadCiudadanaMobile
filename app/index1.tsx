@@ -14,6 +14,7 @@ import {
   KeyboardAvoidingView,
   ScrollView,
 } 
+
 from 'react-native';
 import { useRouter } from 'expo-router';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
@@ -22,7 +23,7 @@ import { useColors } from '@/src/hooks/useColors';
 import { useLanguage } from '@/src/context/LanguageContext';
 import { useAuth } from '@/src/context/AuthContext';
 
-const { height } = Dimensions.get('window');
+const { width, height } = Dimensions.get('window');
 
 export default function LoginScreen() {
   const router = useRouter();
@@ -83,31 +84,33 @@ export default function LoginScreen() {
       <View style={styles.glow1} />
       <View style={styles.glow2} />
 
-      <View style={styles.hero}>
-        <View style={[styles.logoRing, { borderColor: colors.border, backgroundColor: colors.surfaceContainer }]}>
-          <View style={[styles.logoInner, { backgroundColor: 'rgba(255,255,255,0.95)' }]}>
-            <Image
-              source={require('@/assets/images/logo.png')}
-              style={styles.logo}
-              resizeMode="contain"
-            />
+      <ScrollView contentContainerStyle={styles.scrollHero} showsVerticalScrollIndicator={false}>
+        <View style={styles.hero}>
+          <View style={[styles.logoRing, { borderColor: colors.border, backgroundColor: colors.surfaceContainer }]}>
+            <View style={[styles.logoInner, { backgroundColor: 'rgba(255,255,255,0.95)' }]}>
+              <Image
+                source={require('@/assets/images/logo.png')}
+                style={styles.logo}
+                resizeMode="contain"
+              />
+            </View>
           </View>
+
+          <Text style={[styles.titleTop, { color: colors.mutedForeground }]}>
+            Comisión Seguridad Ciudadana
+          </Text>
+          <Text style={[styles.titleMain, { color: colors.primary }]}>
+            TÁCHIRA
+          </Text>
+          <View style={[styles.divider, { backgroundColor: colors.primary }]} />
+          <Text style={[styles.subtitle, { color: colors.mutedForeground }]}>
+            BIENVENIDOS
+          </Text>
         </View>
+      </ScrollView>
 
-        <Text style={[styles.titleTop, { color: colors.mutedForeground }]}>
-          Comisión Seguridad Ciudadana
-        </Text>
-        <Text style={[styles.titleMain, { color: colors.primary }]}>
-          TÁCHIRA
-        </Text>
-        <View style={[styles.divider, { backgroundColor: colors.primary }]} />
-        <Text style={[styles.subtitle, { color: colors.mutedForeground }]}>
-          BIENVENIDOS
-        </Text>
-      </View>
-
-      <View style={[styles.actions, { paddingBottom: bottomInset + 32 }]}>
-        <Animated.View style={{ transform: [{ scale }] }}>
+      <View style={[styles.actions, { paddingBottom: bottomInset + 24 }]}>
+        <Animated.View style={{ transform: [{ scale }], width: '100%' }}>
           <TouchableOpacity
             style={[styles.primaryBtn, { backgroundColor: colors.primary }]}
             onPress={() => setShowLogin(true)}
@@ -151,7 +154,7 @@ export default function LoginScreen() {
           behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
         >
           <TouchableOpacity style={styles.modalBackdrop} activeOpacity={1} onPress={() => setShowLogin(false)} />
-          <View style={[styles.modalSheet, { backgroundColor: colors.surface }]}>
+          <View style={[styles.modalSheet, { backgroundColor: colors.surface, paddingBottom: bottomInset + 20 }]}>
             <View style={[styles.modalHandle, { backgroundColor: colors.border }]} />
 
             <View style={styles.modalHeader}>
@@ -160,89 +163,91 @@ export default function LoginScreen() {
               </View>
               <View style={{ flex: 1 }}>
                 <Text style={[styles.modalTitle, { color: colors.foreground }]}>Iniciar Sesión</Text>
-                <Text style={[styles.modalSub, { color: colors.mutedForeground }]}>Comisión de Seguridad Ciudadana</Text>
+                <Text style={[styles.modalSub, { color: colors.mutedForeground }]} numberOfLines={1}>Comisión de Seguridad Ciudadana</Text>
               </View>
               <TouchableOpacity onPress={() => setShowLogin(false)} style={[styles.closeBtn, { backgroundColor: colors.surfaceContainer }]}>
                 <Ionicons name="close" size={20} color={colors.foreground} />
               </TouchableOpacity>
             </View>
 
-            <View style={styles.modalFields}>
-              <View style={styles.fieldWrap}>
-                <Text style={[styles.fieldLabel, { color: colors.mutedForeground }]}>Correo electrónico</Text>
-                <View style={[styles.inputRow, { backgroundColor: colors.surfaceContainer, borderColor: colors.border }]}>
-                  <Ionicons name="mail-outline" size={18} color={colors.mutedForeground} style={{ marginRight: 8 }} />
-                  <TextInput
-                    style={[styles.input, { color: colors.foreground }]}
-                    value={correo}
-                    onChangeText={(v) => { setCorreo(v); setError(''); }}
-                    placeholder="ejemplo@correo.com"
-                    placeholderTextColor={colors.mutedForeground + '80'}
-                    keyboardType="email-address"
-                    autoCapitalize="none"
-                    autoCorrect={false}
-                  />
+            <ScrollView showsVerticalScrollIndicator={false} keyboardShouldPersistTaps="handled">
+              <View style={styles.modalFields}>
+                <View style={styles.fieldWrap}>
+                  <Text style={[styles.fieldLabel, { color: colors.mutedForeground }]}>Correo electrónico</Text>
+                  <View style={[styles.inputRow, { backgroundColor: colors.surfaceContainer, borderColor: colors.border }]}>
+                    <Ionicons name="mail-outline" size={18} color={colors.mutedForeground} style={{ marginRight: 8 }} />
+                    <TextInput
+                      style={[styles.input, { color: colors.foreground }]}
+                      value={correo}
+                      onChangeText={(v) => { setCorreo(v); setError(''); }}
+                      placeholder="ejemplo@correo.com"
+                      placeholderTextColor={colors.mutedForeground + '80'}
+                      keyboardType="email-address"
+                      autoCapitalize="none"
+                      autoCorrect={false}
+                    />
+                  </View>
                 </View>
+
+                <View style={styles.fieldWrap}>
+                  <Text style={[styles.fieldLabel, { color: colors.mutedForeground }]}>Contraseña</Text>
+                  <View style={[styles.inputRow, { backgroundColor: colors.surfaceContainer, borderColor: colors.border }]}>
+                    <Ionicons name="lock-closed-outline" size={18} color={colors.mutedForeground} style={{ marginRight: 8 }} />
+                    <TextInput
+                      style={[styles.input, { color: colors.foreground }]}
+                      value={password}
+                      onChangeText={(v) => { setPassword(v); setError(''); }}
+                      placeholder="Tu contraseña"
+                      placeholderTextColor={colors.mutedForeground + '80'}
+                      secureTextEntry={!showPass}
+                      autoCapitalize="none"
+                      autoCorrect={false}
+                    />
+                    <TouchableOpacity onPress={() => setShowPass(v => !v)}>
+                      <Ionicons name={showPass ? 'eye-off-outline' : 'eye-outline'} size={18} color={colors.mutedForeground} />
+                    </TouchableOpacity>
+                  </View>
+                </View>
+
+                {error ? (
+                  <View style={[styles.errorBox, { backgroundColor: colors.danger + '15', borderColor: colors.danger + '40' }]}>
+                    <Ionicons name="alert-circle-outline" size={16} color={colors.danger} />
+                    <Text style={[styles.errorText, { color: colors.danger }]}>{error}</Text>
+                  </View>
+                ) : null}
+
+                <TouchableOpacity
+                  style={[styles.loginBtn, { backgroundColor: loading ? colors.primary + 'AA' : colors.primary }]}
+                  onPress={handleLogin}
+                  disabled={loading}
+                  activeOpacity={0.85}
+                >
+                  {loading
+                    ? <ActivityIndicator color="#fff" />
+                    : <>
+                        <Text style={styles.loginBtnText}>Ingresar</Text>
+                        <Ionicons name="arrow-forward-outline" size={20} color="#fff" />
+                      </>
+                  }
+                </TouchableOpacity>
+
+                <TouchableOpacity
+                  onPress={() => { setShowLogin(false); router.push('/forgot-password'); }}
+                  style={styles.forgotLink}
+                >
+                  <Text style={[styles.forgotText, { color: colors.primary }]}>
+                    ¿Olvidaste tu contraseña?
+                  </Text>
+                </TouchableOpacity>
+
+                <TouchableOpacity onPress={() => { setShowLogin(false); router.push('/register'); }} style={styles.registerLinkModal}>
+                  <Text style={[styles.registerText, { color: colors.mutedForeground }]}>
+                    ¿No tienes cuenta?{' '}
+                    <Text style={{ color: colors.primary, fontFamily: 'Inter_700Bold' }}>Regístrate aquí</Text>
+                  </Text>
+                </TouchableOpacity>
               </View>
-
-              <View style={styles.fieldWrap}>
-                <Text style={[styles.fieldLabel, { color: colors.mutedForeground }]}>Contraseña</Text>
-                <View style={[styles.inputRow, { backgroundColor: colors.surfaceContainer, borderColor: colors.border }]}>
-                  <Ionicons name="lock-closed-outline" size={18} color={colors.mutedForeground} style={{ marginRight: 8 }} />
-                  <TextInput
-                    style={[styles.input, { color: colors.foreground }]}
-                    value={password}
-                    onChangeText={(v) => { setPassword(v); setError(''); }}
-                    placeholder="Tu contraseña"
-                    placeholderTextColor={colors.mutedForeground + '80'}
-                    secureTextEntry={!showPass}
-                    autoCapitalize="none"
-                    autoCorrect={false}
-                  />
-                  <TouchableOpacity onPress={() => setShowPass(v => !v)}>
-                    <Ionicons name={showPass ? 'eye-off-outline' : 'eye-outline'} size={18} color={colors.mutedForeground} />
-                  </TouchableOpacity>
-                </View>
-              </View>
-
-              {error ? (
-                <View style={[styles.errorBox, { backgroundColor: colors.danger + '15', borderColor: colors.danger + '40' }]}>
-                  <Ionicons name="alert-circle-outline" size={16} color={colors.danger} />
-                  <Text style={[styles.errorText, { color: colors.danger }]}>{error}</Text>
-                </View>
-              ) : null}
-
-              <TouchableOpacity
-                style={[styles.loginBtn, { backgroundColor: loading ? colors.primary + 'AA' : colors.primary }]}
-                onPress={handleLogin}
-                disabled={loading}
-                activeOpacity={0.85}
-              >
-                {loading
-                  ? <ActivityIndicator color="#fff" />
-                  : <>
-                      <Text style={styles.loginBtnText}>Ingresar</Text>
-                      <Ionicons name="arrow-forward-outline" size={20} color="#fff" />
-                    </>
-                }
-              </TouchableOpacity>
-
-              <TouchableOpacity
-                onPress={() => { setShowLogin(false); router.push('/forgot-password'); }}
-                style={styles.forgotLink}
-              >
-                <Text style={[styles.forgotText, { color: colors.primary }]}>
-                  ¿Olvidaste tu contraseña?
-                </Text>
-              </TouchableOpacity>
-
-              <TouchableOpacity onPress={() => { setShowLogin(false); router.push('/register'); }} style={styles.registerLinkModal}>
-                <Text style={[styles.registerText, { color: colors.mutedForeground }]}>
-                  ¿No tienes cuenta?{' '}
-                  <Text style={{ color: colors.primary, fontFamily: 'Inter_700Bold' }}>Regístrate aquí</Text>
-                </Text>
-              </TouchableOpacity>
-            </View>
+            </ScrollView>
           </View>
         </KeyboardAvoidingView>
       </Modal>
@@ -252,6 +257,7 @@ export default function LoginScreen() {
 
 const styles = StyleSheet.create({
   container: { flex: 1 },
+  scrollHero: { flexGrow: 1, justifyContent: 'center' },
   glow1: {
     position: 'absolute', top: -100, left: -100,
     width: 400, height: 400, borderRadius: 200,
@@ -263,62 +269,64 @@ const styles = StyleSheet.create({
     backgroundColor: 'rgba(220,38,38,0.04)',
   },
   hero: {
-    flex: 1, alignItems: 'center', justifyContent: 'center', paddingHorizontal: 32,
+    alignItems: 'center', justifyContent: 'center', paddingHorizontal: 24,
   },
   logoRing: {
-    width: 150, height: 150, borderRadius: 75, borderWidth: 1,
-    alignItems: 'center', justifyContent: 'center', marginBottom: 36,
+    width: 140, height: 140, borderRadius: 70, borderWidth: 1,
+    alignItems: 'center', justifyContent: 'center', marginBottom: 28,
   },
   logoInner: {
-    width: 124, height: 124, borderRadius: 62, alignItems: 'center', justifyContent: 'center', overflow: 'hidden',
+    width: 116, height: 116, borderRadius: 58, alignItems: 'center', justifyContent: 'center', overflow: 'hidden',
   },
-  logo: { width: 96, height: 96 },
+  logo: { width: 90, height: 90 },
   titleTop: {
-    fontSize: 13, fontFamily: 'Inter_600SemiBold', letterSpacing: 2,
-    textTransform: 'uppercase', marginBottom: 4,
+    fontSize: 12, fontFamily: 'Inter_600SemiBold', letterSpacing: 1.5,
+    textTransform: 'uppercase', marginBottom: 4, textAlign: 'center',
   },
-  titleMain: { fontSize: 40, fontFamily: 'Inter_700Bold', letterSpacing: 8 },
-  divider: { width: 40, height: 3, borderRadius: 2, marginVertical: 16, opacity: 0.5 },
+  titleMain: { fontSize: 36, fontFamily: 'Inter_700Bold', letterSpacing: 6 },
+  divider: { width: 40, height: 3, borderRadius: 2, marginVertical: 14, opacity: 0.5 },
   subtitle: { fontSize: 13, fontFamily: 'Inter_400Regular', textAlign: 'center', lineHeight: 20 },
-  actions: { paddingHorizontal: 28, gap: 16 },
+  actions: { paddingHorizontal: 24, gap: 14, alignItems: 'center', width: '100%' },
   primaryBtn: {
+    width: '100%',
     flexDirection: 'row', alignItems: 'center', justifyContent: 'center',
-    gap: 10, paddingVertical: 18, borderRadius: 18,
-    shadowColor: '#DC2626', shadowOffset: { width: 0, height: 8 },
-    shadowOpacity: 0.35, shadowRadius: 16, elevation: 8,
+    gap: 10, paddingVertical: 16, borderRadius: 18,
+    shadowColor: '#DC2626', shadowOffset: { width: 0, height: 6 },
+    shadowOpacity: 0.3, shadowRadius: 12, elevation: 6,
   },
   primaryBtnText: { color: '#fff', fontSize: 16, fontFamily: 'Inter_700Bold', letterSpacing: 1 },
-  badges: { flexDirection: 'row', justifyContent: 'center', alignItems: 'center', gap: 12 },
-  badge: { flexDirection: 'row', alignItems: 'center', gap: 5 },
-  badgeText: { fontSize: 11, fontFamily: 'Inter_500Medium', textTransform: 'uppercase', letterSpacing: 0.5 },
+  badges: { flexDirection: 'row', justifyContent: 'center', alignItems: 'center', gap: 10, marginTop: 4 },
+  badge: { flexDirection: 'row', alignItems: 'center', gap: 4 },
+  badgeText: { fontSize: 10, fontFamily: 'Inter_500Medium', textTransform: 'uppercase', letterSpacing: 0.5 },
   badgeDot: { width: 4, height: 4, borderRadius: 2 },
   registerLink: { alignItems: 'center', paddingVertical: 2 },
-  registerLinkModal: { alignItems: 'center', paddingVertical: 4 },
-  forgotLink: { alignItems: 'center', paddingVertical: 2 },
+  registerLinkModal: { alignItems: 'center', paddingVertical: 6, marginTop: 4 },
+  forgotLink: { alignItems: 'center', paddingVertical: 4 },
   forgotText: { fontSize: 13, fontFamily: 'Inter_600SemiBold' },
   registerText: { fontSize: 13, fontFamily: 'Inter_400Regular' },
   modalOverlay: { flex: 1, justifyContent: 'flex-end' },
-  modalBackdrop: { flex: 1, backgroundColor: 'rgba(0,0,0,0.5)' },
+  modalBackdrop: { ...StyleSheet.absoluteFillObject, backgroundColor: 'rgba(0,0,0,0.5)' },
   modalSheet: {
     borderTopLeftRadius: 28, borderTopRightRadius: 28,
-    padding: 24, paddingBottom: 40,
+    padding: 24,
+    maxHeight: height * 0.85,
     shadowColor: '#000', shadowOffset: { width: 0, height: -4 },
     shadowOpacity: 0.15, shadowRadius: 20, elevation: 20,
   },
-  modalHandle: { width: 40, height: 4, borderRadius: 2, alignSelf: 'center', marginBottom: 20 },
-  modalHeader: { flexDirection: 'row', alignItems: 'center', gap: 14, marginBottom: 24 },
-  modalIconWrap: { width: 44, height: 44, borderRadius: 14, alignItems: 'center', justifyContent: 'center' },
+  modalHandle: { width: 40, height: 4, borderRadius: 2, alignSelf: 'center', marginBottom: 16 },
+  modalHeader: { flexDirection: 'row', alignItems: 'center', gap: 12, marginBottom: 20 },
+  modalIconWrap: { width: 40, height: 40, borderRadius: 12, alignItems: 'center', justifyContent: 'center' },
   modalTitle: { fontSize: 18, fontFamily: 'Inter_700Bold' },
-  modalSub: { fontSize: 11, fontFamily: 'Inter_400Regular', marginTop: 1 },
-  closeBtn: { width: 36, height: 36, borderRadius: 10, alignItems: 'center', justifyContent: 'center' },
-  modalFields: { gap: 16 },
+  modalSub: { fontSize: 11, fontFamily: 'Inter_400Regular', marginTop: 1, marginRight: 4 },
+  closeBtn: { width: 34, height: 34, borderRadius: 10, alignItems: 'center', justifyContent: 'center' },
+  modalFields: { gap: 14, paddingBottom: 10 },
   fieldWrap: { gap: 6 },
   fieldLabel: { fontSize: 11, fontFamily: 'Inter_600SemiBold', textTransform: 'uppercase', letterSpacing: 0.5 },
   inputRow: {
     flexDirection: 'row', alignItems: 'center',
-    borderWidth: 1, borderRadius: 14, paddingHorizontal: 14, minHeight: 52,
+    borderWidth: 1, borderRadius: 14, paddingHorizontal: 14, minHeight: 50,
   },
-  input: { flex: 1, fontSize: 15, fontFamily: 'Inter_400Regular', paddingVertical: 14 },
+  input: { flex: 1, fontSize: 15, fontFamily: 'Inter_400Regular', paddingVertical: 12 },
   errorBox: {
     flexDirection: 'row', alignItems: 'center', gap: 8,
     padding: 12, borderRadius: 12, borderWidth: 1,
@@ -329,6 +337,7 @@ const styles = StyleSheet.create({
     gap: 10, paddingVertical: 16, borderRadius: 16,
     shadowColor: '#DC2626', shadowOffset: { width: 0, height: 6 },
     shadowOpacity: 0.25, shadowRadius: 12, elevation: 6,
+    marginTop: 4,
   },
   loginBtnText: { color: '#fff', fontSize: 16, fontFamily: 'Inter_700Bold', letterSpacing: 0.5 },
 });

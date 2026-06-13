@@ -9,6 +9,7 @@ import {
   Platform,
   Image,
   Alert,
+  Dimensions,
 } 
 
 from 'react-native';
@@ -21,6 +22,8 @@ import { useColors } from '@/src/hooks/useColors';
 import { useLanguage } from '@/src/context/LanguageContext';
 import { useAuth } from '@/src/context/AuthContext';
 import { actualizarFotoPerfilUsuario } from '@/src/supabaseServices';
+
+const { width } = Dimensions.get('window');
 
 interface UserData {
   displayName: string;
@@ -253,7 +256,7 @@ export default function ProfileScreen() {
             <View style={[styles.avatarRing, { borderColor: colors.border }]}> 
               <View style={[styles.avatar, { backgroundColor: colors.surface }]}> 
                 {avatarUri ? (
-                  <Image source={{ uri: `${avatarUri}?v=${new Date().getTime()}` }} style={styles.avatarImage} />
+                  <Image source={{ uri: `${avatarUri}?v=${new Date().getTime()}` }} style={styles.avatarImage} resizeMode="cover" />
                 ) : (
                   <Ionicons name="person" size={44} color={colors.mutedForeground} />
                 )}
@@ -314,8 +317,8 @@ export default function ProfileScreen() {
                 field.type === 'picker' ? (
                   <View style={[styles.editFieldPicker, { backgroundColor: colors.surfaceContainer, borderColor: colors.border }]}> 
                     <View style={[styles.fieldIcon, { backgroundColor: colors.primaryLight }]}>
-                    <Ionicons name={field.icon as any} size={18} color={colors.primary} />
-                  </View>
+                      <Ionicons name={field.icon as any} size={18} color={colors.primary} />
+                    </View>
                     <ScrollView style={styles.municipioScroll} nestedScrollEnabled>
                       {MUNICIPALITIES.map((municipio) => (
                         <TouchableOpacity
@@ -391,9 +394,9 @@ const styles = StyleSheet.create({
   headerTitle: { fontSize: 22, fontFamily: 'Inter_700Bold', color: '#fff' },
   avatarSection: { alignItems: 'center' },
   avatarOuter: { position: 'relative', marginBottom: 14 },
-  avatarRing: { width: 100, height: 100, borderRadius: 50, borderWidth: 2, padding: 4 },
-  avatar: { flex: 1, borderRadius: 46, alignItems: 'center', justifyContent: 'center', overflow: 'hidden' },
-  avatarImage: { width: '100%', height: '100%', borderRadius: 46 },
+  avatarRing: { width: 100, height: 100, borderRadius: 50, borderWidth: 2, padding: 4, alignItems: 'center', justifyContent: 'center' },
+  avatar: { width: 88, height: 88, borderRadius: 44, alignItems: 'center', justifyContent: 'center', overflow: 'hidden' },
+  avatarImage: { width: '100%', height: '100%', borderRadius: 44 },
   avatarPlusBtn: {
     position: 'absolute', bottom: 2, right: 2,
     width: 28, height: 28, borderRadius: 14,
@@ -430,7 +433,4 @@ const styles = StyleSheet.create({
   fieldText: { flex: 1 },
   fieldLabel: { fontSize: 10, fontFamily: 'Inter_700Bold', textTransform: 'uppercase', letterSpacing: 1 },
   fieldValue: { fontSize: 14, fontFamily: 'Inter_500Medium', marginTop: 2 },
-  securityBtn: { flexDirection: 'row', alignItems: 'center', gap: 14, padding: 16, borderRadius: 18, borderWidth: 1 },
-  secBtnIcon: { width: 40, height: 40, borderRadius: 14, alignItems: 'center', justifyContent: 'center' },
-  secBtnText: { flex: 1, fontSize: 15, fontFamily: 'Inter_600SemiBold' },
 });

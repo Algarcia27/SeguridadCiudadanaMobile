@@ -11,7 +11,9 @@ import {
   Linking,
   ActivityIndicator,
   Image,
-} from 'react-native';
+} 
+
+from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { Ionicons, MaterialIcons } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
@@ -94,8 +96,8 @@ export default function MapScreen() {
   const normalizarTexto = (texto: string) =>
     String(texto || '')
       .normalize('NFD')
-      .replace(/[\u0300-\u036f]/g, '') // Quita acentos
-      .replace(/[^a-zA-Z0-9]/g, ' ') // Cambia caracteres no alfanuméricos por espacio
+      .replace(/[\u0300-\u036f]/g, '')
+      .replace(/[^a-zA-Z0-9]/g, ' ')
       .trim()
       .toUpperCase();
 
@@ -144,9 +146,7 @@ export default function MapScreen() {
   };
 
   const centerOnUser = () => {
-    if (!mapRef.current) {
-      return;
-    }
+    if (!mapRef.current) return;
 
     const region = {
       latitude: userLocation.latitude,
@@ -208,23 +208,27 @@ export default function MapScreen() {
   );
 
   const renderCuadrante = ({ item }: { item: SupabaseCuadrante }) => (
-    <View style={[styles.cuadranteItem, { backgroundColor: colors.surface, borderColor: colors.border, width: Math.round(width * 0.9), alignSelf: 'center' }]}> 
+    <View style={[styles.cuadranteItem, { backgroundColor: colors.surface }]}> 
       <View style={styles.cuadranteInfo}>
-        <Text style={[styles.cuadranteTitle, { color: colors.foreground }]}> 
+        <Text style={[styles.cuadranteTitle, { color: colors.foreground }]}>
           {item.ORGANISMORESPONSABLE} · Cuadrante {item.CUADRANTE}
         </Text>
         <View style={styles.sectoresContainer}>
           <Text style={[styles.sectoresText, { color: colors.mutedForeground }]}>
-            Sectores: {item.SECTORES}
+            Sectores: <Text style={{ color: colors.foreground, fontFamily: 'Inter_400Regular' }}>{item.SECTORES}</Text>
           </Text>
+        </View>
+        <View style={styles.telefonoContainer}>
+          <Text style={[styles.telefonoLabel, { color: colors.mutedForeground }]}>TELÉFONO</Text>
+          <Text style={[styles.telefonoText, { color: colors.foreground }]}>{item.TELEFONOCUADRANTE}</Text>
         </View>
       </View>
       <TouchableOpacity
-        style={[styles.callBtn, { backgroundColor: colors.primary }]}
+        style={[styles.callBtn, { backgroundColor: '#D32F2F' }]}
         onPress={() => Linking.openURL(`tel:${item.TELEFONOCUADRANTE}`)}
         activeOpacity={0.85}
       >
-        <Text style={[styles.callBtnText, { color: colors.background }]}>LLAMAR</Text>
+        <Ionicons name="call" size={18} color="#ffffff" />
       </TouchableOpacity>
     </View>
   );
@@ -349,6 +353,8 @@ export default function MapScreen() {
               renderItem={renderCuadrante}
               keyExtractor={(item, index) => `${item.CUADRANTE}-${index}`}
               style={styles.cuadrantesList}
+              contentContainerStyle={{ paddingBottom: 16, paddingTop: 4 }}
+              showsVerticalScrollIndicator={false}
             />
           )}
         </View>
@@ -438,36 +444,92 @@ const styles = StyleSheet.create({
     position: 'absolute',
     left: 0,
     right: 0,
-    height: height * 0.4,
+    height: height * 0.43,
     borderTopLeftRadius: 28,
     borderTopRightRadius: 28,
     borderWidth: 1,
-    padding: 20,
+    paddingHorizontal: 20,
+    paddingTop: 16,
     zIndex: 50,
     elevation: 20,
   },
-  closeBtn: { alignSelf: 'flex-end', marginBottom: 10 },
-  municipioTitle: { fontSize: 18, fontFamily: 'Inter_700Bold', marginBottom: 10 },
+  closeBtn: { alignSelf: 'flex-end', marginBottom: 6 },
+  municipioTitle: { fontSize: 18, fontFamily: 'Inter_700Bold', marginBottom: 12, paddingHorizontal: 4 },
   cuadrantesList: { flex: 1 },
-  sectoresText: { fontSize: 12, fontFamily: 'Inter_400Regular', marginTop: 6, lineHeight: 18 },
   errorText: { fontSize: 13, fontFamily: 'Inter_600SemiBold', textAlign: 'center', marginTop: 12 },
   emptyText: { fontSize: 13, fontFamily: 'Inter_400Regular', textAlign: 'center', marginTop: 12 },
   loaderContainer: { flex: 1, alignItems: 'center', justifyContent: 'center', gap: 10, padding: 20 },
   loadingText: { fontSize: 14, fontFamily: 'Inter_500Medium' },
+  
+  
   cuadranteItem: {
-    flexDirection: 'column',
-    alignItems: 'flex-start',
-    padding: 12,
-    marginVertical: 8,
-    borderRadius: 12,
-    borderWidth: 1,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    padding: 16,
+    marginVertical: 6,
+    marginHorizontal: 4, 
+    borderRadius: 14,
+    
+    
+    ...Platform.select({
+      ios: {
+        shadowColor: '#000000',
+        shadowOffset: { width: 0, height: 3 },
+        shadowOpacity: 0.06,
+        shadowRadius: 6,
+      },
+      android: {
+        elevation: 3,
+      },
+      web: {
+        boxShadow: '0px 3px 10px rgba(0, 0, 0, 0.05)',
+      }
+    }),
+    gap: 12,
   },
-  cuadranteInfo: { width: '100%' },
-  sectoresContainer: { flexDirection: 'row', flexWrap: 'wrap' },
-  cuadranteTitle: { fontSize: 14, fontFamily: 'Inter_600SemiBold' },
-  cuadranteOrg: { fontSize: 12, fontFamily: 'Inter_400Regular', marginTop: 2 },
-  callBtn: { width: '100%', height: 48, borderRadius: 8, alignItems: 'center', justifyContent: 'center', marginTop: 10 },
-  callBtnText: { fontSize: 14, fontFamily: 'Inter_700Bold' },
+  cuadranteInfo: { 
+    flex: 1,
+    flexDirection: 'column',
+    gap: 6,
+  },
+  cuadranteTitle: { 
+    fontSize: 14, 
+    fontFamily: 'Inter_700Bold',
+    lineHeight: 18,
+  },
+  sectoresContainer: { 
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+  },
+  sectoresText: { 
+    fontSize: 12, 
+    fontFamily: 'Inter_600SemiBold', 
+    lineHeight: 18,
+    textTransform: 'uppercase', 
+  },
+  telefonoContainer: {
+    flexDirection: 'column',
+    marginTop: 2,
+  },
+  telefonoLabel: {
+    fontSize: 11,
+    fontFamily: 'Inter_700Bold',
+    letterSpacing: 0.3,
+  },
+  telefonoText: {
+    fontSize: 13,
+    fontFamily: 'Inter_500Medium',
+    marginTop: 1,
+  },
+  callBtn: { 
+    width: 42, 
+    height: 42, 
+    borderRadius: 21, 
+    alignItems: 'center', 
+    justifyContent: 'center',
+  },
+  
   menuOverlay: {
     position: 'absolute',
     top: 0,

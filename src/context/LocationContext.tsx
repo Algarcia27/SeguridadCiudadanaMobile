@@ -18,15 +18,15 @@ const LocationContext = createContext<LocationContextType>({
   gpsActive: false,
 });
 
+
 const formatLocationLabel = (address: Location.LocationGeocodedAddress): string => {
-  const place = address.name || address.street || address.subregion || address.district;
-  const city = address.city || address.subregion || address.region || address.country;
+  const sector = address.district || address.street || 'Sector Desconocido';
+  const municipio = address.subregion || address.city || 'San Cristóbal';
 
-  if (place && city && place !== city) {
-    return `${place}, ${city}`;
+  if (sector === municipio) {
+    return municipio;
   }
-
-  return city || 'Ubicación actual';
+  return `${sector}, ${municipio}`;
 };
 
 export const LocationProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
@@ -41,6 +41,7 @@ export const LocationProvider: React.FC<{ children: React.ReactNode }> = ({ chil
       try {
         const addresses = await Location.reverseGeocodeAsync(coords);
         if (addresses.length > 0) {
+          // Filtrará la dirección usando la nueva regla limpia
           setLocationLabel(formatLocationLabel(addresses[0]));
         } else {
           setLocationLabel('Ubicación actual');
@@ -65,11 +66,12 @@ export const LocationProvider: React.FC<{ children: React.ReactNode }> = ({ chil
       setCurrentLocation(coords);
       await updateLabel(coords);
 
+      // Esto actualiza dinámicamente cada vez que el usuario se mueve 20 metros
       subscription = await Location.watchPositionAsync(
         {
           accuracy: Location.Accuracy.High,
-          distanceInterval: 20,
-          timeInterval: 10000,
+          distanceInterval: 20, // metros
+          timeInterval: 10000,  // milisegundos
         },
         async (updated) => {
           const coordsUpdate = { latitude: updated.coords.latitude, longitude: updated.coords.longitude };
