@@ -8,7 +8,10 @@ import {
   TextInput,
   Platform,
   Switch,
-} from 'react-native';
+  Alert,
+} 
+
+from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { Ionicons } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
@@ -16,6 +19,7 @@ import { impactLight, impactHeavy, notifySuccess } from '@/src/utils/haptics';
 import { useColors } from '@/src/hooks/useColors';
 import { useTheme } from '@/src/context/ThemeContext';
 import { useLanguage } from '@/src/context/LanguageContext';
+import { supabase } from '@/src/supabaseClient';
 
 type SectionItem = {
   icon: string;
@@ -77,15 +81,75 @@ export default function SettingsTabScreen() {
 
   const topPad = Platform.OS === 'web' ? 67 : insets.top;
 
-  const handleSavePassword = () => {
-    if (!currentPw || !newPw || newPw !== confirmPw) return;
-    notifySuccess();
-    setPwSaved(true);
-    setTimeout(() => {
-      setPwSaved(false);
-      setShowPasswordForm(false);
-      setCurrentPw(''); setNewPw(''); setConfirmPw('');
-    }, 2000);
+  const handleSavePassword = async () => {
+    console.log("=== INICIANDO PROCESO DE CAMBIO DE CONTRASEÑA ===");
+    console.log("Nueva clave a procesar:", newPw);
+
+    // 1. Validaciones de seguridad previas
+    if (!currentPw || !newPw || !confirmPw) {
+      Alert.alert('Error', 'Por favor, rellena todos los campos.');
+      return;
+    }
+
+    if (newPw !== confirmPw) {
+      Alert.alert('Error', 'La nueva contraseña y su confirmación no coinciden.');
+      return;
+    }
+
+    if (newPw.trim().length < 6) {
+      Alert.alert('Error', 'La nueva contraseña debe tener al menos 6 caracteres.');
+      return;
+    }
+
+    try {
+      // 2. Ejecutar la actualización directa en el servidor de Supabase Auth
+      const { data, error } = await supabase.auth.updateUser({
+        password: newPw.trim()
+      });
+
+      console.log("RESPUESTA DEL SERVIDOR SUPABASE:", { data, error });
+
+      if (error) {
+        Alert.alert('Aviso de Supabase', error.message);
+        return;
+      }
+
+      // 3. Flujo visual de éxito
+      notifySuccess();
+      setPwSaved(true);
+
+      // 4. Forzar el cierre de sesión para limpiar los tokens locales del teléfono
+      setTimeout(async () => {
+        setPwSaved(false);
+        setShowPasswordForm(false);
+        setCurrentPw(''); 
+        setNewPw(''); 
+        setConfirmPw('');
+
+        Alert.alert(
+          'Contraseña Actualizada',
+          'Tu contraseña ha sido cambiada con éxito en la nube. La sesión se cerrará para sincronizar tu dispositivo.',
+          [
+            {
+              text: 'Entendido',
+              onPress: async () => {
+                try {
+                  await supabase.auth.signOut();
+                  console.log("Sesión destruida localmente.");
+                  router.replace('/index1');
+                } catch (signOutError) {
+                  router.replace('/index1');
+                }
+              }
+            }
+          ]
+        );
+      }, 1500);
+
+    } catch (errCritico) {
+      console.error('FALLO CRÍTICO EN EL PROCESO:', errCritico);
+      Alert.alert('Error', 'Ocurrió un error inesperado en el componente.');
+    }
   };
 
   const handleToggleTheme = () => {
@@ -253,7 +317,7 @@ export default function SettingsTabScreen() {
                 <Text style={[styles.pwError, { color: colors.danger }]}>Las contraseñas no coinciden</Text>
               )}
 
-              <TouchableOpacity
+             <TouchableOpacity
                 style={[
                   styles.saveBtn,
                   {
@@ -261,7 +325,7 @@ export default function SettingsTabScreen() {
                     opacity: (currentPw && pwMatch) ? 1 : 0.4,
                   },
                 ]}
-                onPress={handleSavePassword}
+                onPress={handleSavePassword} // 
                 disabled={!(currentPw && pwMatch)}
               >
                 <Ionicons name={pwSaved ? 'checkmark-circle-outline' : 'save-outline'} size={18} color="#fff" />

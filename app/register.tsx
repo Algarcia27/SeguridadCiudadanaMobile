@@ -9,11 +9,15 @@ import {
   Platform,
   Animated,
   ActivityIndicator,
-} from 'react-native';
+
+} 
+
+from 'react-native';
 import { useRouter } from 'expo-router';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { Ionicons } from '@expo/vector-icons';
 import { useColors } from '@/src/hooks/useColors';
+import { supabase } from '@/src/supabaseClient';
 
 const PASSWORD_REGEX = /^(?=.*[a-zA-Z])(?=.*[0-9])(?=.*[^a-zA-Z0-9]).{8,}$/;
 
@@ -172,35 +176,48 @@ export default function RegisterScreen() {
     return Object.keys(e).length === 0;
   };
 
-  const handleSubmit = async () => {
+const handleSubmit = async () => {
     if (!validate()) return;
     setLoading(true);
     setServerError('');
+    
     try {
-      const res = await fetch('/api/register', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          nombre: form.nombre.trim(),
-          correo: form.correo.trim(),
-          telefono: form.telefono.trim(),
-          cedula: form.cedula.trim(),
-          municipio: form.municipio.trim(),
-          password: form.password,
-        }),
+      // Registrar en la autenticación enviando los metadatos
+      const { data: authData, error: authError } = await supabase.auth.signUp({
+        email: form.correo.trim(),
+        password: form.password,
+        options: {
+          data: {
+            full_name: form.nombre.trim(),
+            telefono: form.telefono.trim(),
+            cedula: form.cedula.trim(),
+            municipio: form.municipio.trim(),
+          }
+        }
       });
-      const data = await res.json();
-      if (res.ok) {
-        setSuccess(true);
-        setTimeout(() => router.replace('/index1'), 2000);
-      } else {
-        setServerError(data.error || 'Error al registrar. Intenta de nuevo.');
+
+      console.log("=== REGISTRO SUPABASE ===");
+      console.log("Datos devueltos:", authData);
+      console.log("Error devuelto:", authError);
+
+      if (authError) {
+        setServerError(authError.message);
+        setLoading(false);
+        return;
       }
-    } catch {
-      setServerError('No se pudo conectar al servidor.');
+
+      
+
+      setSuccess(true);
+      setTimeout(() => router.replace('/index1'), 2000);
+
+    } catch (err) {
+      console.error("Error en el catch del registro:", err);
+      setServerError('No se pudo conectar con el servicio de autenticación.');
     } finally {
       setLoading(false);
     }
+    
   };
 
   const topInset = Platform.OS === 'web' ? 20 : insets.top;

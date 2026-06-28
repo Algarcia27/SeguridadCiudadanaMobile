@@ -8,7 +8,9 @@ import {
   TextInput,
   Platform,
   Animated,
-} from 'react-native';
+} 
+
+from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { Ionicons } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';

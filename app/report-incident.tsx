@@ -8,7 +8,9 @@ import {
   TextInput,
   Image,
   Alert,
-} from 'react-native';
+} 
+
+from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useRouter } from 'expo-router';
 import * as ImagePicker from 'expo-image-picker';
@@ -21,13 +23,18 @@ import { enviarIncidencia, subirFotoSupabase } from '@/src/supabaseServices';
 const INCIDENT_TYPES = [
   'Vandalismo',
   'Inseguridad',
-  'Bloqueo',
+  'Persona Sospechosa',
   'Vehículo abandonado',
+  'Falla de alumbrado público',
+  'Fuga de agua',
+  'Falla de internet',
   'Mascota perdida',
   'Agresion Fisica',
-  'Violencia de genero',
+  'Falla de energía eléctrica',
   'Otros',
 ];
+
+declare let showTipos: any;
 
 export default function ReportIncidentScreen() {
   const insets = useSafeAreaInsets();
@@ -44,6 +51,7 @@ export default function ReportIncidentScreen() {
   const [error, setError] = useState('');
   const [success, setSuccess] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [showTiposState, setShowTiposState] = useState<any>(false);
 
   const handlePickMedia = async () => {
     const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
@@ -128,27 +136,40 @@ export default function ReportIncidentScreen() {
           )}
         </View>
 
-        <View style={[styles.card, { backgroundColor: colors.surface, borderColor: colors.border }]}> 
-          <Text style={[styles.sectionTitle, { color: colors.foreground }]}>Tipo de incidente</Text>
-          <View style={styles.selectionGrid}>
-            {INCIDENT_TYPES.map((type) => (
-              <TouchableOpacity
-                key={type}
-                style={[
-                  styles.typeButton,
-                  {
-                    backgroundColor: tipoIncidente === type ? colors.police : colors.surfaceContainer,
-                    borderColor: colors.border,
-                  },
-                ]}
-                onPress={() => setTipoIncidente(type)}
-              >
-                <Text style={[styles.typeButtonText, { color: tipoIncidente === type ? '#fff' : colors.foreground }]}>{type}</Text>
-              </TouchableOpacity>
-            ))}
-          </View>
-        </View>
-
+     <View style={[styles.card, { backgroundColor: colors.surface, borderColor: colors.border }]}> 
+  <Text style={[styles.sectionTitle, { color: colors.foreground }]}>Tipo de incidente</Text>
+  <TouchableOpacity
+    style={[styles.selectInput, { borderColor: error && !tipoIncidente ? colors.danger : colors.border, backgroundColor: colors.surfaceContainer }]}
+    onPress={() => {
+      setShowTiposState((prev: any) => !prev);
+      try { setShowMunicipios(false); } catch(e) {} 
+    }}
+  >
+    <Text style={[styles.selectValue, { color: tipoIncidente ? colors.foreground : colors.mutedForeground }]}> 
+      {tipoIncidente || 'Selecciona un tipo de incidente'}
+    </Text>
+    <Ionicons name={showTiposState ? 'chevron-up-outline' : 'chevron-down-outline'} size={20} color={colors.mutedForeground} />
+  </TouchableOpacity>
+  
+  {showTiposState && (
+    <View style={[styles.optionsList, { backgroundColor: colors.surfaceContainer, borderColor: colors.border }]}> 
+      <ScrollView nestedScrollEnabled style={styles.optionsScroll}>
+        {INCIDENT_TYPES.map((item) => (
+          <TouchableOpacity
+            key={item}
+            style={styles.optionRow}
+            onPress={() => { 
+              setTipoIncidente(item); 
+              setShowTiposState(false);
+            }}
+          >
+            <Text style={[styles.optionText, { color: colors.foreground }]}>{item}</Text>
+          </TouchableOpacity>
+        ))}
+      </ScrollView>
+    </View>
+  )}
+</View>
         <View style={[styles.card, { backgroundColor: colors.surface, borderColor: colors.border }]}> 
           <Text style={[styles.sectionTitle, { color: colors.foreground }]}>Municipio</Text>
           <TouchableOpacity

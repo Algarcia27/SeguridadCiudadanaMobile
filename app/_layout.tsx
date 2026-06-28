@@ -8,7 +8,9 @@ import {
   Inter_500Medium,
   Inter_600SemiBold,
   Inter_700Bold,
-} from '@expo-google-fonts/inter';
+} 
+
+from '@expo-google-fonts/inter';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
@@ -31,10 +33,8 @@ function RootLayoutNav() {
       <Stack screenOptions={{ headerShown: false }} initialRouteName="index1">
         <Stack.Screen name="index1" />
         <Stack.Screen name="(tabs)" />
-        <Stack.Screen name="chat" options={{ presentation: 'card' }} />
         <Stack.Screen name="notifications" options={{ presentation: 'card' }} />
         <Stack.Screen name="settings" options={{ presentation: 'card' }} />
-        <Stack.Screen name="report-emergency" options={{ presentation: 'card' }} />
         <Stack.Screen name="report-incident" options={{ presentation: 'card' }} />
         <Stack.Screen name="suggestions" options={{ presentation: 'card' }} />
         <Stack.Screen name="register" options={{ presentation: 'card' }} />

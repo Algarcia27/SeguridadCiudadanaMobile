@@ -74,6 +74,7 @@ export default function MapScreen() {
   const [menuAbierto, setMenuAbierto] = useState(false);
   const [userLocation, setUserLocation] = useState({ latitude: 7.7667, longitude: -72.2333 });
   const { user } = useAuth();
+  const [userMarkerCargado, setUserMarkerCargado] = useState(false);
 
   const { currentLocation, locationLabel } = useLocationContext();
   const [mapType, setMapType] = useState<'standard' | 'satellite'>('standard');
@@ -157,12 +158,7 @@ export default function MapScreen() {
 
     mapRef.current.animateToRegion(region, 700);
   };
-
-  const handleReportEmergency = () => {
-    setMenuAbierto(false);
-    router.push('/report-emergency');
-  };
-
+  
   const handleReportIncident = () => {
     setMenuAbierto(false);
     router.push('/report-incident');
@@ -175,12 +171,13 @@ export default function MapScreen() {
 
     return (
       <Marker
-        key={index}
+        key={`marker-${index}`}
         coordinate={{ latitude, longitude }}
         onPress={() => setSelectedFeature(feature)}
+  
       >
         <View style={[styles.markerContainer, { backgroundColor: isSeguridad ? '#3B82F6' : '#EF4444' }]}> 
-          <Ionicons name={isSeguridad ? 'shield' : 'alert'} size={16} color="#fff" />
+          <Ionicons name={isSeguridad ? 'shield' : 'alert'} size={14} color="#fff" />
         </View>
       </Marker>
     );
@@ -191,7 +188,8 @@ export default function MapScreen() {
       key={`user-marker-${avatarUrl}`}
       coordinate={userLocation}
       anchor={{ x: 0.5, y: 0.5 }}
-      tracksViewChanges={true}
+      
+      tracksViewChanges={!userMarkerCargado}
     >
       <View style={styles.userMarkerWrapper}>
         <View
@@ -200,7 +198,13 @@ export default function MapScreen() {
             { backgroundColor: colors.surface, borderColor: theme === 'light' ? '#FFFFFF' : colors.background },
           ]}
         >
-          <Image source={{ uri: `${avatarUrl}?v=${new Date().getTime()}` }} style={styles.fotoPerfilMarcador} resizeMode="cover" />
+          <Image 
+            source={{ uri: avatarUrl }} 
+            style={styles.fotoPerfilMarcador} 
+            resizeMode="cover"
+        
+            onLoad={() => setUserMarkerCargado(false)} 
+          />
         </View>
         <View style={[styles.marcadorPinTriangle, { borderTopColor: colors.surface, marginTop: -2 }]} />
       </View>
@@ -256,14 +260,26 @@ export default function MapScreen() {
   return (
     <View style={[styles.container, { backgroundColor: colors.background }]}> 
       <MapView
-        ref={mapRef}
+       ref={mapRef}
         style={styles.map}
         initialRegion={initialRegion}
         provider={PROVIDER_DEFAULT}
         mapType={mapType}
         followsUserLocation={false}
+        
+        
+        cacheEnabled={false} 
+        
+        
+        minZoomLevel={8}
+        maxZoomLevel={17}
+        showsBuildings={false}
+        showsIndoors={false}
+        showsTraffic={false}
+        
         loadingEnabled
         loadingBackgroundColor={colors.surface}
+        loadingIndicatorColor={colors.primary}
       >
         <UrlTile
           urlTemplate="https://{s}.tile.openstreetmap.fr/osmfr/{z}/{x}/{y}.png"
@@ -311,10 +327,7 @@ export default function MapScreen() {
       <View style={[styles.bottomMenuWrapper, { bottom: bottomPad + 16 }]}> 
         {menuAbierto && (
           <View style={styles.secondaryActions}>
-            <TouchableOpacity style={[styles.secondaryButton, { backgroundColor: '#D32F2F' }]} onPress={handleReportEmergency}>
-              <MaterialIcons name="warning" size={18} color="#fff" />
-              <Text style={styles.secondaryButtonText}>Reportar Emergencia</Text>
-            </TouchableOpacity>
+           
             <TouchableOpacity style={[styles.secondaryButton, { backgroundColor: '#F57C00' }]} onPress={handleReportIncident}>
               <MaterialIcons name="error" size={18} color="#fff" />
               <Text style={styles.secondaryButtonText}>Reportar Incidente</Text>
@@ -328,7 +341,7 @@ export default function MapScreen() {
           activeOpacity={0.9}
         >
           <MaterialIcons name={menuAbierto ? 'close' : 'report'} size={26} color="#fff" />
-          <Text style={styles.mainActionText}>{menuAbierto ? 'CANCELAR' : 'REPORTAR'}</Text>
+          <Text style={styles.mainActionText}>{menuAbierto ? 'CANCELAR' : 'ALERTA CIUDADANA'}</Text>
         </TouchableOpacity>
       </View>
 
