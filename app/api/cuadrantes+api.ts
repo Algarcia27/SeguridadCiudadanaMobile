@@ -5,7 +5,19 @@ export async function GET() {
     const supabase = getSupabase();
     const { data, error } = await supabase
       .from('cuadrantes')
-      .select('MUNICIPIO, CUADRANTE, ORGANISMORESPONSABLE, TELEFONOCUADRANTE, SECTORES');
+      .select(`
+    id,
+    estado_id,
+    municipio_id,
+    parroquias_id,
+    codigo,
+    organismo,
+    telefono,
+    sectores,
+    municipios (
+      nombre
+    )
+  `);
 
     if (error) {
       throw error;

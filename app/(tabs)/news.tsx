@@ -29,19 +29,19 @@ interface Post {
   image?: string; 
 }
 
-const RSS_JSON_URL = 'https://rss.app/feeds/v1.1/_YNW7L8sCJeqjfohJ.json';
+const RSS_JSON_URL = 'https://rss.app/feeds/v1.1/FUItODpRsfKJiHr5.json';
 
 function PostCard({ post, colors, t }: { post: Post; colors: any; t: (k: string) => string }) {
-  // Limpiamos etiquetas HTML o textos extraños que puedan venir en el feed
+  
   const limpiarTexto = (texto?: string) => {
     if (!texto) return '';
     return texto.replace(/<[^>]*>/g, '').trim();
   };
 
-  // Si RSS.app no provee imagen o falla, usamos una institucional por defecto basada en Picsum
+  
   const imagenUri = post.image || `https://picsum.photos/seed/${post.id}/800/600`;
   
-  // Formateamos la fecha de publicación de manera limpia
+  
   const fechaFormateada = post.date_published 
     ? new Date(post.date_published).toLocaleDateString() 
     : t('officialInfo');

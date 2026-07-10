@@ -66,12 +66,12 @@ export const LocationProvider: React.FC<{ children: React.ReactNode }> = ({ chil
       setCurrentLocation(coords);
       await updateLabel(coords);
 
-      // Esto actualiza dinámicamente cada vez que el usuario se mueve 20 metros
+      
       subscription = await Location.watchPositionAsync(
         {
           accuracy: Location.Accuracy.High,
-          distanceInterval: 20, // metros
-          timeInterval: 10000,  // milisegundos
+          distanceInterval: 20, 
+          timeInterval: 10000,  
         },
         async (updated) => {
           const coordsUpdate = { latitude: updated.coords.latitude, longitude: updated.coords.longitude };

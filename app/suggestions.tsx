@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   View,
   Text,
@@ -7,13 +7,16 @@ import {
   TouchableOpacity,
   TextInput,
   Alert,
-} from 'react-native';
+} 
+
+from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useRouter } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
 import { useColors } from '@/src/hooks/useColors';
 import { useAuth } from '@/src/context/AuthContext';
 import { enviarSugerencia } from '@/src/supabaseServices';
+import { getSupabase } from '@/src/utils/supabase';
 
 export default function SuggestionsScreen() {
   const insets = useSafeAreaInsets();
@@ -26,6 +29,44 @@ export default function SuggestionsScreen() {
   const [error, setError] = useState('');
   const [success, setSuccess] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [profileName, setProfileName] = useState('');
+
+  useEffect(() => {
+    const loadProfileName = async () => {
+      const hasNameFromContext = [user?.nombres?.trim(), user?.apellidos?.trim()].filter(Boolean).join(' ');
+      if (hasNameFromContext) {
+        setProfileName(hasNameFromContext);
+        return;
+      }
+
+      try {
+        const supabase = getSupabase();
+        const { data: authData, error: authError } = await supabase.auth.getUser();
+        const userId = authData?.user?.id || user?.id;
+
+        if (authError || !userId) {
+          return;
+        }
+
+        const { data, error } = await supabase
+          .from('users')
+          .select('nombres, apellidos')
+          .eq('id', userId)
+          .maybeSingle();
+
+        if (!error && data) {
+          const fullName = [data.nombres?.trim(), data.apellidos?.trim()].filter(Boolean).join(' ');
+          if (fullName) {
+            setProfileName(fullName);
+          }
+        }
+      } catch (err) {
+        console.warn('No se pudo cargar el nombre del usuario en sugerencias:', err);
+      }
+    };
+
+    loadProfileName();
+  }, [user?.id, user?.nombres, user?.apellidos]);
 
   const handleSubmit = async () => {
     if (!asunto.trim() || !mensaje.trim()) {
@@ -69,7 +110,7 @@ export default function SuggestionsScreen() {
           <Text style={[styles.sectionTitle, { color: colors.foreground }]}>Tus datos</Text>
           {user ? (
             <View style={styles.userInfo}> 
-              <Text style={[styles.userText, { color: colors.foreground }]}>{user.nombre}</Text>
+              <Text style={[styles.userText, { color: colors.foreground }]}>{profileName || [user?.nombres?.trim(), user?.apellidos?.trim()].filter(Boolean).join(' ') || 'Usuario'}</Text>
               <Text style={[styles.userMeta, { color: colors.mutedForeground }]}>{user.correo}</Text>
               <Text style={[styles.userMeta, { color: colors.mutedForeground }]}>{user.telefono}</Text>
             </View>
@@ -134,6 +175,7 @@ const styles = StyleSheet.create({
   userMeta: { fontSize: 13, fontFamily: 'Inter_400Regular' },
   userMissing: { fontSize: 13, fontFamily: 'Inter_400Regular' },
   card: { borderWidth: 1, borderRadius: 24, padding: 18 },
+  inputField: { height: 48, borderWidth: 1, borderRadius: 12, paddingHorizontal: 12, fontSize: 15, fontFamily: 'Inter_400Regular' },
   textArea: { minHeight: 180, borderWidth: 1, borderRadius: 18, padding: 16, fontSize: 15, fontFamily: 'Inter_400Regular' },
   errorText: { fontSize: 13, fontFamily: 'Inter_600SemiBold', marginBottom: 8 },
   successCard: { flexDirection: 'row', alignItems: 'center', gap: 10, borderWidth: 1, borderRadius: 18, padding: 14, marginBottom: 12 },

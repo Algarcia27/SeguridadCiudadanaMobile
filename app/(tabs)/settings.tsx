@@ -20,6 +20,8 @@ import { useColors } from '@/src/hooks/useColors';
 import { useTheme } from '@/src/context/ThemeContext';
 import { useLanguage } from '@/src/context/LanguageContext';
 import { supabase } from '@/src/supabaseClient';
+import * as Location from 'expo-location';
+import * as Notifications from 'expo-notifications';
 
 type SectionItem = {
   icon: string;
@@ -334,31 +336,8 @@ export default function SettingsTabScreen() {
             </View>
           )}
 
-          <View style={[styles.divider, { backgroundColor: colors.border }]} />
+          
 
-          <TouchableOpacity style={styles.row}>
-            <View style={[styles.rowIcon, { backgroundColor: colors.trafficLight }]}>
-              <Ionicons name="finger-print-outline" size={18} color={colors.traffic} />
-            </View>
-            <View style={styles.rowText}>
-              <Text style={[styles.rowLabel, { color: colors.foreground }]}>Biometría</Text>
-              <Text style={[styles.rowSub, { color: colors.mutedForeground }]}>Huella / Face ID</Text>
-            </View>
-            <Ionicons name="chevron-forward" size={16} color={colors.mutedForeground} />
-          </TouchableOpacity>
-
-          <View style={[styles.divider, { backgroundColor: colors.border }]} />
-
-          <TouchableOpacity style={styles.row}>
-            <View style={[styles.rowIcon, { backgroundColor: colors.policeLight }]}>
-              <Ionicons name="shield-outline" size={18} color={colors.police} />
-            </View>
-            <View style={styles.rowText}>
-              <Text style={[styles.rowLabel, { color: colors.foreground }]}>Privacidad</Text>
-              <Text style={[styles.rowSub, { color: colors.mutedForeground }]}>{t('privacyData')}</Text>
-            </View>
-            <Ionicons name="chevron-forward" size={16} color={colors.mutedForeground} />
-          </TouchableOpacity>
         </View>
 
         {/* ── NOTIFICACIONES ────────────────────────── */}
@@ -392,11 +371,16 @@ export default function SettingsTabScreen() {
                   <Text style={[styles.rowSub, { color: colors.mutedForeground }]}>{item.sub}</Text>
                 </View>
                 <Switch
-                  value={item.value}
-                  onValueChange={(v) => { item.onChange(v); impactLight(); }}
-                  trackColor={{ false: colors.surfaceContainerHigh, true: colors.primary }}
+                 value={item.value}
+                onValueChange={async (v) => {
+                   item.onChange(v);
+                   impactLight();
+                   if (v) {
+                  await Notifications.requestPermissionsAsync();
+             }
+           }}
+                 trackColor={{ false: colors.surfaceContainerHigh, true: colors.primary }}
                   thumbColor="#fff"
-                  ios_backgroundColor={colors.surfaceContainerHigh}
                 />
               </View>
             </View>
@@ -416,14 +400,26 @@ export default function SettingsTabScreen() {
             </View>
             <Switch
               value={gpsAlways}
-              onValueChange={(v) => { setGpsAlways(v); impactLight(); }}
-              trackColor={{ false: colors.surfaceContainerHigh, true: colors.primary }}
-              thumbColor="#fff"
-              ios_backgroundColor={colors.surfaceContainerHigh}
+             onValueChange={async (v) => {
+             impactLight();
+             if (v) {
+             const { status } = await Location.requestForegroundPermissionsAsync();
+             if (status === 'granted') {
+             setGpsAlways(true);
+           } else {
+           Alert.alert("Permiso denegado", "Para tu seguridad, necesitamos acceso a la ubicación.");
+         }
+       } else {
+           setGpsAlways(false);
+     }
+   }}
+  trackColor={{ false: colors.surfaceContainerHigh, true: colors.primary }}
+  thumbColor="#fff"
             />
           </View>
           <View style={[styles.divider, { backgroundColor: colors.border }]} />
-          <TouchableOpacity style={styles.row}>
+          <TouchableOpacity style={styles.row}
+          onPress={() => router.push('/alerta-silenciosa')}>
             <View style={[styles.rowIcon, { backgroundColor: colors.primaryLight }]}>
               <Ionicons name="navigate-outline" size={18} color={colors.primary} />
             </View>
@@ -438,7 +434,11 @@ export default function SettingsTabScreen() {
         {/* ── GENERAL ───────────────────────────────── */}
         <Text style={[styles.sectionLabel, { color: colors.mutedForeground }]}>{t('general')}</Text>
         <View style={[styles.card, { backgroundColor: colors.surfaceContainer, borderColor: colors.border }]}>
-          <TouchableOpacity style={styles.row}>
+
+          <TouchableOpacity 
+            style={styles.row} 
+            onPress={() => router.push('/emergency-contacts')} 
+          >
             <View style={[styles.rowIcon, { backgroundColor: colors.healthLight }]}>
               <Ionicons name="phone-portrait-outline" size={18} color={colors.health} />
             </View>

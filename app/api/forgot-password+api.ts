@@ -35,7 +35,7 @@ export async function POST(request: Request) {
     if (updateErr) throw updateErr;
 
     const apiKey = process.env.RESEND_API_KEY;
-    const fromEmail = process.env.FROM_EMAIL || 'onboarding@resend.dev';
+    const fromEmail = process.env.FROM_EMAIL || 'No-reply@seguridadciudadanatachira.info';
 
     if (apiKey) {
       const resend = new Resend(apiKey);

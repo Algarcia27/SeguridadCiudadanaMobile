@@ -33,12 +33,19 @@ interface Cuadrante {
   sectores: string;
 }
 
+
 interface SupabaseCuadrante {
-  MUNICIPIO: string;
-  CUADRANTE: string;
-  ORGANISMORESPONSABLE: string;
-  TELEFONOCUADRANTE: string;
-  SECTORES: string;
+  id: number;
+  estado_id: number;
+  municipio_id: number;
+  parroquias_id: number;
+  codigo: string;
+  organismo: string;
+  telefono: string;
+  sectores: string;
+  municipios?: {
+    nombre: string;
+  };
 }
 
 interface Feature {
@@ -68,6 +75,8 @@ export default function MapScreen() {
   const bottomPad = Platform.OS === 'web' ? 34 : insets.bottom;
 
   const [selectedFeature, setSelectedFeature] = useState<Feature | null>(null);
+  
+  // Agrupamos por string (llave normalizada del municipio) igual que antes
   const [cuadrantesByMunicipio, setCuadrantesByMunicipio] = useState<Record<string, SupabaseCuadrante[]>>({});
   const [loadingCuadrantes, setLoadingCuadrantes] = useState(true);
   const [cuadrantesError, setCuadrantesError] = useState<string | null>(null);
@@ -102,6 +111,7 @@ export default function MapScreen() {
       .trim()
       .toUpperCase();
 
+  
   useEffect(() => {
     const loadCuadrantes = async () => {
       try {
@@ -115,12 +125,19 @@ export default function MapScreen() {
         }
 
         const rows: SupabaseCuadrante[] = json.data || [];
+        
+        
         const grouped = rows.reduce<Record<string, SupabaseCuadrante[]>>((acc, item) => {
-          const key = normalizarTexto(item.MUNICIPIO || '');
-          if (!acc[key]) {
-            acc[key] = [];
+          
+          const nombreMunicipio = item.municipios?.nombre || '';
+          const key = normalizarTexto(nombreMunicipio);
+          
+          if (key) {
+            if (!acc[key]) {
+              acc[key] = [];
+            }
+            acc[key].push(item);
           }
-          acc[key].push(item);
           return acc;
         }, {});
 
@@ -174,7 +191,6 @@ export default function MapScreen() {
         key={`marker-${index}`}
         coordinate={{ latitude, longitude }}
         onPress={() => setSelectedFeature(feature)}
-  
       >
         <View style={[styles.markerContainer, { backgroundColor: isSeguridad ? '#3B82F6' : '#EF4444' }]}> 
           <Ionicons name={isSeguridad ? 'shield' : 'alert'} size={14} color="#fff" />
@@ -188,7 +204,6 @@ export default function MapScreen() {
       key={`user-marker-${avatarUrl}`}
       coordinate={userLocation}
       anchor={{ x: 0.5, y: 0.5 }}
-      
       tracksViewChanges={!userMarkerCargado}
     >
       <View style={styles.userMarkerWrapper}>
@@ -202,7 +217,6 @@ export default function MapScreen() {
             source={{ uri: avatarUrl }} 
             style={styles.fotoPerfilMarcador} 
             resizeMode="cover"
-        
             onLoad={() => setUserMarkerCargado(false)} 
           />
         </View>
@@ -211,25 +225,26 @@ export default function MapScreen() {
     </Marker>
   );
 
+  
   const renderCuadrante = ({ item }: { item: SupabaseCuadrante }) => (
     <View style={[styles.cuadranteItem, { backgroundColor: colors.surface }]}> 
       <View style={styles.cuadranteInfo}>
         <Text style={[styles.cuadranteTitle, { color: colors.foreground }]}>
-          {item.ORGANISMORESPONSABLE} · Cuadrante {item.CUADRANTE}
+          {item.organismo} · Cuadrante {item.codigo}
         </Text>
         <View style={styles.sectoresContainer}>
           <Text style={[styles.sectoresText, { color: colors.mutedForeground }]}>
-            Sectores: <Text style={{ color: colors.foreground, fontFamily: 'Inter_400Regular' }}>{item.SECTORES}</Text>
+            Sectores: <Text style={{ color: colors.foreground, fontFamily: 'Inter_400Regular' }}>{item.sectores}</Text>
           </Text>
         </View>
         <View style={styles.telefonoContainer}>
           <Text style={[styles.telefonoLabel, { color: colors.mutedForeground }]}>TELÉFONO</Text>
-          <Text style={[styles.telefonoText, { color: colors.foreground }]}>{item.TELEFONOCUADRANTE}</Text>
+          <Text style={[styles.telefonoText, { color: colors.foreground }]}>{item.telefono}</Text>
         </View>
       </View>
       <TouchableOpacity
         style={[styles.callBtn, { backgroundColor: '#D32F2F' }]}
-        onPress={() => Linking.openURL(`tel:${item.TELEFONOCUADRANTE}`)}
+        onPress={() => Linking.openURL(`tel:${item.telefono}`)}
         activeOpacity={0.85}
       >
         <Ionicons name="call" size={18} color="#ffffff" />
@@ -243,7 +258,7 @@ export default function MapScreen() {
   const selectedCuadrantes = selectedMunicipioKey ? cuadrantesByMunicipio[selectedMunicipioKey] || [] : [];
 
   const displayMunicipio = String(
-    selectedFeature?.properties?.Municipio ?? selectedCuadrantes[0]?.MUNICIPIO ?? 'Desconocido'
+    selectedFeature?.properties?.Municipio ?? selectedCuadrantes[0]?.municipios?.nombre ?? 'Desconocido'
   )
     .replace(/\r?\n/g, '')
     .trim();
@@ -260,23 +275,18 @@ export default function MapScreen() {
   return (
     <View style={[styles.container, { backgroundColor: colors.background }]}> 
       <MapView
-       ref={mapRef}
+        ref={mapRef}
         style={styles.map}
         initialRegion={initialRegion}
         provider={PROVIDER_DEFAULT}
         mapType={mapType}
         followsUserLocation={false}
-        
-        
         cacheEnabled={false} 
-        
-        
         minZoomLevel={8}
         maxZoomLevel={17}
         showsBuildings={false}
         showsIndoors={false}
         showsTraffic={false}
-        
         loadingEnabled
         loadingBackgroundColor={colors.surface}
         loadingIndicatorColor={colors.primary}
@@ -327,10 +337,9 @@ export default function MapScreen() {
       <View style={[styles.bottomMenuWrapper, { bottom: bottomPad + 16 }]}> 
         {menuAbierto && (
           <View style={styles.secondaryActions}>
-           
             <TouchableOpacity style={[styles.secondaryButton, { backgroundColor: '#F57C00' }]} onPress={handleReportIncident}>
               <MaterialIcons name="error" size={18} color="#fff" />
-              <Text style={styles.secondaryButtonText}>Reportar Incidente</Text>
+              <Text style={styles.secondaryButtonText}>Alertar Incidente</Text>
             </TouchableOpacity>
           </View>
         )}
@@ -364,7 +373,7 @@ export default function MapScreen() {
             <FlatList
               data={selectedCuadrantes}
               renderItem={renderCuadrante}
-              keyExtractor={(item, index) => `${item.CUADRANTE}-${index}`}
+              keyExtractor={(item, index) => `${item.codigo}-${index}`}
               style={styles.cuadrantesList}
               contentContainerStyle={{ paddingBottom: 16, paddingTop: 4 }}
               showsVerticalScrollIndicator={false}

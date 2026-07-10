@@ -53,6 +53,11 @@ const MUNICIPALITIES = [
   'Uribante',
 ];
 
+function getMunicipioId(municipio: string): number | null {
+  const index = MUNICIPALITIES.findIndex((item) => item.toLowerCase() === municipio.trim().toLowerCase());
+  return index >= 0 ? index + 1 : null;
+}
+
 function getPasswordStrength(pwd: string): { label: string; color: string; percent: number } {
   if (pwd.length === 0) return { label: '', color: 'transparent', percent: 0 };
   const hasLetter = /[a-zA-Z]/.test(pwd);
@@ -142,11 +147,13 @@ export default function RegisterScreen() {
   const colors = useColors();
 
   const [form, setForm] = useState({
-    nombre: '',
+    nombres: '',
+    apellidos: '',
     correo: '',
     telefono: '',
     cedula: '',
     municipio: '',
+    parroquia: '',
     password: '',
     confirmPassword: '',
   });
@@ -155,50 +162,81 @@ export default function RegisterScreen() {
   const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState(false);
   const [showMunicipios, setShowMunicipios] = useState(false);
+  const [showParroquias, setShowParroquias] = useState(false);
+  const [parroquias, setParroquias] = useState<{ id: number; nombre: string }[]>([]);
+  const [selectedParroquiaId, setSelectedParroquiaId] = useState<number | null>(null);
   const scale = useRef(new Animated.Value(1)).current;
 
+  const fetchParroquias = async (municipioId: number) => {
+    try {
+      const res = await fetch(`/api/parroquias?municipio_id=${municipioId}`);
+      const body = await res.json();
+      setParroquias(Array.isArray(body.data) ? body.data : []);
+    } catch (err) {
+      console.warn('Error fetching parroquias:', err);
+      setParroquias([]);
+    }
+  };
+
   const set = (key: keyof typeof form) => (val: string) => {
-    setForm(f => ({ ...f, [key]: val }));
+    setForm(f => ({
+      ...f,
+      [key]: val,
+      ...(key === 'municipio' ? { parroquia: '' } : {}),
+    }));
     if (errors[key]) setErrors(e => ({ ...e, [key]: '' }));
+    if (key === 'municipio') {
+      setSelectedParroquiaId(null);
+      setParroquias([]);
+      setShowParroquias(false);
+    }
     setServerError('');
   };
 
   const validate = () => {
     const e: Partial<typeof form> = {};
-    if (!form.nombre.trim()) e.nombre = 'El nombre es requerido.';
+    if (!form.nombres.trim()) e.nombres = 'El nombre es requerido.';
+    if (!form.apellidos.trim()) e.apellidos = 'El apellido es requerido.';
     if (!form.correo.trim() || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(form.correo)) e.correo = 'Ingresa un correo válido.';
     if (!form.telefono.trim() || !/^\+?[0-9]{7,15}$/.test(form.telefono.replace(/\s/g, ''))) e.telefono = 'Ingresa un teléfono válido.';
     if (!form.cedula.trim() || !/^[0-9]{6,10}$/.test(form.cedula)) e.cedula = 'Número de cédula inválido (6-10 dígitos).';
     if (!form.municipio.trim()) e.municipio = 'Selecciona un municipio.';
+    if (!form.parroquia.trim()) e.parroquia = 'Selecciona una parroquia.';
     if (!PASSWORD_REGEX.test(form.password)) e.password = 'Mínimo 8 caracteres con letras, números y caracteres especiales.';
     if (form.confirmPassword !== form.password) e.confirmPassword = 'Las contraseñas no coinciden.';
     setErrors(e);
     return Object.keys(e).length === 0;
   };
 
-const handleSubmit = async () => {
+  const handleSubmit = async () => {
     if (!validate()) return;
     setLoading(true);
     setServerError('');
-    
+
     try {
-      // Registrar en la autenticación enviando los metadatos
+      const municipioId = getMunicipioId(form.municipio);
+      if (!municipioId) {
+        setServerError('No se pudo determinar el municipio seleccionado.');
+        setLoading(false);
+        return;
+      }
+
       const { data: authData, error: authError } = await supabase.auth.signUp({
-        email: form.correo.trim(),
+        email: form.correo.trim().toLowerCase(),
         password: form.password,
         options: {
           data: {
-            full_name: form.nombre.trim(),
+            nombres: form.nombres.trim(),
+            apellidos: form.apellidos.trim(),
+            correo: form.correo.trim().toLowerCase(),
             telefono: form.telefono.trim(),
             cedula: form.cedula.trim(),
-            municipio: form.municipio.trim(),
-          }
-        }
+            municipio_id: municipioId,
+            parroquia_id: selectedParroquiaId,
+            parroquia: form.parroquia.trim(),
+          },
+        },
       });
-
-      console.log("=== REGISTRO SUPABASE ===");
-      console.log("Datos devueltos:", authData);
-      console.log("Error devuelto:", authError);
 
       if (authError) {
         setServerError(authError.message);
@@ -206,18 +244,14 @@ const handleSubmit = async () => {
         return;
       }
 
-      
-
       setSuccess(true);
-      setTimeout(() => router.replace('/index1'), 2000);
-
+      router.push({ pathname: '/verificacion', params: { correo: form.correo.trim().toLowerCase() } });
     } catch (err) {
-      console.error("Error en el catch del registro:", err);
+      console.error('Error en el catch del registro:', err);
       setServerError('No se pudo conectar con el servicio de autenticación.');
     } finally {
       setLoading(false);
     }
-    
   };
 
   const topInset = Platform.OS === 'web' ? 20 : insets.top;
@@ -260,7 +294,8 @@ const handleSubmit = async () => {
                 <Text style={[styles.cardTitle, { color: colors.foreground }]}>Datos personales</Text>
               </View>
               <View style={styles.fields}>
-                <Field label="Nombre completo" value={form.nombre} onChangeText={set('nombre')} placeholder="Ej. Juan Pérez" error={errors.nombre} colors={colors} />
+                <Field label="Nombres" value={form.nombres} onChangeText={set('nombres')} placeholder="Ej. Juan" error={errors.nombres} colors={colors} />
+                <Field label="Apellidos" value={form.apellidos} onChangeText={set('apellidos')} placeholder="Ej. Pérez García" error={errors.apellidos} colors={colors} />
                 <Field label="Correo electrónico" value={form.correo} onChangeText={set('correo')} placeholder="ejemplo@correo.com" keyboardType="email-address" error={errors.correo} colors={colors} />
                 <Field label="Teléfono" value={form.telefono} onChangeText={set('telefono')} placeholder="+58 412 0000000" keyboardType="phone-pad" error={errors.telefono} colors={colors} />
                 <Field label="Número de cédula" value={form.cedula} onChangeText={set('cedula')} placeholder="Ej. 12345678" keyboardType="numeric" error={errors.cedula} colors={colors} />
@@ -281,7 +316,14 @@ const handleSubmit = async () => {
                           <TouchableOpacity
                             key={municipio}
                             style={[styles.optionItem, { borderBottomColor: colors.border }]}
-                            onPress={() => { set('municipio')(municipio); setShowMunicipios(false); }}
+                            onPress={() => {
+                              set('municipio')(municipio);
+                              setShowMunicipios(false);
+                              const municipioId = getMunicipioId(municipio);
+                              if (municipioId) {
+                                fetchParroquias(municipioId);
+                              }
+                            }}
                           >
                             <Text style={[styles.optionText, { color: colors.foreground }]}>{municipio}</Text>
                           </TouchableOpacity>
@@ -290,6 +332,44 @@ const handleSubmit = async () => {
                     </View>
                   )}
                   {errors.municipio ? <Text style={[fieldStyles.error, { color: colors.danger }]}>{errors.municipio}</Text> : null}
+                </View>
+                <View style={fieldStyles.wrapper}>
+                  <Text style={[fieldStyles.label, { color: colors.mutedForeground }]}>Parroquia</Text>
+                  <View style={[fieldStyles.inputRow, { borderColor: errors.parroquia ? colors.danger : colors.border, backgroundColor: colors.surfaceContainer }]}> 
+                    <TouchableOpacity
+                      style={styles.selectButton}
+                      onPress={() => {
+                        if (!form.municipio) return;
+                        setShowParroquias((v) => !v);
+                      }}
+                      disabled={!form.municipio || parroquias.length === 0}
+                    >
+                      <Text style={[styles.selectValue, { color: form.parroquia ? colors.foreground : colors.mutedForeground }]}> 
+                        {form.parroquia || (form.municipio ? 'Selecciona una parroquia' : 'Selecciona un municipio primero')}
+                      </Text>
+                      <Ionicons name={showParroquias ? 'chevron-up-outline' : 'chevron-down-outline'} size={20} color={colors.mutedForeground} />
+                    </TouchableOpacity>
+                  </View>
+                  {showParroquias && parroquias.length > 0 && (
+                    <View style={[styles.optionsWrapper, { backgroundColor: colors.surfaceContainer, borderColor: colors.border }]}> 
+                      <ScrollView style={styles.optionsScroll} nestedScrollEnabled>
+                        {parroquias.map((item) => (
+                          <TouchableOpacity
+                            key={item.id}
+                            style={[styles.optionItem, { borderBottomColor: colors.border }]}
+                            onPress={() => {
+                              set('parroquia')(item.nombre);
+                              setSelectedParroquiaId(item.id);
+                              setShowParroquias(false);
+                            }}
+                          >
+                            <Text style={[styles.optionText, { color: colors.foreground }]}>{item.nombre}</Text>
+                          </TouchableOpacity>
+                        ))}
+                      </ScrollView>
+                    </View>
+                  )}
+                  {errors.parroquia ? <Text style={[fieldStyles.error, { color: colors.danger }]}>{errors.parroquia}</Text> : null}
                 </View>
               </View>
             </View>

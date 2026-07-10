@@ -28,15 +28,11 @@ export async function POST(request: Request) {
       throw uploadError;
     }
 
-    const { data: publicUrlData, error: publicUrlError } = await supabase.storage
+    const publicUrlResult = await supabase.storage
       .from('evidencias_reportes')
       .getPublicUrl(rutaArchivo);
 
-    if (publicUrlError) {
-      throw publicUrlError;
-    }
-
-    const urlPublica = publicUrlData?.publicUrl;
+    const urlPublica = publicUrlResult?.data?.publicUrl;
     if (!urlPublica) {
       throw new Error('No se pudo obtener la URL pública del avatar.');
     }

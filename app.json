@@ -29,17 +29,25 @@
       "output": "server",
       "favicon": "./assets/images/favicon.png"
     },
-    "plugins": [
-      "expo-router",
-      "expo-font",
-      "expo-system-ui",
-      [
-        "expo-image-picker",
-        {
-          "photosPermission": "Permitir acceso a la galería para actualizar tu foto de perfil."
-        }
-      ]
-    ],
+      "plugins": [
+  "expo-router",
+  "expo-font",
+  "expo-system-ui",
+  [
+    "expo-image-picker",
+    {
+      "photosPermission": "Permitir acceso a la galería para actualizar tu foto de perfil."
+    }
+  ],
+  "expo-secure-store",
+  [
+    "expo-location",
+    {
+      "locationAlwaysPermission": "Necesitamos tu ubicación para alertas de seguridad en tiempo real."
+    }
+  ]
+],
+    
     "extra": {
       "SUPABASE_URL": "https://byykytwjptgbcraooalh.supabase.co",
       "SUPABASE_ANON_KEY": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJ5eWt5dHdqcHRnYmNyYW9vYWxoIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzcxNTk1MDksImV4cCI6MjA5MjczNTUwOX0.kn1E3TMkC222_bdBbvT2xqWtofEUCaz_39QCGr-G7c8"

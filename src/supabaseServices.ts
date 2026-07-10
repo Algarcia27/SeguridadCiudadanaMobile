@@ -1,13 +1,18 @@
 import * as FileSystem from 'expo-file-system/legacy';
 import { decode } from 'base64-arraybuffer';
+import { MUNICIPALITIES } from '@/src/constants/municipalities';
 import { supabase } from './supabaseClient';
 
 
 
 export interface DataIncidencia {
   tipoIncidencia: string;
+  tipoIncidenciaId?: number | string | null;
   descripcion: string;
   municipio: string;
+  municipioId?: number | null;
+  parroquia?: string;
+  parroquiaId?: number | null;
   urlEvidencia: string | null;
 }
 
@@ -75,21 +80,69 @@ export async function subirFotoSupabase(fileUri: string): Promise<string> {
   }
 }
 
+function obtenerMunicipioId(nombre: string, fallback?: number | null): number | null {
+  if (typeof fallback === 'number') return fallback;
+
+  const nombreNormalizado = nombre.trim().toLowerCase();
+  const index = MUNICIPALITIES.findIndex((item) => item.trim().toLowerCase() === nombreNormalizado);
+
+  return index >= 0 ? index + 1 : null;
+}
+
+const MAPEO_TIPOS: Record<string, number> = {
+  vandalismo: 10,
+  inseguridad: 20,
+  'persona sospechosa': 30,
+  'vehículo abandonado': 40,
+  'falla de alumbrado público': 50,
+  'fuga de agua': 60,
+  'falla de internet': 70,
+  'mascota perdida': 80,
+  'agresion fisica': 85,
+  'falla de energía eléctrica': 90,
+  otros: 99,
+};
+
+function convertirTipoIncidenciaId(tipoIncidencia: string, fallback?: number | string | null): number {
+  if (fallback !== undefined && fallback !== null) {
+    const fallbackNumber = typeof fallback === 'number' ? fallback : Number(fallback);
+    if (!Number.isNaN(fallbackNumber)) return fallbackNumber;
+  }
+
+  const tipoNormalizado = tipoIncidencia.trim().toLowerCase();
+  const tipoId = MAPEO_TIPOS[tipoNormalizado];
+
+  if (tipoId === undefined) {
+    throw new Error(`No existe un ID configurado para el tipo de incidencia: ${tipoIncidencia}`);
+  }
+
+  return tipoId;
+}
+
 export async function enviarIncidencia(data: DataIncidencia) {
   try {
     const usuarioId = await obtenerUsuarioId();
+    const municipioId = obtenerMunicipioId(data.municipio, data.municipioId);
+    const tipoIncidenciaId = convertirTipoIncidenciaId(data.tipoIncidencia, data.tipoIncidenciaId);
 
     const { error } = await supabase.from('reportes_incidencia').insert([
       {
-        tipo_incidencia: data.tipoIncidencia,
+        tipo_incidencia_id: tipoIncidenciaId,
         descripcion: data.descripcion,
-        municipio: data.municipio,
+        municipio_id: municipioId,
+        parroquias_id: data.parroquiaId ?? null,
         url_evidencia: data.urlEvidencia,
         usuario_id: usuarioId,
       },
     ]);
 
-    if (error) throw error;
+    if (error) {
+      console.error('--- ERROR DETALLADO DE SUPABASE ---');
+     console.error('Código:', error.code);
+     console.error('Mensaje:', error.message);
+     console.error('Detalles:', error.details);
+      throw error;
+    }
   } catch (error) {
     console.error('enviarIncidencia error:', error);
     throw new Error('No se pudo guardar el reporte de incidencia.');

@@ -31,6 +31,25 @@ interface UserData {
   phone: string;
   cedula: string;
   municipio: string;
+  parroquia: string;
+}
+
+type ParroquiaOption = {
+  id: number;
+  nombre: string;
+};
+
+function getDisplayName(userLike?: { nombres?: string | null; apellidos?: string | null } | null) {
+  const nombres = userLike?.nombres?.trim() || '';
+  const apellidos = userLike?.apellidos?.trim() || '';
+  return [nombres, apellidos].filter(Boolean).join(' ').trim() || 'Usuario Ciudadano';
+}
+
+function getMunicipioId(municipio: string): number | null {
+  const index = MUNICIPALITIES.findIndex(
+    (item) => item.toLowerCase() === municipio.trim().toLowerCase()
+  );
+  return index >= 0 ? index + 1 : null;
 }
 
 const MUNICIPALITIES = [
@@ -72,16 +91,39 @@ export default function ProfileScreen() {
   const { user, setUser } = useAuth();
 
   const [userData, setUserData] = useState<UserData>({
-    displayName: user?.nombre || 'Usuario Ciudadano',
+    displayName: getDisplayName(user),
     email: user?.correo || '',
     phone: user?.telefono || '',
     cedula: user?.cedula || '',
     municipio: user?.municipio || '',
+    parroquia: user?.parroquia || user?.parroquias?.nombre || 'No asignado',
   });
   const [avatarUri, setAvatarUri] = useState<string | null>(user?.avatar_url || null);
   const [editing, setEditing] = useState<string | null>(null);
   const [tempValue, setTempValue] = useState('');
+  const [parroquias, setParroquias] = useState<ParroquiaOption[]>([]);
+  const [selectedMunicipioId, setSelectedMunicipioId] = useState<number | null>(
+    user?.municipio_id ?? null
+  );
+  const [selectedParroquiaId, setSelectedParroquiaId] = useState<number | null>(
+    user?.parroquia_id ?? null
+  );
+  const [showParroquias, setShowParroquias] = useState(false);
+
+  const fetchParroquias = async (municipioId: number) => {
+    try {
+      const response = await fetch(`/api/parroquias?municipio_id=${municipioId}`);
+      const body = await response.json();
+      setParroquias(Array.isArray(body.data) ? body.data : []);
+    } catch (error) {
+      console.warn('No se pudieron cargar las parroquias:', error);
+      setParroquias([]);
+    }
+  };
+
   const topPad = Platform.OS === 'web' ? 67 : insets.top;
+  const visibleDisplayName = userData.displayName?.trim() || (user ? getDisplayName(user) : 'Usuario Ciudadano');
+  const fullNameForEdit = [user?.nombres?.trim(), user?.apellidos?.trim()].filter(Boolean).join(' ');
 
   useEffect(() => {
     const loadSavedProfile = async () => {
@@ -96,13 +138,25 @@ export default function ProfileScreen() {
     };
 
     if (user) {
+      const municipioId = user.municipio_id ?? getMunicipioId(user.municipio || '');
+      const parroquiaId = user.parroquia_id ?? null;
+      setSelectedMunicipioId(municipioId);
+      setSelectedParroquiaId(parroquiaId);
+
       setUserData({
-        displayName: user.nombre,
+        displayName: getDisplayName(user),
         email: user.correo,
         phone: user.telefono || '',
         cedula: user.cedula || '',
         municipio: user.municipio || '',
+        parroquia: user.parroquia || user.parroquias?.nombre || 'No asignado',
       });
+
+      if (municipioId) {
+        setParroquias([]);
+      } else {
+        setParroquias([]);
+      }
 
       if (user.avatar_url && !user.avatar_url.startsWith('file://')) {
         setAvatarUri(user.avatar_url);
@@ -111,44 +165,86 @@ export default function ProfileScreen() {
       }
     } else {
       loadSavedProfile();
+      setParroquias([]);
+      setSelectedMunicipioId(null);
+      setSelectedParroquiaId(null);
     }
   }, [user]);
 
-  const saveField = async (field: keyof UserData) => {
-    const updated = { ...userData, [field]: tempValue };
+ const saveField = async (field: keyof UserData) => {
+    let updated = { ...userData, [field]: tempValue };
+    
+    
+    if (field === 'municipio') {
+      updated = { ...updated, parroquia: 'No asignado' };
+      setSelectedParroquiaId(null);
+      setParroquias([]);
+    }
+
     setUserData(updated);
     AsyncStorage.setItem('user-profile', JSON.stringify({ ...updated, avatarUri }));
     setEditing(null);
 
-    if (user?.id) {
-      const profileFieldMap: Record<keyof UserData, string> = {
-        displayName: 'nombre',
-        email: 'correo',
-        phone: 'telefono',
-        cedula: 'cedula',
-        municipio: 'municipio',
-      };
+    if (!user?.id) {
+      notifySuccess();
+      return;
+    }
 
-      try {
-        const body = { [profileFieldMap[field]]: tempValue };
-        const res = await fetch('/api/update-profile', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            ...(user?.token ? { Authorization: `Bearer ${user.token}` } : {}),
-          },
-          body: JSON.stringify(body),
-        });
-
-        if (res.ok) {
-          const data = await res.json();
-          if (data?.user) {
-            setUser({ ...user, ...data.user });
-          }
-        }
-      } catch (err) {
-        console.warn('Could not sync profile update:', err);
+    try {
+      let body: Record<string, any> = {};
+      
+      
+      if (field === 'displayName') {
+        const parts = tempValue.trim().split(/\s+/).filter(Boolean);
+        body.nombres = parts[0] || '';
+        body.apellidos = parts.slice(1).join(' ');
+      } else if (field === 'municipio') {
+        const municipioId = getMunicipioId(tempValue);
+        body.municipio_id = municipioId;
+        body.municipio = tempValue;
+        body.parroquia_id = null; 
+        body.parroquia = 'No asignado';
+      } else if (field === 'parroquia') {
+        body.parroquia_id = selectedParroquiaId; 
+        body.parroquia = tempValue;
+      } else if (field === 'email') {
+        body.correo = tempValue;
+      } else if (field === 'phone') {
+        body.telefono = tempValue;
+      } else if (field === 'cedula') {
+        body.cedula = tempValue;
       }
+
+      const res = await fetch('/api/update-profile', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          ...(user?.token ? { Authorization: `Bearer ${user.token}` } : {}),
+        },
+        body: JSON.stringify(body),
+      });
+
+      if (!res.ok) {
+        throw new Error('No se pudo actualizar el perfil');
+      }
+
+      const data = await res.json();
+      if (data?.user) {
+        await setUser((prev) => {
+          if (!prev) return prev;
+
+          return {
+            ...prev,
+            ...data.user,
+            municipio: data.user.municipio || updated.municipio,
+            parroquia: data.user.parroquia || updated.parroquia,
+            municipio_id: data.user.municipio_id ?? prev.municipio_id,
+            parroquia_id: data.user.parroquia_id ?? prev.parroquia_id,
+          };
+        });
+      }
+    } catch (err) {
+      console.warn('Could not sync profile update:', err);
     }
 
     notifySuccess();
@@ -242,7 +338,8 @@ export default function ProfileScreen() {
     { key: 'email', labelKey: 'email', icon: 'mail-outline', type: 'email-address' },
     { key: 'phone', labelKey: 'phone', icon: 'call-outline', type: 'phone-pad' },
     { key: 'cedula', labelKey: 'id', icon: 'card-outline', type: 'numeric' },
-    { key: 'municipio', labelKey: 'municipio', icon: 'location-outline', type: 'picker' },
+    { key: 'municipio', labelKey: 'municipio', icon: 'location-sharp', type: 'picker' },
+    { key: 'parroquia', labelKey: 'parroquia', icon: 'map-outline', type: 'picker' },
   ];
 
   return (
@@ -270,7 +367,7 @@ export default function ProfileScreen() {
               <Ionicons name="add" size={16} color={colors.foreground} />
             </TouchableOpacity>
           </View>
-          <Text style={[styles.displayName, { color: colors.foreground }]}>{userData.displayName}</Text>
+          <Text style={[styles.displayName, { color: colors.foreground }]}>{visibleDisplayName}</Text>
           <View style={styles.verifiedBadge}>
             <Ionicons name="shield-checkmark" size={14} color={colors.foreground} />
             <Text style={[styles.verifiedText, { color: colors.foreground }]}>{t('verifiedCitizen')}</Text>
@@ -285,7 +382,7 @@ export default function ProfileScreen() {
             <View style={[styles.editRow, { backgroundColor: colors.surfaceContainer, borderColor: colors.border }]}>
               <TextInput
                 style={[styles.editInput, { color: colors.foreground }]}
-                value={tempValue}
+                value={tempValue || fullNameForEdit}
                 onChangeText={setTempValue}
                 autoFocus
                 placeholderTextColor={colors.mutedForeground}
@@ -300,10 +397,10 @@ export default function ProfileScreen() {
           ) : (
             <TouchableOpacity
               style={[styles.nameRow, { backgroundColor: colors.surfaceContainer, borderColor: colors.border }]}
-              onPress={() => { setTempValue(userData.displayName); setEditing('displayName'); }}
+              onPress={() => { setTempValue(fullNameForEdit || visibleDisplayName); setEditing('displayName'); }}
             >
               <Ionicons name="person-outline" size={20} color={colors.primary} />
-              <Text style={[styles.nameValue, { color: colors.foreground }]}>{userData.displayName}</Text>
+              <Text style={[styles.nameValue, { color: colors.foreground }]}>{visibleDisplayName}</Text>
               <Ionicons name="pencil-outline" size={18} color={colors.mutedForeground} />
             </TouchableOpacity>
           )}
@@ -319,17 +416,51 @@ export default function ProfileScreen() {
                     <View style={[styles.fieldIcon, { backgroundColor: colors.primaryLight }]}>
                       <Ionicons name={field.icon as any} size={18} color={colors.primary} />
                     </View>
-                    <ScrollView style={styles.municipioScroll} nestedScrollEnabled>
-                      {MUNICIPALITIES.map((municipio) => (
-                        <TouchableOpacity
-                          key={municipio}
-                          style={[styles.municipioOption, { backgroundColor: municipio === tempValue ? colors.primaryLight : colors.surface }]}
-                          onPress={() => setTempValue(municipio)}
-                        >
-                          <Text style={[styles.municipioOptionText, { color: colors.foreground }]}>{municipio}</Text>
-                        </TouchableOpacity>
-                      ))}
-                    </ScrollView>
+                    {field.key === 'municipio' ? (
+                      <ScrollView style={styles.municipioScroll} nestedScrollEnabled>
+                        {MUNICIPALITIES.map((municipio) => (
+                          <TouchableOpacity
+                            key={municipio}
+                            style={[styles.municipioOption, { backgroundColor: municipio === tempValue ? colors.primaryLight : colors.surface }]}
+                            onPress={() => {
+                              setTempValue(municipio);
+                              const municipioId = getMunicipioId(municipio);
+                              setSelectedMunicipioId(municipioId);
+                              setParroquias([]);
+                              setSelectedParroquiaId(null);
+                            }}
+                          >
+                            <Text style={[styles.municipioOptionText, { color: colors.foreground }]}>{municipio}</Text>
+                          </TouchableOpacity>
+                        ))}
+                      </ScrollView>
+                    ) : (
+                      <View>
+                        {selectedMunicipioId ? (
+                          parroquias.length > 0 ? (
+                            <ScrollView style={styles.municipioScroll} nestedScrollEnabled>
+                              {parroquias.map((item) => (
+                                <TouchableOpacity
+                                  key={item.id}
+                                  style={[styles.municipioOption, { backgroundColor: item.nombre === tempValue ? colors.primaryLight : colors.surface }]}
+                                  onPress={() => {
+                                    setTempValue(item.nombre);
+                                    setSelectedParroquiaId(item.id);
+                                    
+                                  }}
+                                >
+                                  <Text style={[styles.municipioOptionText, { color: colors.foreground }]}>{item.nombre}</Text>
+                                </TouchableOpacity>
+                              ))}
+                            </ScrollView>
+                          ) : (
+                            <Text style={[styles.municipioOptionText, { color: colors.mutedForeground, padding: 16 }]}>Selecciona primero un municipio.</Text>
+                          )
+                        ) : (
+                          <Text style={[styles.municipioOptionText, { color: colors.mutedForeground, padding: 16 }]}>Selecciona primero un municipio.</Text>
+                        )}
+                      </View>
+                    )}
                     <View style={styles.pickerActions}>
                       <TouchableOpacity onPress={() => saveField(field.key)} style={styles.pickerActionButton}>
                         <Ionicons name="checkmark-circle" size={26} color={colors.primary} />
@@ -363,7 +494,13 @@ export default function ProfileScreen() {
               ) : (
                 <TouchableOpacity
                   style={styles.fieldRow}
-                  onPress={() => { setTempValue(userData[field.key]); setEditing(field.key); }}
+                  onPress={async () => {
+                    setTempValue(userData[field.key]);
+                    if (field.key === 'parroquia' && selectedMunicipioId && parroquias.length === 0) {
+                      await fetchParroquias(selectedMunicipioId);
+                    }
+                    setEditing(field.key);
+                  }}
                 >
                   <View style={[styles.fieldIcon, { backgroundColor: colors.primaryLight }]}>
                     <Ionicons name={field.icon as any} size={18} color={colors.primary} />
@@ -433,4 +570,9 @@ const styles = StyleSheet.create({
   fieldText: { flex: 1 },
   fieldLabel: { fontSize: 10, fontFamily: 'Inter_700Bold', textTransform: 'uppercase', letterSpacing: 1 },
   fieldValue: { fontSize: 14, fontFamily: 'Inter_500Medium', marginTop: 2 },
+  sectionTitle: { fontSize: 14, fontFamily: 'Inter_700Bold', marginBottom: 12 },
+  locationSection: { borderRadius: 20, borderWidth: 1, overflow: 'hidden', padding: 16, marginTop: 16 },
+  locationHeader: { flexDirection: 'row', alignItems: 'center', gap: 10, marginBottom: 12 },
+  locationTitle: { fontSize: 14, fontFamily: 'Inter_700Bold' },
+  editAction: { padding: 12 },
 });

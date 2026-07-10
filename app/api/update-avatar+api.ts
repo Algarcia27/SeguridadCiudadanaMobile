@@ -26,7 +26,7 @@ export async function POST(request: Request) {
         .from('users')
         .update({ avatar_url: avatarUrl })
         .eq('correo', userEmail)
-        .select('id, nombre, correo, telefono, cedula, municipio, avatar_url')
+        .select('id, nombres, correo, telefono, cedula, municipio, avatar_url')
         .maybeSingle();
 
       if (error) throw error;
@@ -37,7 +37,7 @@ export async function POST(request: Request) {
           .from('users')
           .update({ avatar_url: avatarUrl })
           .eq('correo', userEmail)
-          .select('id, nombre, correo, telefono, cedula, avatar_url')
+          .select('id, nombres, correo, telefono, cedula, avatar_url')
           .maybeSingle();
 
         if (error) throw error;

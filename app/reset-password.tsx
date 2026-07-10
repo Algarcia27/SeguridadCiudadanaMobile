@@ -9,7 +9,8 @@ import {
   Animated,
   ActivityIndicator,
   ScrollView,
-} from 'react-native';
+} 
+from 'react-native';
 import { useRouter, useLocalSearchParams } from 'expo-router';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { Ionicons } from '@expo/vector-icons';

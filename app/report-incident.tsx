@@ -44,14 +44,31 @@ export default function ReportIncidentScreen() {
 
   const [tipoIncidente, setTipoIncidente] = useState('');
   const [municipio, setMunicipio] = useState('');
+  const [parroquia, setParroquia] = useState('');
   const [direccion, setDireccion] = useState('');
   const [descripcion, setDescripcion] = useState('');
   const [attachments, setAttachments] = useState<string[]>([]);
   const [showMunicipios, setShowMunicipios] = useState(false);
+  const [showParroquias, setShowParroquias] = useState(false);
+  const [parroquias, setParroquias] = useState<{ id: number; nombre: string }[]>([]);
+  const [selectedParroquiaId, setSelectedParroquiaId] = useState<number | null>(null);
   const [error, setError] = useState('');
   const [success, setSuccess] = useState(false);
   const [loading, setLoading] = useState(false);
   const [showTiposState, setShowTiposState] = useState<any>(false);
+
+  const displayName = [user?.nombres?.trim(), user?.apellidos?.trim()].filter(Boolean).join(' ') || 'Usuario';
+
+  const fetchParroquias = async (municipioId: number) => {
+    try {
+      const res = await fetch(`/api/parroquias?municipio_id=${municipioId}`);
+      const body = await res.json();
+      setParroquias(Array.isArray(body.data) ? body.data : []);
+    } catch (err) {
+      console.warn('Error fetching parroquias:', err);
+      setParroquias([]);
+    }
+  };
 
   const handlePickMedia = async () => {
     const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
@@ -77,7 +94,7 @@ export default function ReportIncidentScreen() {
   };
 
   const handleSubmit = async () => {
-    if (!tipoIncidente || !municipio || !descripcion.trim()) {
+    if (!tipoIncidente || !municipio || !parroquia || !descripcion.trim()) {
       setError('Por favor completa todos los campos del reporte.');
       return;
     }
@@ -92,6 +109,8 @@ export default function ReportIncidentScreen() {
         tipoIncidencia: tipoIncidente,
         descripcion,
         municipio,
+        parroquia,
+        parroquiaId: selectedParroquiaId,
         urlEvidencia,
       });
 
@@ -126,7 +145,7 @@ export default function ReportIncidentScreen() {
           <Text style={[styles.sectionTitle, { color: colors.foreground }]}>Datos del usuario</Text>
           {user ? (
             <View style={styles.userInfo}> 
-              <Text style={[styles.userText, { color: colors.foreground }]}>{user.nombre}</Text>
+              <Text style={[styles.userText, { color: colors.foreground }]}>{displayName}</Text>
               <Text style={[styles.userMeta, { color: colors.mutedForeground }]}>{user.correo}</Text>
               <Text style={[styles.userMeta, { color: colors.mutedForeground }]}>{user.telefono}</Text>
               <Text style={[styles.userMeta, { color: colors.mutedForeground }]}>{user.municipio}</Text>
@@ -188,12 +207,59 @@ export default function ReportIncidentScreen() {
                   <TouchableOpacity
                     key={item}
                     style={styles.optionRow}
-                    onPress={() => { setMunicipio(item); setShowMunicipios(false); }}
+                    onPress={() => {
+                      setMunicipio(item);
+                      setParroquia('');
+                      setSelectedParroquiaId(null);
+                      setShowMunicipios(false);
+                      setShowParroquias(false);
+                      const municipioId = MUNICIPALITIES.findIndex((m) => m === item) + 1;
+                      if (municipioId) {
+                        fetchParroquias(municipioId);
+                      }
+                    }}
                   >
                     <Text style={[styles.optionText, { color: colors.foreground }]}>{item}</Text>
                   </TouchableOpacity>
                 ))}
               </ScrollView>
+            </View>
+          )}
+        </View>
+
+        <View style={[styles.card, { backgroundColor: colors.surface, borderColor: colors.border }]}> 
+          <Text style={[styles.sectionTitle, { color: colors.foreground }]}>Parroquia</Text>
+          <TouchableOpacity
+            style={[styles.selectInput, { borderColor: error && !parroquia ? colors.danger : colors.border, backgroundColor: colors.surfaceContainer }]}
+            onPress={() => setShowParroquias((prev) => (selectedParroquiaId || parroquias.length > 0 ? !prev : prev))}
+            disabled={!municipio}
+          >
+            <Text style={[styles.selectValue, { color: parroquia ? colors.foreground : colors.mutedForeground }]}> 
+              {parroquia || (municipio ? 'Selecciona una parroquia' : 'Selecciona un municipio primero')}
+            </Text>
+            <Ionicons name={showParroquias ? 'chevron-up-outline' : 'chevron-down-outline'} size={20} color={colors.mutedForeground} />
+          </TouchableOpacity>
+          {showParroquias && (
+            <View style={[styles.optionsList, { backgroundColor: colors.surfaceContainer, borderColor: colors.border }]}> 
+              {parroquias.length > 0 ? (
+                <ScrollView nestedScrollEnabled style={styles.optionsScroll}>
+                  {parroquias.map((item) => (
+                    <TouchableOpacity
+                      key={item.id}
+                      style={styles.optionRow}
+                      onPress={() => {
+                        setParroquia(item.nombre);
+                        setSelectedParroquiaId(item.id);
+                        setShowParroquias(false);
+                      }}
+                    >
+                      <Text style={[styles.optionText, { color: colors.foreground }]}>{item.nombre}</Text>
+                    </TouchableOpacity>
+                  ))}
+                </ScrollView>
+              ) : (
+                <Text style={[styles.optionText, { color: colors.mutedForeground, padding: 16 }]}>Selecciona un municipio para ver parroquias.</Text>
+              )}
             </View>
           )}
         </View>
